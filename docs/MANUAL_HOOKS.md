@@ -1,6 +1,6 @@
 # manual 효과 분류 — 훅 승격 작업 목록
 
-> `hook: "manual"` 222건 전수 분류 (기준 커밋 시점). 1·2·3군 완료 후 잔여 176건. 승격 = 엔진이 자동 처리하도록
+> `hook: "manual"` 222건 전수 분류 (기준 커밋 시점). **1~4군 전부 완료 — 잔여 123건은 전부 '승격 부적합' 층**. 승격 = 엔진이 자동 처리하도록
 > 훅/연결을 만드는 것. **위에서부터 싸고 효과가 크다** — 1·2군은 새 훅 없이 끝난다.
 > 파티 전제 효과는 1인 플레이에서 가치가 없으므로 후순위로 몰았다.
 
@@ -52,7 +52,9 @@
 | `throwAnyMelee` | abilities/throwing-arm | effectiveRange 의 thrown 판정 확장 |
 | 중상 적용기 (`extra.skillPenalty` 등 해석) | severe-injuries 5·13·14·16·17 | **extra 는 이미 구조화됨** — 스킬 레벨/이동력에 반영하는 함수만 |
 
-## 4군 — 중형 신규 훅 (지속 상태 시스템 필요 — 한 번 만들면 여럿이 탄다) · 약 30건
+## 4군 — 중형 신규 훅 ✅ 완료
+(잔여 예외: items/marbles 는 아이템 사용 UI 부재로 보류, ranged-mishap 3(귀중품)·
+magical-mishap 9·10·15·16·20 은 GM 재량 성격으로 manual 유지)
 
 **(a) 결박/경직 계열** — `bind {escape: {skill|attr, modifier}, damagePerRound?}` 하나로:
 spells/root-snare·thorn-field·slumber·rime(결박부), monster/web-stalker#5·moss-hulk#3(물림)·
@@ -103,5 +105,8 @@ magical-mishap 11·12·13·14·17 (+ monster/abyss-fiend#3 의 D6 저주표)
 
 1. **1군 + 2군** (한나절감, 코드 거의 없음) → manual 약 20건 감소, 여정 루프 체감 큼
 2. ~~3군~~ ✅ 완료 — 죽음 판정 3성공 회복 시 중상 굴림(CON)도 연결됨
-3. **4군 (a) bind 계열** — 훅 하나로 10건 이상 처리, 몬스터 전투 다양성 급상승
-4. 4군 (b) conditionalBoon — 아이템 태반이 살아난다
+3. ~~4군 (a) bind 계열~~ ✅ — PC·적 양방향 결박/수면/경직/공황, 탈출 판정 루프
+4. ~~4군 (b·c·d·e)~~ ✅ — 원한/표식 보온, 다중 타격, 아침 저주(해주 해제), 빈틈 자유 공격,
+   무기 손상 2단계(캐릭터 지속 + 저녁 수리), 돌 방패 리액션, 무기 강화 critRange, 광전사,
+   악사 오라(악기 비용), 이중 시전, 죽음의 한기, 나이 변화, 전투 버프 3종
+   (아이템 상황부 보정은 conditionalBoon 으로 구조화 — 판정 장면 등장 시 자동화)

@@ -695,7 +695,12 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "bind",
+        "params": {
+          "escape": {
+            "skill": "evade"
+          }
+        }
       }
     ],
     "perPowerLevel": null,
@@ -725,7 +730,13 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "bind",
+        "params": {
+          "escape": {
+            "skill": "evade"
+          },
+          "all": true
+        }
       }
     ],
     "perPowerLevel": null,
@@ -869,7 +880,10 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "bind",
+        "params": {
+          "sleep": true
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1081,7 +1095,19 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "damage",
+        "params": {
+          "dice": "D6"
+        }
+      },
+      {
+        "hook": "bind",
+        "params": {
+          "escape": {
+            "attribute": "str"
+          },
+          "all": true
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1250,7 +1276,10 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "damageReduction",
+        "params": {
+          "dice": "2D6"
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1710,7 +1739,10 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "movementMultiplier",
+        "params": {
+          "multiplier": 2
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1738,7 +1770,10 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "extraDamageDie",
+        "params": {
+          "dice": "D6"
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1767,7 +1802,11 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "armorSet",
+        "params": {
+          "rating": 4,
+          "perPowerLevel": 2
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1824,7 +1863,11 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "critRange",
+        "params": {
+          "max": 2,
+          "perPowerLevel": 1
+        }
       }
     ],
     "perPowerLevel": null,

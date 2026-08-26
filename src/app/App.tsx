@@ -10,6 +10,7 @@ import {
   eveningFish,
   eveningHunt,
   eveningPrepareSpells,
+  eveningRepair,
   eveningRest,
   eveningSkip,
   preparedSpellLimit,
@@ -129,6 +130,11 @@ function GameScreen({
                   </>
                 )
               })()}
+              {((state.character.damagedWeaponIds ?? []).length > 0 || (state.character.impairedWeaponIds ?? []).length > 0) && (
+                <button onClick={() => setState(eveningRepair(rng, data, state))}>
+                  무기 손질 (제작 판정)
+                </button>
+              )}
               <button onClick={() => setState(eveningSkip(rng, data, state))}>
                 바로 잔다
               </button>

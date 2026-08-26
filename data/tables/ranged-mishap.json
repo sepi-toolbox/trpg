@@ -43,7 +43,7 @@
       "description": "무기가 부서진다. 수리 전까지 사용에 베인.",
       "effects": [
         {
-          "hook": "manual"
+          "hook": "weaponImpaired"
         }
       ]
     },

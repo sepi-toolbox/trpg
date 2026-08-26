@@ -8,8 +8,12 @@ import {
   pcAttack,
   pcDash,
   pcDisarm,
+  pcDoubleSlash,
   pcDrawWeapon,
+  pcEscapeBind,
   pcFlee,
+  pcMarkQuarry,
+  pcTwinShot,
   pcGrapple,
   pcGrappleCrush,
   pcPickUpWeapon,
@@ -67,6 +71,7 @@ export function CombatPanel({
       && !c.outOfAmmoWeaponIds.includes(w.id))
 
   const targetUnit = c.enemies.find((e) => e.state.id === currentTarget && !e.state.dead)
+  const hasAbility = (id: string) => !!state.character.abilities[id]
   const pcStr = c.pc.attributes?.str ?? null
 
   /** 무기별 거리 상황 표시 — null 이면 그대로 근접 */
@@ -144,6 +149,7 @@ export function CombatPanel({
                   {e.kind === 'monster' ? ` · 흉포도 ${e.state.ferocity}` : ''}
                   {e.state.prone ? ' · 넘어짐' : ''}
                   {c.grappledEnemyId === e.state.id ? ' · 붙잡힘' : ''}
+                  {e.bound ? (e.bound.sleeping ? ' · 잠듦' : ' · 결박') : ''}
                 </span>
               </div>
               <div className="bar"><span style={{ width: `${(hp / maxHp) * 100}%` }} /></div>
@@ -188,6 +194,11 @@ export function CombatPanel({
                 패리 (턴 소모)
               </button>
             )}
+            {c.prompt.canWardSpell && (
+              <button onClick={() => setState(resolveReaction(rng, data, state, 'ward'))}>
+                {data.spells.find((s) => s.id === (c.prompt as { canWardSpell?: string }).canWardSpell)?.name || '감쇄 주문'} (리액션 — 턴 소모 없음)
+              </button>
+            )}
             <button onClick={() => setState(resolveReaction(rng, data, state, 'none'))}>
               그냥 받아낸다
             </button>
@@ -219,6 +230,22 @@ export function CombatPanel({
         </div>
       )}
 
+      {/* PC 결박·경직 — 벗어나기만 가능 */}
+      {isPcTurn && !downed && c.pcBind && (
+        <div className="event-card bad">
+          <p style={{ marginTop: 0 }}>
+            <strong>{c.pcBind.name}</strong> — 붙들려 있다. 벗어나야 움직일 수 있다.
+            {c.pcBind.damagePerRound ? ` (실패 시 ${c.pcBind.damagePerRound} 피해)` : ''}
+          </p>
+          <div className="button-row">
+            <button className="primary" onClick={() => setState(pcEscapeBind(rng, data, state))}>
+              벗어나기 ({c.pcBind.escape.skill ? data.skills.find((k) => k.id === c.pcBind!.escape.skill)?.name ?? c.pcBind.escape.skill : '능력치'} 판정, 액션)
+            </button>
+            <button onClick={() => setState(pcPass(rng, data, state))}>버틴다</button>
+          </div>
+        </div>
+      )}
+
       {/* PC 턴 액션 — 붙잡기 유지 중이면 조르기/놓아주기만 */}
       {isPcTurn && !downed && c.grappledEnemyId && (
         <div className="event-card">
@@ -237,7 +264,7 @@ export function CombatPanel({
         </div>
       )}
 
-      {isPcTurn && !downed && !c.grappledEnemyId && (
+      {isPcTurn && !downed && !c.grappledEnemyId && !c.pcBind && (
         <>
           <h3>공격{targetUnit ? ` — 목표 ${targetUnit.distance}m` : ''}</h3>
           <div className="button-row" style={{ marginBottom: 8 }}>
@@ -296,6 +323,21 @@ export function CombatPanel({
                       setState(pcAttack(rng, data, state, w.id, currentTarget, 'piercing', 'weakSpot'))
                     }}>
                     약점 찌르기 (베인, 방어구 무시)
+                  </button>
+                )}
+                {hasAbility('twin-shot') && weapons.some((w) => w.skillId === 'bows') && (
+                  <button onClick={() => setState(pcTwinShot(rng, data, state, weapons.find((w) => w.skillId === 'bows')!.id, currentTarget))}>
+                    쌍발 사격 (베인, 피해 ×2)
+                  </button>
+                )}
+                {hasAbility('double-slash') && weapons.some((w) => w.damageTypes.includes('slashing')) && (
+                  <button onClick={() => setState(pcDoubleSlash(rng, data, state, weapons.find((w) => w.damageTypes.includes('slashing'))!.id))}>
+                    쌍참격 (두 적)
+                  </button>
+                )}
+                {hasAbility('hunters-mark') && c.markedTargetId !== currentTarget && (
+                  <button onClick={() => setState(pcMarkQuarry(rng, data, state, currentTarget))}>
+                    사냥감 지정 (액션)
                   </button>
                 )}
               </div>

@@ -49,7 +49,10 @@
     "stackable": false,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "damagedMe"
+        }
       }
     ],
     "trigger": null
@@ -146,7 +149,10 @@
     "stackable": false,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "markedTarget"
+        }
       }
     ],
     "trigger": null
@@ -318,13 +324,13 @@
     "trigger": null,
     "effects": [
       {
+        "hook": "berserk"
+      },
+      {
         "hook": "condition",
         "params": {
           "condition": "angry"
         }
-      },
-      {
-        "hook": "manual"
       }
     ]
   },
@@ -480,7 +486,11 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "multiStrike",
+        "params": {
+          "count": 2,
+          "targets": 2
+        }
       }
     ]
   },
@@ -868,7 +878,7 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "castTwoSpells"
       }
     ]
   },
@@ -931,7 +941,15 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "aura",
+        "params": {
+          "instrumentCosts": {
+            "harp": 1,
+            "lyre": 1,
+            "bagpipe": 1,
+            "flute": 2
+          }
+        }
       }
     ]
   },
@@ -1093,7 +1111,12 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "multiStrike",
+        "params": {
+          "count": 2,
+          "bane": 1,
+          "weapon": "bow"
+        }
       }
     ]
   },

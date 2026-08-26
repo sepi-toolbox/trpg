@@ -42,6 +42,13 @@ export interface Directive {
     | 'selfHit'
     | 'dropWeapon'
     | 'outOfAmmo'
+    | 'bind'
+    | 'multiStrike'
+    | 'curse'
+    | 'freeAttackAgainst'
+    | 'weaponImpaired'
+    | 'noHealUntilWarm'
+    | 'ageShift'
     | 'fearAttackOnOthers' // 광역 공포 등 대상이 자신이 아닌 경우
     | 'light'
   params: Record<string, unknown>
@@ -69,6 +76,8 @@ export interface ApplyOptions {
   armorRating?: number
   /** 공포 면역 (immuneFear 마커 보유) */
   immuneFear?: boolean
+  /** 받는 피해 일괄 감소 (돌 방패 등 — 첫 damage 효과에 1회 적용) */
+  damageReduction?: number
 }
 
 /**
@@ -93,7 +102,11 @@ export function applyEffects<T extends Vitals>(
   for (const effect of effects) {
     switch (effect.hook) {
       case 'damage': {
-        const rolled = roll(rng, dice(effect)).total
+        let rolled = roll(rng, dice(effect)).total
+        if (options.damageReduction) {
+          rolled = Math.max(0, rolled - options.damageReduction)
+          options = { ...options, damageReduction: 0 } // 1회만
+        }
         const ignoreArmor = effect.params?.['ignoreArmor'] === true
         const afterArmor = Math.max(0, rolled - (ignoreArmor ? 0 : (options.armorRating ?? 0)))
         const taken = Math.min(out.hp, afterArmor)
@@ -251,12 +264,28 @@ export function applyEffects<T extends Vitals>(
       case 'throwAnyMelee':
       case 'reduceFallDamage':
       case 'autoActivity':
+      case 'conditionalBoon':
+      case 'conditionalBane':
+      case 'critRange':
+      case 'damageReduction':
+      case 'berserk':
+      case 'aura':
+      case 'castTwoSpells':
+      case 'armorSet':
+      case 'movementMultiplier':
         break
       // 게임 루프가 소비하는 지시
       case 'lifeDrain':
       case 'selfHit':
       case 'dropWeapon':
-      case 'outOfAmmo': {
+      case 'outOfAmmo':
+      case 'bind':
+      case 'multiStrike':
+      case 'curse':
+      case 'freeAttackAgainst':
+      case 'weaponImpaired':
+      case 'noHealUntilWarm':
+      case 'ageShift': {
         directives.push({ kind: effect.hook, params: effect.params ?? {} })
         break
       }

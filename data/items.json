@@ -222,7 +222,13 @@
     "description": "상황에 따라 CHA 기반 판정에 보온.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "attribute": "cha"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -256,7 +262,13 @@
     "description": "상황에 따라 CHA 기반 판정에 베인.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBane",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "attribute": "cha"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -275,7 +287,13 @@
     "description": "없으면 CHA 기반 판정에 베인.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBane",
+        "params": {
+          "when": "withoutItem",
+          "roll": {
+            "attribute": "cha"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -292,11 +310,7 @@
     "supply": "uncommon",
     "weight": 1,
     "description": "musician 능력의 WP 비용 1로, 사거리 50m로.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -311,11 +325,7 @@
     "supply": "common",
     "weight": 1,
     "description": "musician 사거리 20m.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -330,11 +340,7 @@
     "supply": "common",
     "weight": 1,
     "description": "musician WP 비용 2.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -349,11 +355,7 @@
     "supply": "uncommon",
     "weight": 2,
     "description": "musician WP 비용 1.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -368,11 +370,7 @@
     "supply": "common",
     "weight": 1,
     "description": "musician 사거리 100m.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -387,11 +385,7 @@
     "supply": "uncommon",
     "weight": 1,
     "description": "musician WP 비용 1.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -408,7 +402,13 @@
     "description": "수리 계산 INT 판정에 보온.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "attribute": "int"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -427,7 +427,13 @@
     "description": "없으면 추위 저항 판정에 베인.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBane",
+        "params": {
+          "when": "withoutItem",
+          "roll": {
+            "attribute": "con"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -517,7 +523,15 @@
     "description": "없으면 자물쇠 따기에 베인.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBane",
+        "params": {
+          "when": "withoutItem",
+          "roll": {
+            "skills": [
+              "sleight-of-hand"
+            ]
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -615,7 +629,13 @@
     "description": "10회분. 상황에 따라 CHA 판정에 보온.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "attribute": "cha"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -649,7 +669,15 @@
     "description": "10m. 고정돼 있으면 등반 곡예에 보온.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "skills": [
+              "acrobatics"
+            ]
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -668,7 +696,15 @@
     "description": "10m. 고정돼 있으면 등반 곡예에 보온.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "skills": [
+              "acrobatics"
+            ]
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -687,7 +723,15 @@
     "description": "없으면 마상 전투 판정 전부 베인.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBane",
+        "params": {
+          "when": "withoutItem",
+          "roll": {
+            "skills": [
+              "riding"
+            ]
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -781,7 +825,13 @@
     "description": "특정 주제의 판정에 보온. 가격은 주제에 따라 변동.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "attribute": "int"
+          }
+        }
       }
     ],
     "extinguishDie": null,
@@ -1447,7 +1497,15 @@
     "description": "질병 저항 치료 판정에 보온. 1회분.",
     "effects": [
       {
-        "hook": "manual"
+        "hook": "conditionalBoon",
+        "params": {
+          "when": "situational",
+          "roll": {
+            "skills": [
+              "healing"
+            ]
+          }
+        }
       }
     ],
     "extinguishDie": null,

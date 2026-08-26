@@ -28,6 +28,9 @@ const KNOWN_HOOKS: EffectHook[] = [
   'maxHpBonus', 'maxWpBonus', 'movementBonus', 'armorBonus', 'light',
   'immuneFear', 'parryRangedWithMelee', 'ignoreLongRangeBane', 'throwAnyMelee',
   'reduceFallDamage', 'autoActivity', 'lifeDrain', 'selfHit', 'dropWeapon', 'outOfAmmo',
+  'bind', 'conditionalBoon', 'conditionalBane', 'multiStrike', 'curse',
+  'freeAttackAgainst', 'weaponImpaired', 'damageReduction', 'critRange', 'berserk',
+  'aura', 'castTwoSpells', 'noHealUntilWarm', 'ageShift', 'armorSet', 'movementMultiplier',
   'manual',
 ]
 

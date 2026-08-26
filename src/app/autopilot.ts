@@ -22,6 +22,7 @@ import {
   eveningSkip,
   pcAttack,
   pcCastSpell,
+  pcEscapeBind,
   pcPass,
   resolveAmbush,
   resolveCritical,
@@ -84,6 +85,8 @@ export function autoStep(data: GameData, rngSeed: number, state: GameState, tick
     }
     const slot = c.order[c.turnIndex]
     if (slot?.ownerId === 'pc' && !slot.done && c.status === 'ongoing') {
+      // 결박·경직 — 벗어나기부터
+      if (c.pcBind) return pcEscapeBind(rng, data, state)
       const target = c.enemies.find((e) => !e.state.dead)
       if (!target || c.pc.hp === 0) return pcPass(rng, data, state)
 

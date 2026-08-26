@@ -85,6 +85,21 @@ export function SheetPanel({ data, state }: { data: GameData; state: GameState }
         </div>
       )}
 
+      {(state.curses.length > 0 || state.chilled || (c.damagedWeaponIds ?? []).length > 0 || (c.impairedWeaponIds ?? []).length > 0) && (
+        <div style={{ marginTop: 10 }}>
+          {state.curses.map((x) => (
+            <span className="tag" key={x.id}>저주: {x.name}</span>
+          ))}
+          {state.chilled && <span className="tag">죽음의 한기</span>}
+          {(c.damagedWeaponIds ?? []).map((id) => (
+            <span className="tag" key={id}>{data.weapons.find((w) => w.id === id)?.name ?? id} 파손</span>
+          ))}
+          {(c.impairedWeaponIds ?? []).map((id) => (
+            <span className="tag" key={id}>{data.weapons.find((w) => w.id === id)?.name ?? id} 손상</span>
+          ))}
+        </div>
+      )}
+
       {c.conditions.length > 0 && (
         <div style={{ marginTop: 10 }}>
           {c.conditions.map((id) => {

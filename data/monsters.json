@@ -137,7 +137,7 @@
             }
           },
           {
-            "hook": "manual"
+            "hook": "noHealUntilWarm"
           }
         ]
       }
@@ -326,7 +326,10 @@
         "canDodge": false,
         "effects": [
           {
-            "hook": "manual"
+            "hook": "curse",
+            "params": {
+              "morningDie": null
+            }
           }
         ]
       },
@@ -736,7 +739,13 @@
         "canDodge": false,
         "effects": [
           {
-            "hook": "manual"
+            "hook": "bind",
+            "params": {
+              "escape": {
+                "attribute": "str"
+              },
+              "banes": 1
+            }
           }
         ]
       },
@@ -806,7 +815,12 @@
         "canDodge": true,
         "effects": [
           {
-            "hook": "manual"
+            "hook": "multiStrike",
+            "params": {
+              "countDice": "D6",
+              "dice": "D8",
+              "type": "slashing"
+            }
           }
         ]
       },
@@ -1357,7 +1371,13 @@
             }
           },
           {
-            "hook": "manual"
+            "hook": "bind",
+            "params": {
+              "escape": {
+                "attribute": "str"
+              },
+              "damagePerRound": "2D8"
+            }
           }
         ]
       },
@@ -1520,7 +1540,15 @@
             }
           },
           {
-            "hook": "manual"
+            "hook": "bind",
+            "params": {
+              "escape": {
+                "skill": "evade"
+              }
+            }
+          },
+          {
+            "hook": "noHealUntilWarm"
           }
         ]
       },

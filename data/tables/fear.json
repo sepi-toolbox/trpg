@@ -4,55 +4,124 @@
   "die": 8,
   "rows": [
     {
-      "min": 1, "max": 1,
+      "min": 1,
+      "max": 1,
       "name": "기력 고갈",
       "description": "공포가 기력과 의지를 앗아간다. WP 2D6 상실(최소 0), 낙담 상태.",
       "effects": [
-        { "hook": "drainWp", "params": { "dice": "2D6" } },
-        { "hook": "condition", "params": { "condition": "disheartened" } }
+        {
+          "hook": "drainWp",
+          "params": {
+            "dice": "2D6"
+          }
+        },
+        {
+          "hook": "condition",
+          "params": {
+            "condition": "disheartened"
+          }
+        }
       ]
     },
     {
-      "min": 2, "max": 2,
+      "min": 2,
+      "max": 2,
       "name": "떨림",
       "description": "겁먹음 상태가 된다.",
-      "effects": [{ "hook": "condition", "params": { "condition": "scared" } }]
+      "effects": [
+        {
+          "hook": "condition",
+          "params": {
+            "condition": "scared"
+          }
+        }
+      ]
     },
     {
-      "min": 3, "max": 3,
+      "min": 3,
+      "max": 3,
       "name": "가쁜 숨",
       "description": "숨이 턱까지 차오른다. 탈진 상태.",
-      "effects": [{ "hook": "condition", "params": { "condition": "exhausted" } }]
+      "effects": [
+        {
+          "hook": "condition",
+          "params": {
+            "condition": "exhausted"
+          }
+        }
+      ]
     },
     {
-      "min": 4, "max": 4,
+      "min": 4,
+      "max": 4,
       "name": "새하얀 얼굴",
       "description": "얼굴이 백지장이 된다. 본인과 10m 내에서 이를 본 플레이어 캐릭터 전원이 겁먹음 상태.",
-      "effects": [{ "hook": "manual" }]
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
     },
     {
-      "min": 5, "max": 5,
+      "min": 5,
+      "max": 5,
       "name": "비명",
       "description": "공포에 질려 비명을 지른다. 소리를 들은 플레이어 캐릭터 전원이 즉시 같은 공포 공격을 받는다(동일 공포에는 1회만 판정).",
-      "effects": [{ "hook": "manual" }]
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
     },
     {
-      "min": 6, "max": 6,
+      "min": 6,
+      "max": 6,
       "name": "격분",
       "description": "공포가 분노로 바뀐다. 다음 턴에 공포의 근원을 공격해야 한다(가능하면 근접). 격앙 상태.",
-      "effects": [{ "hook": "condition", "params": { "condition": "angry" } }, { "hook": "manual" }]
+      "effects": [
+        {
+          "hook": "condition",
+          "params": {
+            "condition": "angry"
+          }
+        },
+        {
+          "hook": "manual"
+        }
+      ]
     },
     {
-      "min": 7, "max": 7,
+      "min": 7,
+      "max": 7,
       "name": "경직",
       "description": "몸이 굳는다. 다음 턴에 행동·이동 불가. 이후 턴마다 WIL 판정(액션 아님)으로 해제.",
-      "effects": [{ "hook": "manual" }]
+      "effects": [
+        {
+          "hook": "bind",
+          "params": {
+            "escape": {
+              "attribute": "wil"
+            }
+          }
+        }
+      ]
     },
     {
-      "min": 8, "max": 8,
+      "min": 8,
+      "max": 8,
       "name": "공황 질주",
       "description": "다음 턴에 공포의 근원 반대편으로 전력 이동해야 한다. 이후 턴마다 WIL 판정(액션 아님)으로 멈출 수 있다.",
-      "effects": [{ "hook": "manual" }]
+      "effects": [
+        {
+          "hook": "bind",
+          "params": {
+            "escape": {
+              "attribute": "wil"
+            },
+            "fleeing": true
+          }
+        }
+      ]
     }
   ]
 }

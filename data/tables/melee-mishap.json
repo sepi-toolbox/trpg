@@ -21,7 +21,7 @@
       "description": "적에게 빈틈을 보인다. 적이 회피·패리 불가능한 자유 공격 1회.",
       "effects": [
         {
-          "hook": "manual"
+          "hook": "freeAttackAgainst"
         }
       ]
     },
@@ -32,7 +32,10 @@
       "description": "무기가 깊이 박힌다. 뽑으려면 STR 판정(액션).",
       "effects": [
         {
-          "hook": "manual"
+          "hook": "dropWeapon",
+          "params": {
+            "retrieveCheck": "str"
+          }
         }
       ]
     },
@@ -57,7 +60,7 @@
       "description": "단단한 곳을 때려 무기가 상한다. 수리 전까지 사용에 베인.",
       "effects": [
         {
-          "hook": "manual"
+          "hook": "weaponImpaired"
         }
       ]
     },

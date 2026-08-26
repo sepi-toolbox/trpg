@@ -105,6 +105,22 @@ export type EffectHook =
   | 'selfHit' //              자신을 타격 (사고표) — params: { damageBonus?: boolean }
   | 'dropWeapon' //           무기를 떨어뜨림 (사고표)
   | 'outOfAmmo' //            화살 소진 (사고표)
+  | 'bind' //                 결박/경직 — params: { escape: { skill?|attribute?, modifier? }, damagePerRound?, noAct? }
+  | 'conditionalBoon' //      조건부 보온 — params: { when: 'damagedMe'|'markedTarget'|'situational', roll? }
+  | 'conditionalBane' //      조건부 베인 — params: { when, roll? }
+  | 'multiStrike' //          다중 타격 — params: { count?|countDice?, dice?, type?, bane? }
+  | 'curse' //                아침 굴림 저주 — params: { morningDie?, baneAll? }
+  | 'freeAttackAgainst' //    빈틈 — 적의 자유 공격 (리액션 불가)
+  | 'weaponImpaired' //       무기 손상 (경상태) — 수리 전까지 사용에 베인
+  | 'damageReduction' //      받는 피해 감소 (리액션 주문) — params: { dice }
+  | 'critRange' //            용 범위 확대 — params: { max, perPowerLevel? }
+  | 'berserk' //              광전사 — 근접 보온, 리액션 불가, 종료 시 탈진
+  | 'aura' //                 오라 — 1라운드 판정 보온 — params: { instrumentCosts? }
+  | 'castTwoSpells' //        한 액션에 두 주문
+  | 'noHealUntilWarm' //      따뜻해질 때까지 회복 불가
+  | 'ageShift' //             나이 구간 이동 — params: { direction: 1 | -1 }
+  | 'armorSet' //             방어 등급 고정(높은 쪽) — params: { rating, perPowerLevel? }
+  | 'movementMultiplier' //   이동력 배수 — params: { multiplier }
   | 'manual' //      구조화 불가 — description 표시 후 수동 처리
 
 /** boon/bane 훅이 어느 판정에 걸리는지 지정 */

@@ -61,6 +61,10 @@ export interface Character {
   advancementMarks: string[]
   weaknessId: number | null
   mementoId: number | null
+  /** 파손된 무기 (사용 불가 — 수리 필요). 전투 간 지속 */
+  damagedWeaponIds?: string[]
+  /** 손상된 무기 (사용에 베인 — 수리 필요) */
+  impairedWeaponIds?: string[]
 }
 
 /* ─────────────────────────── 파생치 계산 ─────────────────────────── */
@@ -356,6 +360,8 @@ export function createCharacter(rng: RNG, data: GameData, input: CreationInput):
     advancementMarks: [],
     weaknessId: input.weaknessId ?? null,
     mementoId: input.mementoId ?? null,
+    damagedWeaponIds: [],
+    impairedWeaponIds: [],
   }
 
   /* 생성 직후: 알고 있는 주문을 한도까지 자동 준비 (트릭 제외) */

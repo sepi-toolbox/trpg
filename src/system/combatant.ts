@@ -81,7 +81,7 @@ export function combatantFromCharacter(data: GameData, character: Character): Co
     prone: false,
     card: null,
     acted: false,
-    damagedWeaponIds: [],
+    damagedWeaponIds: [...(character.damagedWeaponIds ?? [])],
     deathRolls: null,
     dead: false,
     abilityHooks,
