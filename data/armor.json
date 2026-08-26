@@ -1,5 +1,20 @@
 [
   {
+    "id": "padded-robe",
+    "name": "누비 로브",
+    "kind": "armor",
+    "rating": 2,
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "baneSkillIds": [],
+    "baneRangedAttacks": false,
+    "typeModifiers": {},
+    "metal": false
+  },
+  {
     "id": "leather-armor",
     "name": "가죽 갑옷",
     "kind": "armor",
