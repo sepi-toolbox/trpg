@@ -1,0 +1,13 @@
+{
+  "pushRolls": true,
+  "damageTypes": true,
+  "severeInjuries": true,
+  "weaknesses": true,
+  "mementos": true,
+  "shove": true,
+  "specialAttacks": true,
+  "mishapTables": true,
+  "magicalMishaps": true,
+  "encumbrance": true,
+  "improvisedWeapons": false
+}

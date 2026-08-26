@@ -1,0 +1,115 @@
+[
+  {
+    "id": "fighter",
+    "name": "무인",
+    "description": "(임시) 무기와 폭력이 곧 생업인 직업.",
+    "keyAttribute": "str",
+    "skillIds": ["axes", "bows", "brawling", "crossbows", "evade", "hammers", "spears", "swords"],
+    "heroicAbilityIds": ["veteran"],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": { "min": 1, "max": 2 },
+        "items": [
+          { "itemId": "broadsword" },
+          { "itemId": "shield-small" },
+          { "itemId": "chainmail" },
+          { "itemId": "torch" },
+          { "itemId": "flint-tinder" },
+          { "itemId": "field-ration", "qty": "D6" }
+        ],
+        "silver": "D6"
+      },
+      {
+        "roll": { "min": 3, "max": 4 },
+        "items": [
+          { "itemId": "short-sword" },
+          { "itemId": "crossbow-light" },
+          { "itemId": "quiver-iron" },
+          { "itemId": "leather-armor" },
+          { "itemId": "torch" },
+          { "itemId": "flint-tinder" },
+          { "itemId": "field-ration", "qty": "D6" }
+        ],
+        "silver": "D6"
+      },
+      {
+        "roll": { "min": 5, "max": 6 },
+        "items": [
+          { "itemId": "long-spear" },
+          { "itemId": "studded-leather" },
+          { "itemId": "open-helmet" },
+          { "itemId": "torch" },
+          { "itemId": "flint-tinder" },
+          { "itemId": "field-ration", "qty": "D6" }
+        ],
+        "silver": "D6"
+      }
+    ],
+    "nicknames": ["무덤장이", "돌턱", "찬바람", "식은칼", "겁없쇠", "도살자"]
+  },
+  {
+    "id": "mage",
+    "name": "술사",
+    "description": "(임시) 세계에 흐르는 옛 힘을 다루는 직업. 유파를 하나 고른다.",
+    "keyAttribute": "wil",
+    "variants": [
+      {
+        "id": "spirit",
+        "name": "정령술사",
+        "skillIds": ["spirit-magic", "beast-lore", "bushcraft", "evade", "healing", "hunting-fishing", "sneaking", "staves"]
+      },
+      {
+        "id": "elemental",
+        "name": "원소술사",
+        "skillIds": ["elemental-magic", "awareness", "evade", "healing", "languages", "myths-legends", "spot-hidden", "staves"]
+      },
+      {
+        "id": "mind",
+        "name": "심상술사",
+        "skillIds": ["mind-magic", "acrobatics", "awareness", "brawling", "evade", "healing", "languages", "myths-legends"]
+      }
+    ],
+    "heroicAbilityIds": [],
+    "startingMagic": { "spells": 3, "tricks": 3 },
+    "gearSets": [
+      {
+        "roll": { "min": 1, "max": 2 },
+        "items": [
+          { "itemId": "staff" },
+          { "itemId": "orbuculum" },
+          { "itemId": "grimoire" },
+          { "itemId": "torch" },
+          { "itemId": "flint-tinder" },
+          { "itemId": "field-ration", "qty": "D6" }
+        ],
+        "silver": "D8"
+      },
+      {
+        "roll": { "min": 3, "max": 4 },
+        "items": [
+          { "itemId": "knife" },
+          { "itemId": "wand" },
+          { "itemId": "grimoire" },
+          { "itemId": "torch" },
+          { "itemId": "flint-tinder" },
+          { "itemId": "field-ration", "qty": "D6" }
+        ],
+        "silver": "D8"
+      },
+      {
+        "roll": { "min": 5, "max": 6 },
+        "items": [
+          { "itemId": "amulet" },
+          { "itemId": "grimoire" },
+          { "itemId": "sleeping-fur" },
+          { "itemId": "torch" },
+          { "itemId": "flint-tinder" },
+          { "itemId": "field-ration", "qty": "D6" }
+        ],
+        "silver": "D8"
+      }
+    ],
+    "nicknames": ["뿌리마음", "굽은등", "잿빛망토", "폭풍손", "지팡이걸음", "그늘몰이"]
+  }
+]

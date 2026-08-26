@@ -1,0 +1,123 @@
+[
+  {
+    "id": "torch",
+    "name": "횃불",
+    "category": "lightSource",
+    "cost": { "amount": 5, "unit": "copper" },
+    "supply": "common",
+    "weight": 1,
+    "description": "반경 10m를 밝힌다. 최대 1시프트 연소. 스트레치마다, 또는 무기로 사용할 때마다 D6을 굴려 1이면 꺼진다. 무기로 쓰면 소형 나무 곤봉 취급(화염 피해).",
+    "effects": [{ "hook": "light", "params": { "radius": 10, "duration": "shift" } }],
+    "extinguishDie": 6
+  },
+  {
+    "id": "flint-tinder",
+    "name": "부싯돌과 부시",
+    "category": "lightSource",
+    "cost": { "amount": 5, "unit": "silver" },
+    "supply": "common",
+    "weight": 0,
+    "description": "횃불·초·랜턴 점화와 불 피우기에 필요.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "field-ration",
+    "name": "휴대 식량",
+    "category": "tradeGoods",
+    "cost": { "amount": 1, "unit": "silver" },
+    "supply": "common",
+    "weight": 0.25,
+    "description": "하루 1식 필요. 먹지 않으면 굶주림 규칙 적용.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "quiver-iron",
+    "name": "화살통(철촉)",
+    "category": "tradeGoods",
+    "cost": { "amount": 2, "unit": "gold" },
+    "supply": "common",
+    "weight": 1,
+    "description": "활·석궁 사격에 필요. 화살 개수는 세지 않는다.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "grimoire",
+    "name": "마법서",
+    "category": "study",
+    "cost": { "amount": 50, "unit": "gold" },
+    "supply": "unique",
+    "weight": 1,
+    "description": "습득한 주문을 기록한다. 기록에 주문당 1시프트. 준비 안 된 주문도 여기서 직접 시전 가능(시간 2배).",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "orbuculum",
+    "name": "수정구",
+    "category": "study",
+    "cost": { "amount": 18, "unit": "gold" },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "주문의 매개체(focus)로 사용 가능.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "wand",
+    "name": "완드",
+    "category": "study",
+    "cost": { "amount": 10, "unit": "gold" },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "주문의 매개체(focus)로 사용 가능.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "amulet",
+    "name": "부적",
+    "category": "study",
+    "cost": { "amount": 3, "unit": "gold" },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "주문의 매개체(focus)로 사용 가능.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "sleeping-fur",
+    "name": "침낭 모피",
+    "category": "tradeGoods",
+    "cost": { "amount": 1, "unit": "gold" },
+    "supply": "common",
+    "weight": 1,
+    "description": "없으면 야영 판정(야외술)에 베인.",
+    "effects": [],
+    "extinguishDie": null
+  },
+  {
+    "id": "healing-potion",
+    "name": "치유 물약",
+    "category": "medicine",
+    "cost": { "amount": 50, "unit": "gold" },
+    "supply": "rare",
+    "weight": 1,
+    "description": "즉시 2D6 HP 회복.",
+    "effects": [{ "hook": "heal", "params": { "dice": "2D6" } }],
+    "extinguishDie": null
+  },
+  {
+    "id": "bandages",
+    "name": "붕대 (10회분)",
+    "category": "medicine",
+    "cost": { "amount": 5, "unit": "silver" },
+    "supply": "common",
+    "weight": 1,
+    "description": "없으면 소생(치료) 판정에 베인. 시도마다 1회분 소모.",
+    "effects": [],
+    "extinguishDie": null
+  }
+]

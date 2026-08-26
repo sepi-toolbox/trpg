@@ -1,0 +1,130 @@
+[
+  {
+    "id": "adaptive",
+    "name": "임기응변",
+    "description": "스킬 판정을 할 때, 정당화할 수 있다면 다른 스킬로 대신 굴린다.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "effects": [{ "hook": "manual" }]
+  },
+  {
+    "id": "hard-to-catch",
+    "name": "미꾸라지",
+    "description": "공격을 회피할 때 발동. 회피 판정에 보온.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "effects": [{ "hook": "boon", "params": { "roll": { "skills": ["evade"] } } }]
+  },
+  {
+    "id": "unforgiving",
+    "name": "옛 원한",
+    "description": "과거에 자신에게 피해(1점 이상)를 준 상대를 공격할 때 발동. 공격 판정에 보온.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "effects": [{ "hook": "manual" }]
+  },
+  {
+    "id": "deep-trance",
+    "name": "깊은 명상",
+    "description": "스트레치 휴식 중 깊이 명상한다. HP D6, WP D6 추가 회복, 상태이상 1개 추가 해소. 명상 중에는 완전히 무방비이며 깨울 수 없다.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 0,
+    "activation": "passive",
+    "stackable": false,
+    "effects": [
+      { "hook": "heal", "params": { "dice": "D6" } },
+      { "hook": "healWp", "params": { "dice": "D6" } },
+      { "hook": "healCondition", "params": { "count": 1 } }
+    ]
+  },
+  {
+    "id": "hot-temper",
+    "name": "불같은 성미",
+    "description": "스킬 판정에 발동(액션 아님). 판정에 보온을 얻고 격앙 상태가 된다. INT 및 INT 기반 스킬에는 사용 불가.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "effects": [
+      { "hook": "boon", "params": { "roll": { "all": true } } },
+      { "hook": "condition", "params": { "condition": "angry" } }
+    ]
+  },
+  {
+    "id": "webbed-feet",
+    "name": "물갈퀴",
+    "description": "수영 판정에 항상 보온. 물속에서 이동력 감소 없음.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 0,
+    "activation": "passive",
+    "stackable": false,
+    "effects": [{ "hook": "boon", "params": { "roll": { "skills": ["swimming"] } } }]
+  },
+  {
+    "id": "hunters-mark",
+    "name": "사냥 표식",
+    "description": "보이거나 냄새 맡을 수 있는 대상을 사냥감으로 지정(전투 중 액션). 하루 종일 추적 가능. 추가 1 WP로 사냥감 공격에 보온.",
+    "kind": "innate",
+    "requirement": null,
+    "wpCost": 3,
+    "activation": "action",
+    "stackable": false,
+    "effects": [{ "hook": "manual" }]
+  },
+  {
+    "id": "robust",
+    "name": "강골",
+    "description": "최대 HP +2. 제한 없이 중복 습득 가능.",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 0,
+    "activation": "passive",
+    "stackable": true,
+    "effects": [{ "hook": "maxHpBonus", "params": { "amount": 2 } }]
+  },
+  {
+    "id": "focused",
+    "name": "집중",
+    "description": "최대 WP +2. 제한 없이 중복 습득 가능.",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 0,
+    "activation": "passive",
+    "stackable": true,
+    "effects": [{ "hook": "maxWpBonus", "params": { "amount": 2 } }]
+  },
+  {
+    "id": "veteran",
+    "name": "역전의 용사",
+    "description": "라운드 시작에 발동. 새 선제 카드를 뽑는 대신 지난 라운드의 카드를 유지한다. 액션 아님.",
+    "kind": "heroic",
+    "requirement": { "skillIds": ["anyWeapon"], "level": 12 },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "effects": [{ "hook": "initiativeSwap", "params": { "mode": "keepPrevious" } }]
+  },
+  {
+    "id": "dual-wield",
+    "name": "쌍수",
+    "description": "한손 무기 둘을 들었을 때 자기 턴에 발동. 보조 무기의 STR 요구 +3. 두 번째 무기로 추가 공격 1회(베인). 첫 공격의 피해까지 끝낸 뒤 두 번째 공격을 굴린다.",
+    "kind": "heroic",
+    "requirement": { "skillIds": ["anyMeleeWeapon"], "level": 12 },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "effects": [{ "hook": "extraAttack", "params": { "bane": true } }]
+  }
+]

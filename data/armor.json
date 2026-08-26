@@ -1,0 +1,68 @@
+[
+  {
+    "id": "leather-armor",
+    "name": "가죽 갑옷",
+    "kind": "armor",
+    "rating": 1,
+    "cost": { "amount": 2, "unit": "gold" },
+    "supply": "common",
+    "baneSkillIds": [],
+    "baneRangedAttacks": false,
+    "typeModifiers": { "bludgeoning": 2 }
+  },
+  {
+    "id": "studded-leather",
+    "name": "징 박은 가죽 갑옷",
+    "kind": "armor",
+    "rating": 2,
+    "cost": { "amount": 10, "unit": "gold" },
+    "supply": "uncommon",
+    "baneSkillIds": ["sneaking"],
+    "baneRangedAttacks": false,
+    "typeModifiers": { "bludgeoning": 2 }
+  },
+  {
+    "id": "chainmail",
+    "name": "사슬 갑옷",
+    "kind": "armor",
+    "rating": 4,
+    "cost": { "amount": 50, "unit": "gold" },
+    "supply": "uncommon",
+    "baneSkillIds": ["evade", "sneaking"],
+    "baneRangedAttacks": false,
+    "typeModifiers": { "slashing": 2 }
+  },
+  {
+    "id": "plate-armor",
+    "name": "판금 갑옷",
+    "kind": "armor",
+    "rating": 6,
+    "cost": { "amount": 500, "unit": "gold" },
+    "supply": "rare",
+    "baneSkillIds": ["acrobatics", "evade", "sneaking"],
+    "baneRangedAttacks": false,
+    "typeModifiers": {}
+  },
+  {
+    "id": "open-helmet",
+    "name": "개방형 투구",
+    "kind": "helmet",
+    "rating": 1,
+    "cost": { "amount": 12, "unit": "gold" },
+    "supply": "uncommon",
+    "baneSkillIds": ["awareness"],
+    "baneRangedAttacks": false,
+    "typeModifiers": {}
+  },
+  {
+    "id": "great-helm",
+    "name": "그레이트 헬름",
+    "kind": "helmet",
+    "rating": 2,
+    "cost": { "amount": 100, "unit": "gold" },
+    "supply": "rare",
+    "baneSkillIds": ["awareness"],
+    "baneRangedAttacks": true,
+    "typeModifiers": {}
+  }
+]

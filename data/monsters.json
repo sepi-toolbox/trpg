@@ -1,0 +1,84 @@
+[
+  {
+    "id": "marsh-lurker",
+    "name": "늪그림자",
+    "description": "(임시) 늪지의 안개 속을 떠도는 원령. 산 자의 온기를 탐한다.",
+    "ferocity": 2,
+    "size": "normal",
+    "movement": { "land": 12 },
+    "armor": null,
+    "hp": 27,
+    "resistances": [],
+    "immunities": ["slashing", "piercing", "bludgeoning"],
+    "persuadable": true,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "비물질 — 마법과 화염 외 모든 피해에 면역",
+      "쓰러뜨려도 1시프트 뒤 돌아온다. 영구히 몰아내려면 전용 주문 또는 사연 해결이 필요",
+      "설득 가능하지만 판정에 베인"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "돌진",
+        "description": "10m 내 대상에게 달려들어 후려친다. 2D6m 밀려나고 그만큼 타격 피해, 넘어진다.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [{ "hook": "knockback", "params": { "dice": "2D6", "damagePerMeter": true, "prone": true } }]
+      },
+      {
+        "roll": 2,
+        "name": "차가운 손",
+        "description": "가슴에 손을 찔러 넣는다. 2D10 피해, 겁먹음. 방어구 무효.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          { "hook": "damage", "params": { "dice": "2D10", "ignoreArmor": true } },
+          { "hook": "condition", "params": { "condition": "scared" } }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "울부짖음",
+        "description": "10m 내 전원에게 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [{ "hook": "fearAttack", "params": { "radius": 10 } }]
+      },
+      {
+        "roll": 4,
+        "name": "죽음의 응시",
+        "description": "한 명을 응시한다. 겁먹음 + 공포 공격(WIL 판정에 베인).",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          { "hook": "condition", "params": { "condition": "scared" } },
+          { "hook": "fearAttack", "params": { "bane": true } }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "옥죄는 포옹",
+        "description": "10m 내 대상 앞에 나타나 끌어안는다. 3D6 타격 피해, 휘청임.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          { "hook": "damage", "params": { "dice": "3D6", "type": "bludgeoning" } },
+          { "hook": "condition", "params": { "condition": "dazed" } }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "한기 주입",
+        "description": "몸에 죽음의 한기를 흘려 넣는다. 2D8 피해, 방어구 무효. 따뜻한 곳에서 1시프트를 보내기 전까지 HP·WP 회복 불가.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          { "hook": "damage", "params": { "dice": "2D8", "ignoreArmor": true } },
+          { "hook": "manual" }
+        ]
+      }
+    ]
+  }
+]

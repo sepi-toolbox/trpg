@@ -1,0 +1,52 @@
+{
+  "baseChanceTable": [
+    { "min": 1, "max": 5, "baseChance": 3 },
+    { "min": 6, "max": 8, "baseChance": 4 },
+    { "min": 9, "max": 12, "baseChance": 5 },
+    { "min": 13, "max": 15, "baseChance": 6 },
+    { "min": 16, "max": 18, "baseChance": 7 }
+  ],
+  "damageBonusTable": [
+    { "min": 1, "max": 12, "bonus": null },
+    { "min": 13, "max": 16, "bonus": "D4" },
+    { "min": 17, "max": 18, "bonus": "D6" }
+  ],
+  "ageTable": [
+    {
+      "id": "young",
+      "name": "청년",
+      "roll": { "min": 1, "max": 3 },
+      "extraTrainedSkills": 2,
+      "attributeMods": { "agl": 1, "con": 1 }
+    },
+    {
+      "id": "adult",
+      "name": "장년",
+      "roll": { "min": 4, "max": 5 },
+      "extraTrainedSkills": 4,
+      "attributeMods": {}
+    },
+    {
+      "id": "old",
+      "name": "노년",
+      "roll": { "min": 6, "max": 6 },
+      "extraTrainedSkills": 6,
+      "attributeMods": { "str": -2, "agl": -2, "con": -2, "int": 1, "wil": 1 }
+    }
+  ],
+  "movementModTable": [
+    { "min": 1, "max": 6, "mod": -4 },
+    { "min": 7, "max": 9, "mod": -2 },
+    { "min": 10, "max": 12, "mod": 0 },
+    { "min": 13, "max": 15, "mod": 2 },
+    { "min": 16, "max": 18, "mod": 4 }
+  ],
+  "conditions": [
+    { "id": "exhausted", "attribute": "str", "name": "탈진" },
+    { "id": "sickly", "attribute": "con", "name": "병약" },
+    { "id": "dazed", "attribute": "agl", "name": "휘청임" },
+    { "id": "angry", "attribute": "int", "name": "격앙" },
+    { "id": "scared", "attribute": "wil", "name": "겁먹음" },
+    { "id": "disheartened", "attribute": "cha", "name": "낙담" }
+  ]
+}

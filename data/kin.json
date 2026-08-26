@@ -1,0 +1,50 @@
+[
+  {
+    "id": "human",
+    "name": "인간",
+    "description": "(임시) 가장 흔한 종족. 어디에나 있고 무엇이든 된다.",
+    "movement": 10,
+    "roll": { "min": 1, "max": 4 },
+    "abilityIds": ["adaptive"]
+  },
+  {
+    "id": "halfkin",
+    "name": "반인족",
+    "description": "(임시) 작고 온화한 언덕 사람들. 숨는 데 능하다.",
+    "movement": 8,
+    "roll": { "min": 5, "max": 7 },
+    "abilityIds": ["hard-to-catch"]
+  },
+  {
+    "id": "stonefolk",
+    "name": "바위족",
+    "description": "(임시) 오래된 지하 장인들. 원한을 잊지 않는다.",
+    "movement": 8,
+    "roll": { "min": 8, "max": 9 },
+    "abilityIds": ["unforgiving"]
+  },
+  {
+    "id": "starfolk",
+    "name": "별지기",
+    "description": "(임시) 숲을 지키는 옛 종족. 깊은 명상으로 회복한다.",
+    "movement": 10,
+    "roll": { "min": 10, "max": 10 },
+    "abilityIds": ["deep-trance"]
+  },
+  {
+    "id": "beakfolk",
+    "name": "부리족",
+    "description": "(임시) 깃털 달린 장사꾼들. 성미가 불같다.",
+    "movement": 8,
+    "roll": { "min": 11, "max": 11 },
+    "abilityIds": ["hot-temper", "webbed-feet"]
+  },
+  {
+    "id": "fangkin",
+    "name": "송곳니족",
+    "description": "(임시) 야생의 사냥꾼들. 한번 정한 사냥감을 놓치지 않는다.",
+    "movement": 12,
+    "roll": { "min": 12, "max": 12 },
+    "abilityIds": ["hunters-mark"]
+  }
+]

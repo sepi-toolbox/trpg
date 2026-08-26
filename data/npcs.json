@@ -1,0 +1,27 @@
+[
+  {
+    "id": "guard",
+    "name": "경비병",
+    "kind": "minion",
+    "skills": { "awareness": 10, "swords": 12 },
+    "heroicAbilities": [],
+    "damageBonus": { "str": "D4" },
+    "hp": 12,
+    "wp": null,
+    "gearIds": ["broadsword", "studded-leather"]
+  },
+  {
+    "id": "bandit-chief",
+    "name": "산적 두목",
+    "kind": "boss",
+    "skills": { "awareness": 12, "brawling": 15, "hammers": 15 },
+    "heroicAbilities": [
+      { "abilityId": "robust", "count": 6 },
+      { "abilityId": "veteran", "count": 1 }
+    ],
+    "damageBonus": { "str": "D6" },
+    "hp": 30,
+    "wp": 16,
+    "gearIds": ["chainmail", "open-helmet"]
+  }
+]
