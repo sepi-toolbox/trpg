@@ -416,9 +416,11 @@ export function applyDamage(
   data: GameData,
   defender: Combatant,
   damage: DamageRoll,
-  options: { melee: boolean },
+  options: { melee: boolean; armorMultiplier?: number },
 ): DamageApplication {
-  const rating = damage.ignoreArmor ? 0 : armorRating(data, defender, damage.damageType)
+  const rating = damage.ignoreArmor
+    ? 0
+    : armorRating(data, defender, damage.damageType) * (options.armorMultiplier ?? 1)
   const afterArmor = Math.max(0, damage.total - rating)
   const absorbed = damage.total - afterArmor
 

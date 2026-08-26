@@ -7,6 +7,7 @@ import { SESSION_QUESTIONS } from '../system/character'
 import type { GameState } from './session'
 import {
   eveningCastSpell,
+  eveningFish,
   eveningHunt,
   eveningPrepareSpells,
   eveningRest,
@@ -111,9 +112,23 @@ function GameScreen({
               <button className="primary" onClick={() => setState(eveningRest(rng, data, state))}>
                 휴식 (스트레치 — HP·WP·상태이상)
               </button>
-              <button onClick={() => setState(eveningHunt(rng, data, state))}>
-                사냥 (식량 조달)
-              </button>
+              {(() => {
+                const has = (id: string) => state.character.inventory.some((i) => i.itemId === id && i.qty > 0)
+                const canHunt = state.character.weaponsAtHand.length > 0 || has('snare') || has('bear-trap')
+                const canFish = has('fishing-rod') || has('fishing-net')
+                return (
+                  <>
+                    <button disabled={!canHunt} title={canHunt ? undefined : '무기나 덫이 필요하다'}
+                      onClick={() => setState(eveningHunt(rng, data, state))}>
+                      사냥 (식량 조달)
+                    </button>
+                    <button disabled={!canFish} title={canFish ? undefined : '낚싯대나 그물이 필요하다'}
+                      onClick={() => setState(eveningFish(rng, data, state))}>
+                      낚시{canFish && has('fishing-net') ? ' (그물 D6)' : ' (낚싯대 D4)'}
+                    </button>
+                  </>
+                )
+              })()}
               <button onClick={() => setState(eveningSkip(rng, data, state))}>
                 바로 잔다
               </button>

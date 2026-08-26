@@ -1111,7 +1111,11 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "knockback",
+        "params": {
+          "dice": "2D4",
+          "damagePerMeter": true
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1306,7 +1310,11 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "knockback",
+        "params": {
+          "dice": "2D6",
+          "damagePerMeter": true
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1336,7 +1344,12 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "knockback",
+        "params": {
+          "dice": "2D4",
+          "damagePerMeter": true,
+          "prone": true
+        }
       }
     ],
     "perPowerLevel": null,
@@ -1840,7 +1853,11 @@
     "usesPowerLevel": true,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "knockback",
+        "params": {
+          "dice": "2D6",
+          "damagePerMeter": true
+        }
       }
     ],
     "perPowerLevel": null,

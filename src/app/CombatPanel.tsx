@@ -173,7 +173,7 @@ export function CombatPanel({
         <div className="event-card bad">
           <p style={{ marginTop: 0 }}>
             <strong>공격이 날아온다!</strong>{' '}
-            {c.prompt.monsterAttack ? c.prompt.monsterAttack.description : '리액션을 선택하면 이번 라운드 턴을 소모한다.'}
+            {c.prompt.monsterAttack?.description || '리액션을 선택하면 이번 라운드 턴을 소모한다.'}
           </p>
           <div className="button-row">
             {c.prompt.canDodge && (

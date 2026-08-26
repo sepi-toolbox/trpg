@@ -38,6 +38,10 @@ export interface Combatant {
   /** 죽음 판정 진행 상태 (0 HP 일 때만) */
   deathRolls: { successes: number; failures: number } | null
   dead: boolean
+  /** 동물 등 자연 무기 하나로 싸우는 참가자 (무기 대신 사용) */
+  naturalAttack?: { skillLevel: number; damage: string; name: string } | null
+  /** 라운드당 이동력 (미기재 시 게임 루프 기본값) */
+  movement?: number
 }
 
 /** NPC 미기재 스킬 기본치 */
@@ -124,6 +128,38 @@ export function combatantFromNpc(data: GameData, npcId: string, uid?: string): C
     damagedWeaponIds: [],
     deathRolls: null,
     dead: false,
+  }
+}
+
+/** 동물 → 전투 참가자. 자연 무기(naturalAttack) 하나로 싸운다. */
+export function combatantFromAnimal(data: GameData, animalId: string, uid?: string): Combatant {
+  const animal = data.animals.find((a) => a.id === animalId)
+  if (!animal) throw new Error(`없는 동물: ${animalId}`)
+  return {
+    id: uid ?? animal.id,
+    name: animal.name,
+    side: 'enemy',
+    kind: 'npc',
+    hp: animal.hp,
+    maxHp: animal.hp,
+    wp: null,
+    conditions: [],
+    skills: { ...animal.skills },
+    attributes: null,
+    damageBonusStr: null,
+    damageBonusAgl: null,
+    weaponsAtHand: [],
+    drawnWeaponIds: [],
+    armorId: null,
+    helmetId: null,
+    prone: false,
+    card: null,
+    acted: false,
+    damagedWeaponIds: [],
+    deathRolls: null,
+    dead: false,
+    naturalAttack: { skillLevel: animal.attack.skillLevel, damage: animal.attack.damage, name: animal.name },
+    movement: animal.movement,
   }
 }
 

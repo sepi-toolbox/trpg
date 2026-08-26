@@ -1,10 +1,10 @@
 # manual 효과 분류 — 훅 승격 작업 목록
 
-> `hook: "manual"` 222건 전수 분류 (기준 커밋 시점). 승격 = 엔진이 자동 처리하도록
+> `hook: "manual"` 222건 전수 분류 (기준 커밋 시점). 1·2군 완료 후 잔여 198건. 승격 = 엔진이 자동 처리하도록
 > 훅/연결을 만드는 것. **위에서부터 싸고 효과가 크다** — 1·2군은 새 훅 없이 끝난다.
 > 파티 전제 효과는 1인 플레이에서 가치가 없으므로 후순위로 몰았다.
 
-## 1군 — 즉시 연결형 (새 훅 불필요, 기존 엔진 함수에 소지품 검사만 연결) · 13건
+## 1군 — 즉시 연결형 ✅ 완료 (blanket 만 보류 — 수면 추위 시스템 없음)
 
 이미 엔진에 파라미터/extra 가 있는데 호출부가 인벤토리를 안 보고 있는 것들.
 
@@ -21,7 +21,7 @@
 | table:journey-mishap 11 (사나운 짐승) | `animals.json` 에서 스폰 → 전투 | 동물 데이터 신설로 가능해짐 |
 | items/backpack | ~~encumbrance~~ | ✅ 이미 구현됨 — manual 표기만 정리 |
 
-## 2군 — 데이터 치환형 (기존 훅으로 재표현, 코드 변경 0) · 6건
+## 2군 — 데이터 치환형 ✅ 완료 (force-fist 는 버프 지속 시스템 필요 → 4군으로 이동)
 
 | 대상 | 치환 | 비고 |
 |---|---|---|
@@ -30,7 +30,7 @@
 | spells/cyclone | `knockback {dice: 2D4, damagePerMeter, prone}` | 베인 특례는 desc |
 | spells/psychic-blow | `knockback {dice: 2D6, damagePerMeter}` | 회피·패리 가능은 기본 경로 |
 | abilities/battle-cry | `healCondition {count: 1}` | 1인 플레이 기준 자신 = 아군 전원 |
-| spells/force-fist | `extraDamageDie` + 무기 필터 param | 맨손 한정 param 하나 추가 |
+| ~~spells/force-fist~~ | → 4군 | 지속 버프 추적이 먼저 필요 |
 
 ## 3군 — 소형 신규 훅 (엔진 한 지점 수정으로 끝) · 18건
 

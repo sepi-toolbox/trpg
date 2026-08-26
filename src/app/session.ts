@@ -16,7 +16,7 @@ import type { Character } from '../system/character'
 import { baseChance, encumbrance, maxHp, maxWp, movementOf, resolveAdvancement, markAdvancement } from '../system/character'
 import type { AdvancementRollResult } from '../system/character'
 import type { Combatant } from '../system/combatant'
-import { combatantFromCharacter, combatantFromNpc, weaponOf } from '../system/combatant'
+import { combatantFromAnimal, combatantFromCharacter, combatantFromNpc, weaponOf } from '../system/combatant'
 import type { AttackRoll, CriticalChoice } from '../system/combat'
 import {
   applyDamage,
@@ -52,17 +52,18 @@ import { applyEffects } from '../system/effects'
 import type { Vitals, RestUsage } from '../system/hazards'
 import {
   FRESH_REST_USAGE,
+  coldExposureFailure,
   stretchRest,
   shiftRest,
   sufferCondition,
   starvationDailyTick,
 } from '../system/hazards'
 import { stretchRestBonus } from '../system/effects'
-import { pathfind, makeCamp, hunt, forcedMarch, KM_PER_SHIFT_FOOT } from '../system/journey'
+import { pathfind, makeCamp, hunt, fish, forcedMarch, KM_PER_SHIFT_FOOT } from '../system/journey'
 import { castSpell, prepareSpells, rollSpellDice, isHealingSpell, spellOf } from '../system/magic'
 import { conditionBanes, rollD20 } from '../system/roll'
 import { gatherMods } from '../system/combat'
-import { roll as rollDice } from '../system/dice'
+import { roll as rollDice, rollWithExtraDice } from '../system/dice'
 
 export const JOURNEY_TOTAL_KM = 60
 
@@ -127,6 +128,8 @@ export interface CombatSession {
   sneakPending: boolean
   /** 이번 라운드에 무기 바꿔 들기(자유 행동)를 썼는가 */
   drewWeaponThisRound: boolean
+  /** 사냥감 전투 — 승리 시 얻는 식량 주사위 */
+  preyRations: string | null
 }
 
 /* ─────────────────────────── 게임 상태 ─────────────────────────── */
@@ -275,7 +278,7 @@ export function travelShift(rng: RNG, data: GameData, state: GameState, forced =
   const pf = pathfind(rng, data, {
     skillLevels: s.character.skillLevels,
     conditions: s.character.conditions,
-  }, { hasMap: false })
+  }, { hasMap: hasItem(s.character, 'map') })
   s = trackMark(s, 'bushcraft', pf.roll.dragon, pf.roll.demon)
 
   const km = Math.round(KM_PER_SHIFT_FOOT * pf.distanceFactor)
@@ -289,8 +292,8 @@ export function travelShift(rng: RNG, data: GameData, state: GameState, forced =
     s = log(s, 'good', `지름길 발견! ${km}km 전진 (${s.kmTraveled}/${JOURNEY_TOTAL_KM}km)`)
   } else if (pf.mishap) {
     s = log(s, 'bad', `사고 — ${pf.mishap.name}: ${km}km 전진`)
-    s = applyJourneyMishap(rng, s, pf.mishap)
-    if (s.screen === 'dead') return s
+    s = applyJourneyMishap(rng, data, s, pf.mishap)
+    if (s.screen === 'dead' || s.screen === 'combat') return s
   } else {
     s = log(s, 'info', `${km}km 전진 (${s.kmTraveled}/${JOURNEY_TOTAL_KM}km)`)
   }
@@ -325,7 +328,7 @@ export function travelShift(rng: RNG, data: GameData, state: GameState, forced =
   return s
 }
 
-function applyJourneyMishap(rng: RNG, state: GameState, row: RollTableRow): GameState {
+function applyJourneyMishap(rng: RNG, data: GameData, state: GameState, row: RollTableRow): GameState {
   let s = state
   const dmgNotation = row.extra?.['damage'] as string | undefined
   if (dmgNotation) {
@@ -333,12 +336,12 @@ function applyJourneyMishap(rng: RNG, state: GameState, row: RollTableRow): Game
     const evade = rollD20(rng, s.character.skillLevels['evade'] ?? 0)
     s = trackMark(s, 'evade', evade.dragon, evade.demon)
     if (!evade.success) {
-      const dice = dmgNotation
-      let dmg = 0
-      const spec = dice.toUpperCase()
-      dmg = spec === 'D6' ? rollDie(rng, 6) : spec === 'D10' ? rollDie(rng, 10) : rollDie(rng, 6)
+      let dmg = rollDice(rng, dmgNotation).total
       const boots = row.extra?.['bootsReduce'] as number | undefined
-      if (boots) dmg = Math.max(0, dmg - boots) // 장화 보유 가정 안 함 — 초벌은 미적용이 기본이나 여기선 감산 없음
+      if (boots && hasItem(s.character, 'boots')) {
+        dmg = Math.max(0, dmg - boots)
+        s = log(s, 'info', `장화가 충격을 ${boots} 줄였다.`)
+      }
       const hp = Math.max(0, s.character.hp - dmg)
       s = { ...s, character: { ...s.character, hp } }
       s = log(s, 'bad', `${row.name} — ${dmg} 피해 (HP ${hp})`)
@@ -349,11 +352,38 @@ function applyJourneyMishap(rng: RNG, state: GameState, row: RollTableRow): Game
       s = log(s, 'good', `${row.name} — 아슬아슬하게 피했다.`)
     }
   }
+  // 망토가 있으면 무효인 상태이상 (벌레 떼 등)
   const cond = row.extra?.['conditionWithoutCloak'] as ConditionId | undefined
   if (cond) {
-    const suffered = sufferCondition(rng, vitalsOf(s.character), cond)
-    s = { ...s, character: withVitals(s.character, suffered.vitals) }
-    if (suffered.gained) s = log(s, 'bad', `${row.name} — 상태이상`)
+    if (hasItem(s.character, 'cloak')) {
+      s = log(s, 'info', `${row.name} — 망토 덕에 견뎠다.`)
+    } else {
+      const suffered = sufferCondition(rng, vitalsOf(s.character), cond)
+      s = { ...s, character: withVitals(s.character, suffered.vitals) }
+      if (suffered.gained) s = log(s, 'bad', `${row.name} — 상태이상`)
+    }
+  }
+  // 폭우 등 — 망토 없으면 추위 판정 (모피 외투 보온)
+  if (row.extra?.['coldWithoutCloak'] === true && !hasItem(s.character, 'cloak')) {
+    const boons = hasItem(s.character, 'fur-coat') ? 1 : 0
+    const cold = rollD20(rng, s.character.attributes.con, { boons })
+    if (!cold.success) {
+      const out = coldExposureFailure(rng, vitalsOf(s.character))
+      s = { ...s, character: withVitals(s.character, out.vitals) }
+      s = log(s, 'bad', `추위가 뼛속까지 스민다 — HP -${out.hpLost}, WP -${out.wpLost}`)
+      if (s.character.hp === 0) {
+        return { ...log(s, 'bad', '차가운 비 속에 쓰러졌다…'), screen: 'dead' }
+      }
+    } else {
+      s = log(s, 'info', '비바람을 버텨냈다.')
+    }
+  }
+  // 사나운 짐승 — 동물 표에서 스폰
+  const beasts = row.extra?.['animalEncounter'] as string[] | undefined
+  if (beasts && beasts.length > 0) {
+    const pick = beasts[Math.floor(rng.next() * beasts.length)]!
+    s = log(s, 'bad', '수풀이 갈라진다 — 들짐승이다!')
+    return beginCombat(rng, data, s, [{ npcOrMonster: 'animal', id: pick, distance: 6 }])
   }
   return s
 }
@@ -365,6 +395,10 @@ export function eveningHunt(rng: RNG, data: GameData, state: GameState): GameSta
   const weapon = state.character.weaponsAtHand
     .map((id) => weaponOf(data, id))
     .find((w) => w.category !== 'shield')
+  const hasTrap = hasItem(state.character, 'snare') || hasItem(state.character, 'bear-trap')
+  if (!weapon && !hasTrap) {
+    return log(state, 'info', '사냥 도구가 없다 — 무기나 덫(올가미·곰덫)이 필요하다.')
+  }
   const out = hunt(rng, data, {
     skillLevels: state.character.skillLevels,
     conditions: state.character.conditions,
@@ -376,10 +410,31 @@ export function eveningHunt(rng: RNG, data: GameData, state: GameState): GameSta
     s = log(s, 'good', `사냥 성공 — ${out.animal?.name} (식량 +${out.rations}, 총 ${s.rations})`)
   } else if (out.attackedByPrey) {
     s = log(s, 'bad', `${out.animal?.name}이(가) 덤벼든다!`)
-    return nightPhase(rng, data, beginCombat(rng, data, s, [{ npcOrMonster: 'npc', id: 'raider' }]), true)
-    // 초벌: 멧돼지 전투는 약탈자 스탯으로 대체 (베스티어리 확충 시 교체)
+    // 멧돼지 — 동물 스탯으로 전투. 이기면 고기(사냥감표 수확)를 얻는다.
+    const rationDice = String(out.animal?.extra?.['rations'] ?? '2D6')
+    return beginCombat(rng, data, s, [{ npcOrMonster: 'animal', id: 'boar', distance: 4 }], { preyRations: rationDice })
   } else {
     s = log(s, 'info', '사냥은 빈손으로 끝났다.')
+  }
+  return nightPhase(rng, data, s)
+}
+
+/** 낚시 (저녁 시프트) — 낚싯대 D4 / 그물 D6 식량. 도구가 있어야 한다. */
+export function eveningFish(rng: RNG, data: GameData, state: GameState): GameState {
+  if (state.screen !== 'evening') return state
+  const hasNet = hasItem(state.character, 'fishing-net')
+  const hasRod = hasItem(state.character, 'fishing-rod')
+  if (!hasNet && !hasRod) return log(state, 'info', '낚시 도구가 없다 — 낚싯대나 그물이 필요하다.')
+  const out = fish(rng, data, {
+    skillLevels: state.character.skillLevels,
+    conditions: state.character.conditions,
+  }, hasNet ? 'net' : 'rod')
+  let s = trackMark(state, 'hunting-fishing', out.roll.dragon, out.roll.demon)
+  if (out.rations > 0) {
+    s = { ...s, rations: s.rations + out.rations }
+    s = log(s, 'good', `낚시 성공 — 식량 +${out.rations} (총 ${s.rations})`)
+  } else {
+    s = log(s, 'info', '입질이 없었다.')
   }
   return nightPhase(rng, data, s)
 }
@@ -547,7 +602,10 @@ function nightPhase(rng: RNG, data: GameData, state: GameState, skipCamp = false
     : makeCamp(rng, data, {
         skillLevels: s.character.skillLevels,
         conditions: s.character.conditions,
-      }, { hasSleepingFur: hasItem(s.character, 'sleeping-fur') })
+      }, {
+        hasSleepingFur: hasItem(s.character, 'sleeping-fur'),
+        usingTent: hasItem(s.character, 'tent-small') || hasItem(s.character, 'tent-large'),
+      })
 
   if (!skipCamp && 'roll' in camp) {
     s = trackMark(s, 'bushcraft', camp.roll.dragon, camp.roll.demon)
@@ -580,7 +638,7 @@ function hasItem(character: Character, itemId: string): boolean {
 /* ─────────────────────────── 전투: 시작·선제 ─────────────────────────── */
 
 interface EnemySpec {
-  npcOrMonster: 'npc' | 'monster'
+  npcOrMonster: 'npc' | 'monster' | 'animal'
   id: string
   /** 개전 시 거리(m). 기본 2 (이미 교전 거리) */
   distance?: number
@@ -591,6 +649,8 @@ interface BeginCombatOptions {
   ambushOption?: boolean
   /** 1라운드 기습: 어느 쪽이 카드를 고르는가 */
   surprise?: 'pc' | 'enemies' | null
+  /** 사냥감 전투 — 승리 시 식량 주사위 */
+  preyRations?: string
 }
 
 export function beginCombat(
@@ -604,7 +664,9 @@ export function beginCombat(
   const enemies: EnemyUnit[] = specs.map((spec, i) =>
     spec.npcOrMonster === 'monster'
       ? { kind: 'monster', state: spawnMonster(data, spec.id, `${spec.id}#${i}`), distance: spec.distance ?? 2 }
-      : { kind: 'npc', state: combatantFromNpc(data, spec.id, `${spec.id}#${i}`), distance: spec.distance ?? 2 },
+      : spec.npcOrMonster === 'animal'
+        ? { kind: 'npc', state: combatantFromAnimal(data, spec.id, `${spec.id}#${i}`), distance: spec.distance ?? 2 }
+        : { kind: 'npc', state: combatantFromNpc(data, spec.id, `${spec.id}#${i}`), distance: spec.distance ?? 2 },
   )
 
   const session: CombatSession = {
@@ -621,6 +683,7 @@ export function beginCombat(
     pcWaited: false,
     sneakPending: false,
     drewWeaponThisRound: false,
+    preyRations: options.preyRations ?? null,
   }
 
   let s: GameState = { ...state, screen: 'combat', combat: session }
@@ -713,7 +776,7 @@ function enemyMovement(data: GameData, e: EnemyUnit): number {
   if (e.kind === 'monster') {
     return data.monsters.find((m) => m.id === e.state.monsterId)?.movement.land ?? 10
   }
-  return 10
+  return e.state.movement ?? 10
 }
 
 function pcMovement(data: GameData, state: GameState): number {
@@ -903,6 +966,46 @@ function enemyTurn(rng: RNG, data: GameData, state: GameState, enemy: EnemyUnit)
 
   // NPC 적
   const npc = enemy.state
+
+  // 동물 — 자연 무기 공격 (일반 스킬 판정, 회피·패리 가능)
+  if (npc.naturalAttack) {
+    const na = npc.naturalAttack
+    if (enemy.distance > 2) {
+      if (enemy.distance - movement <= 2) {
+        s = setDistance(s, id, 2)
+      } else {
+        s = setDistance(s, id, Math.max(2, enemy.distance - movement * 2))
+        return log(s, 'combat', `${npc.name}이(가) 달려든다. (${s.combat!.enemies.find((e) => unitId(e) === id)!.distance}m)`)
+      }
+    }
+    const result = rollD20(rng, na.skillLevel)
+    if (!result.success) {
+      return log(s, 'combat', `${npc.name}의 공격 — 빗나감 (${result.natural})`)
+    }
+    s = log(s, 'combat', `${npc.name}이(가) 물어뜯으려 든다! (${result.natural})`)
+    const pseudoAttack: MonsterAttack = {
+      roll: 1, name: na.name, description: '',
+      canParry: true, canDodge: true,
+      effects: [{ hook: 'damage', params: { dice: na.damage } }],
+    }
+    if (!c.pc.acted) {
+      return {
+        ...s,
+        combat: {
+          ...s.combat!,
+          prompt: {
+            kind: 'reaction',
+            enemyId: id,
+            monsterAttack: pseudoAttack,
+            canDodge: true,
+            canParry: c.pc.drawnWeaponIds.length > 0,
+          },
+        },
+      }
+    }
+    return applyMonsterAttackToPc(rng, data, s, pseudoAttack, id)
+  }
+
   let weaponId = npc.drawnWeaponIds[0]
 
   // 무장 해제당한 무기 줍기 (액션)
@@ -1244,6 +1347,16 @@ export function pcAttack(
   const weapon = weaponOf(data, weaponId)
   const reach = weaponReach(weapon)
   const str = c.pc.attributes?.str ?? null
+
+  // 화살통: requiresQuiver 무기는 화살통이 있어야 쏠 수 있다. 목제 화살통뿐이면 상대 방어구 ×2.
+  let armorMultiplier = 1
+  if (weapon.features.includes('requiresQuiver')) {
+    const iron = hasItem(state.character, 'quiver-iron')
+    const wooden = hasItem(state.character, 'quiver-wooden')
+    if (!iron && !wooden) return log(state, 'info', '화살통이 없다 — 사격할 수 없다.')
+    if (!iron && wooden) armorMultiplier = 2
+  }
+
   let s: GameState = { ...state, combat: { ...c, nextRollBoons: 0 } }
 
   // ── 거리 해결 ──
@@ -1321,7 +1434,7 @@ export function pcAttack(
   }
 
   s = log(s, 'combat', `${sneak ? '암습 ' : ''}${special === 'weakSpot' ? '약점 ' : ''}명중 (${attack.result.natural})`)
-  s = dealPcDamage(rng, data, s, attack, targetId, null, { forceIgnoreArmor: special === 'weakSpot' })
+  s = dealPcDamage(rng, data, s, attack, targetId, null, { forceIgnoreArmor: special === 'weakSpot', armorMultiplier })
   return finishPcAction(rng, data, s)
 }
 
@@ -1352,7 +1465,7 @@ function dealPcDamage(
   attack: AttackRoll,
   targetId: string,
   critical: CriticalChoice | null,
-  options: { forceIgnoreArmor?: boolean } = {},
+  options: { forceIgnoreArmor?: boolean; armorMultiplier?: number } = {},
 ): GameState {
   let s = state
   const c = s.combat!
@@ -1384,7 +1497,7 @@ function dealPcDamage(
   }
 
   const dmg = rollDamage(rng, data, c.pc, attack, critical)
-  return damageEnemyUnit(s, data, targetId, dmg.total, dmg.damageType, dmg.ignoreArmor || !!options.forceIgnoreArmor)
+  return damageEnemyUnit(s, data, targetId, dmg.total, dmg.damageType, dmg.ignoreArmor || !!options.forceIgnoreArmor, options.armorMultiplier ?? 1)
 }
 
 function damageEnemyUnit(
@@ -1394,12 +1507,13 @@ function damageEnemyUnit(
   total: number,
   damageType: DamageType | null,
   ignoreArmor: boolean,
+  armorMultiplier = 1,
 ): GameState {
   const enemy = state.combat!.enemies.find((e) => unitId(e) === targetId)
   if (!enemy) return state
 
   if (enemy.kind === 'monster') {
-    const out = applyDamageToMonster(data, enemy.state, { total, damageType, ignoreArmor })
+    const out = applyDamageToMonster(data, enemy.state, { total, damageType, ignoreArmor, armorMultiplier })
     let s = updateEnemyState(state, targetId, out.monster)
     if (out.immune) return log(s, 'info', `${enemy.state.name}에게는 통하지 않는다! (면역)`)
     s = log(
@@ -1410,7 +1524,7 @@ function damageEnemyUnit(
     if (out.monster.dead) s = log(s, 'good', `${enemy.state.name}을(를) 쓰러뜨렸다!`)
     return s
   }
-  return damageNpc(state, data, targetId, total, damageType, ignoreArmor)
+  return damageNpc(state, data, targetId, total, damageType, ignoreArmor, armorMultiplier)
 }
 
 function damageNpc(
@@ -1420,6 +1534,7 @@ function damageNpc(
   total: number,
   damageType: DamageType | null,
   ignoreArmor: boolean,
+  armorMultiplier = 1,
 ): GameState {
   const enemy = state.combat!.enemies.find((e) => unitId(e) === targetId)
   if (!enemy || enemy.kind !== 'npc') return state
@@ -1430,7 +1545,7 @@ function damageNpc(
     ignoreArmor,
     damageType,
     breakdown: String(total),
-  }, { melee: true })
+  }, { melee: true, armorMultiplier })
   let s = updateEnemyState(state, targetId, applied.defender)
   s = log(s, 'combat', `${enemy.state.name}에게 ${applied.taken} 피해${applied.absorbed ? ` (방어 ${applied.absorbed} 흡수)` : ''}`)
   if (applied.defender.dead) s = log(s, 'good', `${enemy.state.name}을(를) 쓰러뜨렸다!`)
@@ -1699,6 +1814,24 @@ export function pcCastSpell(
       const total = out.dragon ? dmg.total * 2 : dmg.total
       s = damageEnemyUnit(s, data, targetId, total, null, dmg.ignoreArmor)
     }
+    // 밀쳐냄 주문 (돌풍·해일·회오리·정신 타격) — 위력당 주사위 +1
+    const kb = spell.effects.find((e) => e.hook === 'knockback')
+    if (kb) {
+      const extraDice = spell.usesPowerLevel ? Math.max(0, powerLevel - 1) : 0
+      const r = rollWithExtraDice(rng, String(kb.params?.['dice'] ?? 'D6'), extraDice)
+      const meters = out.dragon ? r.total * 2 : r.total
+      if (kb.params?.['damagePerMeter'] === true) {
+        s = damageEnemyUnit(s, data, targetId, meters, 'bludgeoning', false)
+      }
+      const pushed = s.combat!.enemies.find((e) => unitId(e) === targetId)
+      if (pushed && !isDead(pushed)) {
+        s = setDistance(s, targetId, pushed.distance + meters)
+        if (kb.params?.['prone'] === true) {
+          s = updateEnemyState(s, targetId, { ...pushed.state, prone: true })
+        }
+        s = log(s, 'combat', `${pushed.state.name}이(가) ${meters}m 날아갔다!`)
+      }
+    }
   }
   return finishPcAction(rng, data, s)
 }
@@ -1727,7 +1860,8 @@ export function pcActivateAbility(rng: RNG, data: GameData, state: GameState, ab
     },
   }
   s = log(s, 'good', `${ability.name} 발동 (WP -${cost})`)
-  return s // 자유 발동 — 턴 소모 없음 (activation free 기준)
+  if (ability.activation === 'action') return finishPcAction(rng, data, s)
+  return s // 자유 발동 — 턴 소모 없음
 }
 
 /** 자기 소생 시도 (0 HP, WIL 베인) */
@@ -1785,7 +1919,6 @@ function finishPcAction(rng: RNG, data: GameData, state: GameState): GameState {
 /* ─────────────────────────── 전투 종료 ─────────────────────────── */
 
 function endCombat(rng: RNG, data: GameData, state: GameState, result: 'victory' | 'defeat'): GameState {
-  void rng
   void data
   const c = state.combat!
   let s: GameState = {
@@ -1803,6 +1936,12 @@ function endCombat(rng: RNG, data: GameData, state: GameState, result: 'victory'
   }
 
   s = log(s, 'good', '전투 승리!')
+  // 사냥감 전투였다면 고기를 얻는다
+  if (c.preyRations) {
+    const meat = rollDice(rng, c.preyRations).total
+    s = { ...s, rations: s.rations + meat }
+    s = log(s, 'good', `사냥감을 해체했다 — 식량 +${meat} (총 ${s.rations})`)
+  }
   const wasBoss = c.enemies.some((e) => e.kind === 'monster' && e.state.monsterId === 'stonehide')
   if (wasBoss) {
     s = { ...s, bossDefeated: true }

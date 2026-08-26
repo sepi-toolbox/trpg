@@ -294,7 +294,10 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "healCondition",
+        "params": {
+          "count": 1
+        }
       }
     ]
   },

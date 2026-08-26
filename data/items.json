@@ -190,11 +190,7 @@
     "supply": "uncommon",
     "weight": 1,
     "description": "일부 여정 사고의 피해 경감(사고표 참조).",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -209,11 +205,7 @@
     "supply": "uncommon",
     "weight": 1,
     "description": "일부 여정 사고(벌레 떼·폭우) 무효.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -247,11 +239,7 @@
     "supply": "uncommon",
     "weight": 1,
     "description": "추위 저항 야외술 판정에 보온.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -572,11 +560,7 @@
     "supply": "uncommon",
     "weight": 0,
     "description": "없으면 길찾기 판정에 베인.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -648,11 +632,7 @@
     "supply": "common",
     "weight": 1,
     "description": "활·석궁 사격에 필요. 상대 방어구 효과 2배.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -750,11 +730,7 @@
     "supply": "common",
     "weight": 2,
     "description": "2인용. 야영 판정 보온 — 설치자 1인만 굴리고 성공 시 수용 인원 전원 적용.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -769,11 +745,7 @@
     "supply": "common",
     "weight": 4,
     "description": "6인용. 효과는 소형 텐트와 동일.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -1256,11 +1228,7 @@
     "supply": "common",
     "weight": 0,
     "description": "소지 한도 +2. 1인 1개.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -1522,11 +1490,7 @@
     "supply": "uncommon",
     "weight": 1,
     "description": "덫 사냥에 사용.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": true
   },
@@ -1541,11 +1505,7 @@
     "supply": "common",
     "weight": 1,
     "description": "낚시 성공 시 D4 식량.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -1560,11 +1520,7 @@
     "supply": "common",
     "weight": 2,
     "description": "낚시 성공 시 D6 식량.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },
@@ -1579,11 +1535,7 @@
     "supply": "common",
     "weight": 1,
     "description": "덫 사냥 1회용.",
-    "effects": [
-      {
-        "hook": "manual"
-      }
-    ],
+    "effects": [],
     "extinguishDie": null,
     "metal": false
   },

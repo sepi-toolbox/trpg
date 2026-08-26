@@ -167,7 +167,7 @@ export interface MonsterDamageResult {
 export function applyDamageToMonster(
   data: GameData,
   monster: MonsterCombatant,
-  damage: { total: number; damageType: DamageType | null; ignoreArmor: boolean },
+  damage: { total: number; damageType: DamageType | null; ignoreArmor: boolean; armorMultiplier?: number },
 ): MonsterDamageResult {
   const def = monsterOf(data, monster.monsterId)
 
@@ -175,7 +175,7 @@ export function applyDamageToMonster(
     return { monster, immune: true, resisted: false, absorbed: 0, taken: 0 }
   }
 
-  const rating = damage.ignoreArmor ? 0 : (monster.armor ?? 0)
+  const rating = damage.ignoreArmor ? 0 : (monster.armor ?? 0) * (damage.armorMultiplier ?? 1)
   let afterArmor = Math.max(0, damage.total - rating)
   const absorbed = damage.total - afterArmor
 
