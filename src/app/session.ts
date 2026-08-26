@@ -782,7 +782,12 @@ export function advanceCombat(rng: RNG, data: GameData, state: GameState): GameS
               ? `죽음 판정 3성공 — 의식을 되찾았다! (HP ${out.combatant.hp})`
               : `죽음 판정 ${out.roll.natural} (성공 ${out.combatant.deathRolls?.successes ?? 0} / 실패 ${out.combatant.deathRolls?.failures ?? 0})`,
         )
-        s = { ...s, combat: { ...s.combat!, pc: out.combatant } }
+        // 회복 시 캐릭터 HP 도 함께 동기화 (죽음 판정 회복 → character 반영)
+        s = {
+          ...s,
+          character: { ...s.character, hp: out.combatant.hp },
+          combat: { ...s.combat!, pc: out.combatant },
+        }
         s = consumeSlot(s)
         continue
       }
@@ -876,7 +881,7 @@ function enemyTurn(rng: RNG, data: GameData, state: GameState, enemy: EnemyUnit)
         },
       }
     }
-    return applyMonsterAttackToPc(rng, data, s, pick.attack)
+    return applyMonsterAttackToPc(rng, data, s, pick.attack, monster.id)
   }
 
   // NPC 적
@@ -1022,7 +1027,7 @@ export function resolveReaction(
         s = log(s, 'bad', choice === 'dodge' ? '피하지 못했다.' : '막지 못했다.')
       }
     }
-    s = applyMonsterAttackToPc(rng, data, s, prompt.monsterAttack)
+    s = applyMonsterAttackToPc(rng, data, s, prompt.monsterAttack, prompt.enemyId)
     s = consumePromptSlot(s, prompt.enemyId)
     return advanceCombat(rng, data, s)
   }
@@ -1102,12 +1107,21 @@ function findNpc(state: GameState, id: string): Combatant | null {
 
 /* ─────────────────────────── 전투: 피해 적용 ─────────────────────────── */
 
-function applyMonsterAttackToPc(rng: RNG, data: GameData, state: GameState, attack: MonsterAttack): GameState {
+function applyMonsterAttackToPc(
+  rng: RNG,
+  data: GameData,
+  state: GameState,
+  attack: MonsterAttack,
+  enemyId?: string,
+): GameState {
   let s = state
   const c = s.combat!
   const pcArmor = armorRatingOfPc(data, c.pc)
+  const prevHp = c.pc.hp
 
-  const result = applyEffects(rng, data, attack.effects, vitalsOf(s.character), {
+  // 죽음 판정 회복 등으로 combat.pc 가 최신일 수 있다 — pc 기준 Vitals 로 적용
+  const vitals: Vitals = { ...vitalsOf(s.character), hp: c.pc.hp, conditions: c.pc.conditions }
+  const result = applyEffects(rng, data, attack.effects, vitals, {
     armorRating: pcArmor,
     maxHp: maxHp(data, s.character),
     maxWp: maxWp(data, s.character),
@@ -1118,24 +1132,47 @@ function applyMonsterAttackToPc(rng: RNG, data: GameData, state: GameState, atta
   let pc = { ...c.pc, hp: result.target.hp, conditions: [...result.target.conditions] }
 
   for (const a of result.applied) {
-    if (a.hook === 'damage' || a.hook === 'knockback') s = log(s, 'bad', a.detail)
+    if (a.hook === 'damage' || a.hook === 'knockback') s = log(s, 'bad', `${a.detail} (HP ${result.target.hp})`)
     else if (a.hook === 'fearAttack') s = log(s, a.detail.includes('저항') ? 'good' : 'bad', a.detail)
     else s = log(s, 'info', a.detail)
   }
   for (const d of result.directives) {
-    if (d.kind === 'knockback' && d.params['prone']) pc = { ...pc, prone: true }
+    if (d.kind === 'knockback') {
+      if (d.params['prone']) pc = { ...pc, prone: true }
+      // 밀려난 만큼 그 몬스터와의 거리가 벌어진다
+      const meters = Number(d.params['meters']) || 0
+      if (meters > 0 && enemyId) {
+        const enemy = s.combat!.enemies.find((e) => unitId(e) === enemyId)
+        if (enemy) s = setDistance(s, enemyId, enemy.distance + meters)
+      }
+    }
   }
   for (const m of result.manual) {
     void m
     s = log(s, 'info', `(수동 효과) ${attack.description}`)
   }
 
-  // 0 HP 처리
-  if (pc.hp === 0 && !pc.deathRolls && !pc.dead) {
-    const overkill = 0 // applyEffects 는 초과 피해를 추적하지 않음 — 즉사는 미적용 (해석 기록)
-    void overkill
+  // 0 HP 처리 — 이번 공격으로 실제로 쓰러졌을 때만
+  if (prevHp > 0 && pc.hp === 0 && !pc.deathRolls && !pc.dead) {
     pc = { ...pc, prone: true, deathRolls: { successes: 0, failures: 0 } }
     s = log(s, 'bad', '쓰러졌다! 죽음의 문턱에서 버텨야 한다.')
+  }
+  // 이미 0 HP 인 상태에서 피해를 또 받으면 죽음 판정 실패 1회 (원문)
+  if (prevHp === 0 && pc.deathRolls) {
+    // knockback 의 amount 는 피해 동반(damagePerMeter)일 때만 피해량이다
+    const damageTaken = result.applied
+      .filter((a) => a.hook === 'damage' || (a.hook === 'knockback' && a.detail.includes('피해')))
+      .reduce((sum, a) => sum + (a.amount ?? 0), 0)
+    if (damageTaken > 0) {
+      const failures = pc.deathRolls.failures + 1
+      if (failures >= 3) {
+        pc = { ...pc, deathRolls: null, dead: true }
+        s = log(s, 'bad', '쓰러진 몸에 또 한 번 — 숨이 끊어졌다.')
+      } else {
+        pc = { ...pc, deathRolls: { ...pc.deathRolls, failures } }
+        s = log(s, 'bad', `쓰러진 몸에 추가 피해 — 죽음 판정 실패 +1 (실패 ${failures})`)
+      }
+    }
   }
 
   return { ...s, combat: { ...s.combat!, pc } }

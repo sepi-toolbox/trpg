@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { GameData, DamageType } from '../system/types'
 import type { RNG } from '../system/rng'
-import { weaponOf } from '../system/combatant'
+import { skillLevelOf, weaponOf } from '../system/combatant'
 import { effectiveRange, rangedDistanceState, weaponReach } from '../system/combat'
 import type { GameState, EnemyUnit } from './session'
 import {
@@ -111,16 +111,18 @@ export function CombatPanel({
 
   return (
     <section className="panel">
-      <h2>전투 — 라운드 {c.round}</h2>
+      <h2>{c.round === 0 ? '조우 — 개전 전' : `전투 — 라운드 ${c.round}`}</h2>
 
-      <div className="turn-banner">
-        선제:{' '}
-        {c.order.map((s, i) => (
-          <span key={i} style={{ opacity: s.done ? 0.35 : 1, marginRight: 6 }}>
-            [{s.card}] {s.ownerId === 'pc' ? state.character.name : c.enemies.find((e) => e.state.id === s.ownerId)?.state.name ?? s.ownerId}
-          </span>
-        ))}
-      </div>
+      {c.order.length > 0 && (
+        <div className="turn-banner">
+          선제:{' '}
+          {c.order.map((s, i) => (
+            <span key={i} style={{ opacity: s.done ? 0.35 : 1, marginRight: 6 }}>
+              [{s.card}] {s.ownerId === 'pc' ? state.character.name : c.enemies.find((e) => e.state.id === s.ownerId)?.state.name ?? s.ownerId}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div style={{ marginBottom: 12 }}>
         {c.enemies.map((e) => {
@@ -239,12 +241,13 @@ export function CombatPanel({
           <div className="button-row" style={{ marginBottom: 8 }}>
             {weapons.flatMap((w) => {
               const hint = attackHint(w.id)
+              const level = skillLevelOf(c.pc, w.skillId)
               return (w.damageTypes.length ? w.damageTypes : [null]).map((t) => (
                 <button key={`${w.id}-${t}`} className="primary"
                   disabled={!currentTarget || hint === '사거리 밖'}
-                  title={hint ?? undefined}
+                  title={`${data.skills.find((s) => s.id === w.skillId)?.name ?? w.skillId} 판정 — ${level} 이하 성공`}
                   onClick={() => setState(pcAttack(rng, data, state, w.id, currentTarget, t))}>
-                  {w.name} {w.damage}{t ? ` (${DMG_LABEL[t]})` : ''}{hint ? ` · ${hint}` : ''}
+                  {w.name} {w.damage}{t ? ` (${DMG_LABEL[t]})` : ''} · ≤{level}{hint ? ` · ${hint}` : ''}
                 </button>
               ))
             })}
@@ -304,7 +307,7 @@ export function CombatPanel({
             {waitTargets.map(({ index, slot }) => (
               <button key={index} disabled={c.pcWaited}
                 onClick={() => setState(pcWait(rng, data, state, index))}>
-                대기 — [{slot.card}] {c.enemies.find((e) => e.state.id === slot.ownerId)?.state.name ?? slot.ownerId}와 교환
+                대기 — [{slot.card}]번 카드와 교환 ({c.enemies.find((e) => e.state.id === slot.ownerId)?.state.name ?? slot.ownerId})
               </button>
             ))}
           </div>

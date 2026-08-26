@@ -97,6 +97,13 @@ h3 {
   }
 }
 
+/* 좁은 화면: 게임 화면(오른쪽 컬럼)을 시트보다 위로 */
+@media (max-width: 779px) {
+  .grid-2 > aside.panel {
+    order: 2;
+  }
+}
+
 button {
   font: inherit;
   font-weight: 600;

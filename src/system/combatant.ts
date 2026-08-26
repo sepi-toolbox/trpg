@@ -50,6 +50,8 @@ export function skillLevelOf(c: Combatant, skillId: string): number {
 }
 
 export function combatantFromCharacter(data: GameData, character: Character): Combatant {
+  // 손에 든 무기가 하나도 없으면 맨손(격투)으로 싸운다
+  const atHand = character.weaponsAtHand.length > 0 ? [...character.weaponsAtHand] : ['unarmed']
   return {
     id: 'pc',
     name: character.name,
@@ -63,8 +65,8 @@ export function combatantFromCharacter(data: GameData, character: Character): Co
     attributes: { ...character.attributes },
     damageBonusStr: damageBonus(data, character.attributes.str),
     damageBonusAgl: damageBonus(data, character.attributes.agl),
-    weaponsAtHand: [...character.weaponsAtHand],
-    drawnWeaponIds: character.weaponsAtHand.slice(0, 1),
+    weaponsAtHand: atHand,
+    drawnWeaponIds: atHand.slice(0, 1),
     armorId: character.armorId,
     helmetId: character.helmetId,
     prone: false,
