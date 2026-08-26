@@ -1,0 +1,27 @@
+{
+  "id": "magical-mishap",
+  "name": "마법 사고표",
+  "die": 20,
+  "rows": [
+    { "min": 1, "max": 1, "name": "마력 어지럼", "description": "마력이 정신을 뒤흔든다. 휘청임 상태.", "effects": [{ "hook": "condition", "params": { "condition": "dazed" } }] },
+    { "min": 2, "max": 2, "name": "급격한 소모", "description": "시전의 반동으로 탈진 상태.", "effects": [{ "hook": "condition", "params": { "condition": "exhausted" } }] },
+    { "min": 3, "max": 3, "name": "기력 쇠약", "description": "마력이 몸을 갉아먹는다. 병약 상태.", "effects": [{ "hook": "condition", "params": { "condition": "sickly" } }] },
+    { "min": 4, "max": 4, "name": "제어 상실", "description": "주문이 손아귀를 벗어난다. 격앙 상태.", "effects": [{ "hook": "condition", "params": { "condition": "angry" } }] },
+    { "min": 5, "max": 5, "name": "장막 너머의 환영", "description": "끔찍한 환영이 스친다. 겁먹음 상태.", "effects": [{ "hook": "condition", "params": { "condition": "scared" } }] },
+    { "min": 6, "max": 6, "name": "허무의 자각", "description": "자신의 하찮음을 본다. 낙담 상태.", "effects": [{ "hook": "condition", "params": { "condition": "disheartened" } }] },
+    { "min": 7, "max": 7, "name": "역류", "description": "마력이 몸을 할퀸다. 위력당 D6 피해.", "effects": [{ "hook": "manual" }], "extra": { "damagePerPowerLevel": "D6" } },
+    { "min": 8, "max": 8, "name": "의지 유출", "description": "주문이 의지력을 빨아들인다. 위력당 D6 WP 상실.", "effects": [{ "hook": "manual" }], "extra": { "wpDrainPerPowerLevel": "D6" } },
+    { "min": 9, "max": 9, "name": "마법병", "description": "병독성 3D6의 마법 질병에 걸린다. 다음 시프트 동안 접촉한 전원도 노출.", "effects": [{ "hook": "manual" }], "extra": { "virulence": "3D6" } },
+    { "min": 10, "max": 10, "name": "뒤바뀐 주문", "description": "알고 있는 다른 주문이 무작위로 발동한다. 같은 대상·같은 위력.", "effects": [{ "hook": "manual" }] },
+    { "min": 11, "max": 11, "name": "개구리 딸꾹질", "description": "거짓말할 때마다 개구리를 토한다. 매일 아침 D4 — 1이면 해제. 해주 주문으로도 해제 가능.", "effects": [{ "hook": "manual" }], "extra": { "morningDie": 4 } },
+    { "min": 12, "max": 12, "name": "재로 바스러지는 금붙이", "description": "만지는 금·은이 먼지가 된다. 매일 아침 D4 — 1이면 해제. 해주로도 해제 가능.", "effects": [{ "hook": "manual" }], "extra": { "morningDie": 4 } },
+    { "min": 13, "max": 13, "name": "눈먼 시야", "description": "실명 — 완전한 어둠 속에 있는 것으로 취급. 매일 아침 D4 — 1이면 회복. 해주로도 해제 가능.", "effects": [{ "hook": "manual" }], "extra": { "morningDie": 4 } },
+    { "min": 14, "max": 14, "name": "기억의 안개", "description": "자신과 동료가 누구인지 잊는다. 롤플레이로 표현. 매일 아침 D4 — 1이면 회복.", "effects": [{ "hook": "manual" }], "extra": { "morningDie": 4 } },
+    { "min": 15, "max": 15, "name": "빗나간 축복", "description": "주문이 의도치 않은 대상에게도 적용된다. 치유·보조 주문이면 적에게 향한다.", "effects": [{ "hook": "manual" }] },
+    { "min": 16, "max": 16, "name": "역화", "description": "공격 주문이면 자신에게 적중. 보호·치유 주문이면 회복량만큼 피해를 준다.", "effects": [{ "hook": "manual" }] },
+    { "min": 17, "max": 17, "name": "짐승 변화", "description": "동물로 변한다 (D6: 1 고양이 / 2 여우 / 3 염소 / 4 늑대 / 5 사슴 / 6 곰). 말은 못 하지만 지성은 유지. 매일 아침 D4 — 1이면 복귀.", "effects": [{ "hook": "manual" }], "extra": { "morningDie": 4 } },
+    { "min": 18, "max": 18, "name": "젊어짐", "description": "나이 구간이 한 단계 젊어진다. 능력치·파생치는 나이표대로 재계산, 스킬 레벨은 유지. 영구적이며 새 나이에서 정상적으로 나이 든다. 이미 청년이면 아이가 된다 (STR·CON −2, 최소 3).", "effects": [{ "hook": "manual" }], "extra": { "permanent": true } },
+    { "min": 19, "max": 19, "name": "늙어버림", "description": "나이 구간이 한 단계 늙는다. 능력치·파생치는 나이표대로 재계산, 스킬 레벨은 유지. 영구적. 이미 노년이면 노쇠해져 STR·CON −2.", "effects": [{ "hook": "manual" }], "extra": { "permanent": true } },
+    { "min": 20, "max": 20, "name": "이계의 방문자", "description": "마력이 이계의 존재를 끌어들인다. 다음 시프트 안에 나타나 공격하거나 문제를 일으킨다.", "effects": [{ "hook": "manual" }] }
+  ]
+}

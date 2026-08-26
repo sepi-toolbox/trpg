@@ -267,6 +267,8 @@ export interface Weapon {
   features: WeaponFeature[]
   /** melee | ranged — 원거리 무기는 명중에 해당 스킬, 피해 보너스는 AGL */
   category: 'melee' | 'ranged' | 'shield'
+  /** 금속제 여부 — 손에 지니면 마법 시전 불가 (부분 금속 포함) */
+  metal: boolean
 }
 
 export interface Armor {
@@ -283,6 +285,8 @@ export interface Armor {
   baneRangedAttacks: boolean
   /** 옵션 룰 damageTypes 켜졌을 때 유형별 등급 보정 */
   typeModifiers: Partial<Record<DamageType, number>>
+  /** 금속제 여부 — 착용하면 마법 시전 불가 */
+  metal: boolean
 }
 
 export interface Item {
@@ -313,6 +317,8 @@ export interface Item {
    * 광원 아니면 null.
    */
   extinguishDie: number | null
+  /** 금속제 여부 — 손에 드는 물건일 때 마법 제한에 관여 (철촉 화살통 등) */
+  metal: boolean
 }
 
 /* ─────────────────────────── 마법 ─────────────────────────── */

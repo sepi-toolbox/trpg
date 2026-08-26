@@ -10,9 +10,14 @@
     "durability": null,
     "cost": null,
     "supply": null,
-    "damageTypes": ["bludgeoning"],
-    "features": ["unarmed"],
-    "category": "melee"
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "unarmed"
+    ],
+    "category": "melee",
+    "metal": false
   },
   {
     "id": "knife",
@@ -23,11 +28,20 @@
     "range": "STR",
     "damage": "D8",
     "durability": 6,
-    "cost": { "amount": 5, "unit": "silver" },
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
     "supply": "common",
-    "damageTypes": ["piercing"],
-    "features": ["subtle", "thrown"],
-    "category": "melee"
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "subtle",
+      "thrown"
+    ],
+    "category": "melee",
+    "metal": true
   },
   {
     "id": "short-sword",
@@ -38,11 +52,18 @@
     "range": 2,
     "damage": "D10",
     "durability": 12,
-    "cost": { "amount": 8, "unit": "gold" },
+    "cost": {
+      "amount": 8,
+      "unit": "gold"
+    },
     "supply": "common",
-    "damageTypes": ["piercing", "slashing"],
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
     "features": [],
-    "category": "melee"
+    "category": "melee",
+    "metal": true
   },
   {
     "id": "broadsword",
@@ -53,11 +74,18 @@
     "range": 2,
     "damage": "2D6",
     "durability": 15,
-    "cost": { "amount": 12, "unit": "gold" },
+    "cost": {
+      "amount": 12,
+      "unit": "gold"
+    },
     "supply": "common",
-    "damageTypes": ["piercing", "slashing"],
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
     "features": [],
-    "category": "melee"
+    "category": "melee",
+    "metal": true
   },
   {
     "id": "long-spear",
@@ -68,11 +96,19 @@
     "range": 4,
     "damage": "2D8",
     "durability": 9,
-    "cost": { "amount": 1, "unit": "gold" },
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
     "supply": "common",
-    "damageTypes": ["piercing"],
-    "features": ["long"],
-    "category": "melee"
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "long"
+    ],
+    "category": "melee",
+    "metal": true
   },
   {
     "id": "staff",
@@ -83,11 +119,19 @@
     "range": 2,
     "damage": "D8",
     "durability": 9,
-    "cost": { "amount": 2, "unit": "silver" },
+    "cost": {
+      "amount": 2,
+      "unit": "silver"
+    },
     "supply": "common",
-    "damageTypes": ["bludgeoning"],
-    "features": ["toppling"],
-    "category": "melee"
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": false
   },
   {
     "id": "short-bow",
@@ -98,11 +142,19 @@
     "range": 30,
     "damage": "D10",
     "durability": 3,
-    "cost": { "amount": 25, "unit": "gold" },
+    "cost": {
+      "amount": 25,
+      "unit": "gold"
+    },
     "supply": "common",
-    "damageTypes": ["piercing"],
-    "features": ["requiresQuiver"],
-    "category": "ranged"
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "requiresQuiver"
+    ],
+    "category": "ranged",
+    "metal": false
   },
   {
     "id": "crossbow-light",
@@ -113,11 +165,20 @@
     "range": 40,
     "damage": "2D6",
     "durability": 6,
-    "cost": { "amount": 75, "unit": "gold" },
+    "cost": {
+      "amount": 75,
+      "unit": "gold"
+    },
     "supply": "uncommon",
-    "damageTypes": ["piercing"],
-    "features": ["requiresQuiver", "noDamageBonus"],
-    "category": "ranged"
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "requiresQuiver",
+      "noDamageBonus"
+    ],
+    "category": "ranged",
+    "metal": true
   },
   {
     "id": "shield-small",
@@ -128,10 +189,16 @@
     "range": 2,
     "damage": "D8",
     "durability": 15,
-    "cost": { "amount": 4, "unit": "gold" },
+    "cost": {
+      "amount": 4,
+      "unit": "gold"
+    },
     "supply": "common",
-    "damageTypes": ["bludgeoning"],
+    "damageTypes": [
+      "bludgeoning"
+    ],
     "features": [],
-    "category": "shield"
+    "category": "shield",
+    "metal": true
   }
 ]

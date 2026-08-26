@@ -72,14 +72,17 @@ id 는 코드가 참조하므로 **바꾸지 않는다** (바꿔야 하면 참�
 - `features` 🔧: `subtle`(암습 강화) `toppling`(넘어뜨리기 보온) `long`(4m·아군 너머)
   `thrown` `noParry` `noDamageBonus`(석궁) `requiresQuiver` `tiny` `requiresMount` `unarmed`
 - `category` 🔧 melee | ranged | shield
+- `metal` 🔧 금속제 여부 — 손에 지니면 마법 시전 불가 (부분 금속 포함, 지팡이·곤봉·투석구·활은 false)
 - `name` ✏️
 
 ### armor.json — 갑옷·투구
 `rating` 🔧 (투구는 갑옷에 합산) / `baneSkillIds` 🔧 착용 페널티 / `baneRangedAttacks` 🔧
-`typeModifiers` 🔧 피해 유형별 등급 보정 (옵션 룰 damageTypes 켜졌을 때) / `name` ✏️
+`typeModifiers` 🔧 피해 유형별 등급 보정 (옵션 룰 damageTypes 켜졌을 때)
+`metal` 🔧 금속제 여부 — 착용 시 마법 시전 불가 (가죽 갑옷만 false) / `name` ✏️
 
 ### items.json — 일반 장비
 `weight` 🔧 (0 = tiny, 0.25 = 식량처럼 4개당 1) / `effects` 🔧 / `extinguishDie` 🔧 광원 전용
+`metal` 🔧 손에 드는 금속 물건이면 true (철촉 화살통 등 — 마법 제한 관여)
 `name` `description` ✏️
 
 ### spells.json — 주문·트릭

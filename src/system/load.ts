@@ -20,6 +20,7 @@ import fearTable from '../../data/tables/fear.json'
 import meleeMishapTable from '../../data/tables/melee-mishap.json'
 import rangedMishapTable from '../../data/tables/ranged-mishap.json'
 import severeInjuriesTable from '../../data/tables/severe-injuries.json'
+import magicalMishapTable from '../../data/tables/magical-mishap.json'
 
 export function loadGameData(): GameData {
   // JSON 리터럴 추론이 union 타입(예: NPC skills 키 합집합)으로 좁혀지는 것을 풀기 위한 캐스팅.
@@ -41,6 +42,6 @@ export function loadGameData(): GameData {
     spells,
     monsters,
     npcs,
-    tables: [fearTable, meleeMishapTable, rangedMishapTable, severeInjuriesTable],
+    tables: [fearTable, meleeMishapTable, rangedMishapTable, severeInjuriesTable, magicalMishapTable],
   } as unknown as GameData
 }
