@@ -175,7 +175,7 @@ export function rollAttack(
   data: GameData,
   attacker: Combatant,
   weaponId: string,
-  defender: Combatant,
+  defender: { id: string; prone: boolean },
   context: AttackContext,
 ): AttackRoll | { rejected: AttackRejection } {
   if (!attacker.drawnWeaponIds.includes(weaponId)) return { rejected: 'not-drawn' }

@@ -1,6 +1,0 @@
-[
-  { "id": "robe", "name": "마법 로브", "baseDefense": 12, "dexCap": null },
-  { "id": "leather", "name": "가죽 갑옷", "baseDefense": 12, "dexCap": null },
-  { "id": "chainmail", "name": "사슬 갑옷", "baseDefense": 14, "dexCap": 2 },
-  { "id": "plate", "name": "판금 갑옷", "baseDefense": 16, "dexCap": 0 }
-]

@@ -109,23 +109,23 @@ describe('PC의 리액션', () => {
 
 describe('몬스터 피해 — 방어구·저항·면역', () => {
   it('자연 방어구 차감 후 저항 절반(올림)', () => {
-    const m = spawnMonster(data, 'stonehide') // 방어 3, 참격 저항
+    const m = spawnMonster(data, 'stonehide') // 방어 2, 참격 저항
     const out = applyDamageToMonster(data, m, {
-      total: 13, damageType: 'slashing', ignoreArmor: false,
+      total: 12, damageType: 'slashing', ignoreArmor: false,
     })
-    // 13 - 3 = 10 → 절반 5
-    expect(out.absorbed).toBe(3)
+    // 12 - 2 = 10 → 절반 5
+    expect(out.absorbed).toBe(2)
     expect(out.resisted).toBe(true)
     expect(out.taken).toBe(5)
-    expect(out.monster.hp).toBe(44 - 5)
+    expect(out.monster.hp).toBe(30 - 5)
   })
 
   it('저항 절반은 올림', () => {
     const m = spawnMonster(data, 'stonehide')
     const out = applyDamageToMonster(data, m, {
-      total: 8, damageType: 'slashing', ignoreArmor: false,
+      total: 7, damageType: 'slashing', ignoreArmor: false,
     })
-    // 8-3=5 → ceil(2.5)=3
+    // 7-2=5 → ceil(2.5)=3
     expect(out.taken).toBe(3)
   })
 

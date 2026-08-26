@@ -152,8 +152,8 @@
     "movement": {
       "land": 8
     },
-    "armor": 3,
-    "hp": 44,
+    "armor": 2,
+    "hp": 30,
     "resistances": [
       "slashing"
     ],
@@ -176,7 +176,7 @@
           {
             "hook": "damage",
             "params": {
-              "dice": "2D8",
+              "dice": "2D6",
               "type": "bludgeoning"
             }
           }
@@ -211,7 +211,7 @@
           {
             "hook": "damage",
             "params": {
-              "dice": "D12",
+              "dice": "D10",
               "type": "bludgeoning"
             }
           }
@@ -259,7 +259,7 @@
           {
             "hook": "damage",
             "params": {
-              "dice": "3D6",
+              "dice": "2D6",
               "type": "bludgeoning"
             }
           }
