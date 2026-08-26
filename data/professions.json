@@ -1,5 +1,238 @@
 [
   {
+    "id": "artisan",
+    "name": "",
+    "description": "",
+    "keyAttribute": "str",
+    "skillIds": [
+      "axes",
+      "brawling",
+      "crafting",
+      "hammers",
+      "knives",
+      "sleight-of-hand",
+      "spot-hidden",
+      "swords"
+    ],
+    "heroicAbilityIds": [
+      "master-blacksmith",
+      "master-carpenter",
+      "master-tanner"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "warhammer-light"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "blacksmith-tools"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D8"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "handaxe"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "carpentry-tools"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D8"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "tanning-tools"
+          },
+          {
+            "itemId": "lantern"
+          },
+          {
+            "itemId": "lamp-oil"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D8"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "id": "bard",
+    "name": "",
+    "description": "",
+    "keyAttribute": "cha",
+    "skillIds": [
+      "acrobatics",
+      "bluffing",
+      "evade",
+      "knives",
+      "languages",
+      "myths-legends",
+      "performance",
+      "persuasion"
+    ],
+    "heroicAbilityIds": [
+      "musician"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "lyre"
+          },
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "oil-lamp"
+          },
+          {
+            "itemId": "lamp-oil"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D8"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "flute"
+          },
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D8"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "horn"
+          },
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D8"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
     "id": "fighter",
     "name": "무인",
     "description": "(임시) 무기와 폭력이 곧 생업인 직업.",
@@ -114,6 +347,276 @@
       "식은칼",
       "겁없쇠",
       "도살자"
+    ]
+  },
+  {
+    "id": "hunter",
+    "name": "",
+    "description": "",
+    "keyAttribute": "agl",
+    "skillIds": [
+      "acrobatics",
+      "awareness",
+      "bows",
+      "bushcraft",
+      "hunting-fishing",
+      "knives",
+      "slings",
+      "sneaking"
+    ],
+    "heroicAbilityIds": [
+      "companion"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "short-bow"
+          },
+          {
+            "itemId": "quiver-wooden"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "snare"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D6"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "longbow"
+          },
+          {
+            "itemId": "quiver-wooden"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "fishing-rod"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D6"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "sling"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "snare"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D6"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "id": "knight",
+    "name": "",
+    "description": "",
+    "keyAttribute": "str",
+    "skillIds": [
+      "beast-lore",
+      "hammers",
+      "myths-legends",
+      "performance",
+      "persuasion",
+      "riding",
+      "spears",
+      "swords"
+    ],
+    "heroicAbilityIds": [
+      "guardian"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "broadsword"
+          },
+          {
+            "itemId": "shield-small"
+          },
+          {
+            "itemId": "plate-armor"
+          },
+          {
+            "itemId": "great-helm"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D12"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "flail"
+          },
+          {
+            "itemId": "shield-small"
+          },
+          {
+            "itemId": "chainmail"
+          },
+          {
+            "itemId": "open-helmet"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D12"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "short-sword"
+          },
+          {
+            "itemId": "lance"
+          },
+          {
+            "itemId": "shield-small"
+          },
+          {
+            "itemId": "chainmail"
+          },
+          {
+            "itemId": "open-helmet"
+          },
+          {
+            "itemId": "buy-warhorse"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D12"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   {
@@ -272,6 +775,508 @@
       "폭풍손",
       "지팡이걸음",
       "그늘몰이"
+    ]
+  },
+  {
+    "id": "mariner",
+    "name": "",
+    "description": "",
+    "keyAttribute": "agl",
+    "skillIds": [
+      "acrobatics",
+      "awareness",
+      "hunting-fishing",
+      "knives",
+      "languages",
+      "seamanship",
+      "swimming",
+      "swords"
+    ],
+    "heroicAbilityIds": [
+      "sea-legs"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "short-bow"
+          },
+          {
+            "itemId": "quiver-wooden"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "grappling-hook"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D10"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "scimitar"
+          },
+          {
+            "itemId": "leather-armor"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "grappling-hook"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D10"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "trident"
+          },
+          {
+            "itemId": "spyglass"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "grappling-hook"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D8"
+          }
+        ],
+        "silver": "D10"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "id": "merchant",
+    "name": "",
+    "description": "",
+    "keyAttribute": "cha",
+    "skillIds": [
+      "awareness",
+      "bartering",
+      "bluffing",
+      "evade",
+      "knives",
+      "persuasion",
+      "sleight-of-hand",
+      "spot-hidden"
+    ],
+    "heroicAbilityIds": [
+      "treasure-hunter"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "buy-donkey"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D12"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "lantern"
+          },
+          {
+            "itemId": "lamp-oil"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-kitchen"
+          },
+          {
+            "itemId": "buy-donkey"
+          },
+          {
+            "itemId": "cart"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D12"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "tent-large"
+          },
+          {
+            "itemId": "oil-lamp"
+          },
+          {
+            "itemId": "lamp-oil"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "backpack"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D12"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "id": "scholar",
+    "name": "",
+    "description": "",
+    "keyAttribute": "int",
+    "skillIds": [
+      "awareness",
+      "beast-lore",
+      "bushcraft",
+      "evade",
+      "healing",
+      "languages",
+      "myths-legends",
+      "spot-hidden"
+    ],
+    "heroicAbilityIds": [
+      "intuition"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "staff"
+          },
+          {
+            "itemId": "notebook"
+          },
+          {
+            "itemId": "quill-ink"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D10"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "book"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "oil-lamp"
+          },
+          {
+            "itemId": "lamp-oil"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D10"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "short-sword"
+          },
+          {
+            "itemId": "bandages"
+          },
+          {
+            "itemId": "poison-sleeping"
+          },
+          {
+            "itemId": "sleeping-fur"
+          },
+          {
+            "itemId": "lantern"
+          },
+          {
+            "itemId": "lamp-oil"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D10"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "id": "thief",
+    "name": "",
+    "description": "",
+    "keyAttribute": "agl",
+    "skillIds": [
+      "acrobatics",
+      "awareness",
+      "bluffing",
+      "evade",
+      "knives",
+      "sleight-of-hand",
+      "sneaking",
+      "spot-hidden"
+    ],
+    "heroicAbilityIds": [
+      "backstabbing"
+    ],
+    "startingMagic": null,
+    "gearSets": [
+      {
+        "roll": {
+          "min": 1,
+          "max": 2
+        },
+        "items": [
+          {
+            "itemId": "dagger"
+          },
+          {
+            "itemId": "sling"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "grappling-hook"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D10"
+      },
+      {
+        "roll": {
+          "min": 3,
+          "max": 4
+        },
+        "items": [
+          {
+            "itemId": "knife"
+          },
+          {
+            "itemId": "lockpicks-simple"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D10"
+      },
+      {
+        "roll": {
+          "min": 5,
+          "max": 6
+        },
+        "items": [
+          {
+            "itemId": "dagger",
+            "qty": 2
+          },
+          {
+            "itemId": "marbles"
+          },
+          {
+            "itemId": "rope-hemp"
+          },
+          {
+            "itemId": "torch"
+          },
+          {
+            "itemId": "flint-tinder"
+          },
+          {
+            "itemId": "field-ration",
+            "qty": "D6"
+          }
+        ],
+        "silver": "D10"
+      }
+    ],
+    "nicknames": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   }
 ]

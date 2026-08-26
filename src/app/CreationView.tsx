@@ -21,14 +21,14 @@ function autoAssign(values: number[], keyAttribute: AttributeId): Record<Attribu
   return out
 }
 
-/** 술사(정령술) 기본 시작 주문 — 현재 데이터 기준 자동 선택 */
-function mageSpellPicks(data: GameData): string[] {
+/** 술사 기본 시작 주문 — 선택한 유파 기준 자동 선택 (랭크 1 주문 3 + 트릭 3) */
+function mageSpellPicks(data: GameData, schoolSkillId: string): string[] {
   const spells = data.spells
-    .filter((s) => s.kind === 'spell' && s.rank === 1 && (s.school === 'spirit-magic' || s.school === 'general'))
+    .filter((s) => s.kind === 'spell' && s.rank === 1 && (s.school === schoolSkillId || s.school === 'general'))
     .slice(0, 3)
     .map((s) => s.id)
   const tricks = data.spells
-    .filter((s) => s.kind === 'trick' && s.school === 'general')
+    .filter((s) => s.kind === 'trick' && (s.school === 'general' || s.school === schoolSkillId))
     .slice(0, 3)
     .map((s) => s.id)
   return [...spells, ...tricks]
@@ -52,7 +52,11 @@ export function CreationView({
   const seed = seedText.trim() === '' ? (Date.now() >>> 0) : hashSeed(seedText.trim())
   const profession = professionOf(data, { professionId })
   const isMage = !!profession.startingMagic
-  const variantId = isMage ? 'spirit' : undefined
+  const [chosenVariantId, setChosenVariantId] = useState<string | null>(null)
+  const [heroicAbilityId, setHeroicAbilityId] = useState<string | null>(null)
+  const variantId = profession.variants
+    ? (profession.variants.some((v) => v.id === chosenVariantId) ? chosenVariantId! : profession.variants[0]!.id)
+    : undefined
 
   const attrValues = useMemo(
     () => rollAttributeScores(createRNG(hashSeed(`${seedText}#attrs#${rollCount}`))),
@@ -80,10 +84,13 @@ export function CreationView({
     else if (list.length < max) set([...list, id])
   }
 
-  const switchProfession = (id: string) => {
+  const switchProfession = (id: string, nextVariantId?: string) => {
     setProfessionId(id)
     const p = professionOf(data, { professionId: id })
-    const skills = professionSkillIds(p, p.startingMagic ? 'spirit' : null)
+    const v = p.variants ? (nextVariantId ?? p.variants[0]!.id) : null
+    setChosenVariantId(v)
+    setHeroicAbilityId(p.heroicAbilityIds[0] ?? null)
+    const skills = professionSkillIds(p, v)
     setChosenProf(skills.slice(0, 6))
     setChosenFree([])
     setError(null)
@@ -99,8 +106,10 @@ export function CreationView({
         ageId,
         attributes,
         trainedSkillIds: [...chosenProf, ...chosenFree],
-        heroicAbilityId: isMage ? undefined : profession.heroicAbilityIds[0],
-        spellIds: isMage ? mageSpellPicks(data) : undefined,
+        heroicAbilityId: isMage ? undefined : (heroicAbilityId ?? profession.heroicAbilityIds[0]),
+        spellIds: isMage
+          ? mageSpellPicks(data, profSkills.find((s) => data.skills.some((k) => k.id === s && k.kind === 'magic'))!)
+          : undefined,
         weaknessId: null,
         mementoId: null,
       }
@@ -182,10 +191,35 @@ export function CreationView({
               </button>
             ))}
           </div>
-          {isMage && (
-            <p className="muted" style={{ marginTop: 8 }}>
-              유파: 정령술 (초벌 데이터 기준 — 원소술·심상술은 주문 데이터 확충 후)
-            </p>
+          {profession.variants && (
+            <div style={{ marginTop: 10 }}>
+              <h3>유파</h3>
+              <div className="button-row">
+                {profession.variants.map((v) => (
+                  <button key={v.id} className={v.id === variantId ? 'primary' : ''}
+                    onClick={() => switchProfession(professionId, v.id)}>
+                    {v.name || v.id}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {profession.heroicAbilityIds.length > 1 && (
+            <div style={{ marginTop: 10 }}>
+              <h3>시작 영웅 능력</h3>
+              <div className="button-row">
+                {profession.heroicAbilityIds.map((id) => {
+                  const a = data.abilities.find((x) => x.id === id)
+                  return (
+                    <button key={id} className={id === (heroicAbilityId ?? profession.heroicAbilityIds[0]) ? 'primary' : ''}
+                      title={a?.description}
+                      onClick={() => setHeroicAbilityId(id)}>
+                      {a?.name || id}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           )}
         </section>
 
