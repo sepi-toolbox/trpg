@@ -189,6 +189,13 @@ export interface Ability {
   activation: 'action' | 'free' | 'reaction' | 'passive'
   /** Robust/Focused 처럼 중복 습득 가능 여부 */
   stackable: boolean
+  /**
+   * 효과가 자동 적용되는 시점 (passive 능력용).
+   * null = 발동형(호출부가 activateAbility 로 실행).
+   * 'always' = 상시 (maxHpBonus 등 파생치 계산에 반영)
+   * 'stretchRest' = 스트레치 휴식 시 (깊은 명상류)
+   */
+  trigger: 'always' | 'stretchRest' | null
   effects: Effect[]
 }
 

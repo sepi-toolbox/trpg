@@ -8,7 +8,12 @@
     "wpCost": 3,
     "activation": "free",
     "stackable": false,
-    "effects": [{ "hook": "manual" }]
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "trigger": null
   },
   {
     "id": "hard-to-catch",
@@ -19,7 +24,19 @@
     "wpCost": 3,
     "activation": "free",
     "stackable": false,
-    "effects": [{ "hook": "boon", "params": { "roll": { "skills": ["evade"] } } }]
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "evade"
+            ]
+          }
+        }
+      }
+    ],
+    "trigger": null
   },
   {
     "id": "unforgiving",
@@ -30,7 +47,12 @@
     "wpCost": 3,
     "activation": "free",
     "stackable": false,
-    "effects": [{ "hook": "manual" }]
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "trigger": null
   },
   {
     "id": "deep-trance",
@@ -42,10 +64,26 @@
     "activation": "passive",
     "stackable": false,
     "effects": [
-      { "hook": "heal", "params": { "dice": "D6" } },
-      { "hook": "healWp", "params": { "dice": "D6" } },
-      { "hook": "healCondition", "params": { "count": 1 } }
-    ]
+      {
+        "hook": "heal",
+        "params": {
+          "dice": "D6"
+        }
+      },
+      {
+        "hook": "healWp",
+        "params": {
+          "dice": "D6"
+        }
+      },
+      {
+        "hook": "healCondition",
+        "params": {
+          "count": 1
+        }
+      }
+    ],
+    "trigger": "stretchRest"
   },
   {
     "id": "hot-temper",
@@ -57,9 +95,22 @@
     "activation": "free",
     "stackable": false,
     "effects": [
-      { "hook": "boon", "params": { "roll": { "all": true } } },
-      { "hook": "condition", "params": { "condition": "angry" } }
-    ]
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "all": true
+          }
+        }
+      },
+      {
+        "hook": "condition",
+        "params": {
+          "condition": "angry"
+        }
+      }
+    ],
+    "trigger": null
   },
   {
     "id": "webbed-feet",
@@ -70,7 +121,19 @@
     "wpCost": 0,
     "activation": "passive",
     "stackable": false,
-    "effects": [{ "hook": "boon", "params": { "roll": { "skills": ["swimming"] } } }]
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "swimming"
+            ]
+          }
+        }
+      }
+    ],
+    "trigger": "always"
   },
   {
     "id": "hunters-mark",
@@ -81,7 +144,12 @@
     "wpCost": 3,
     "activation": "action",
     "stackable": false,
-    "effects": [{ "hook": "manual" }]
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "trigger": null
   },
   {
     "id": "robust",
@@ -92,7 +160,15 @@
     "wpCost": 0,
     "activation": "passive",
     "stackable": true,
-    "effects": [{ "hook": "maxHpBonus", "params": { "amount": 2 } }]
+    "effects": [
+      {
+        "hook": "maxHpBonus",
+        "params": {
+          "amount": 2
+        }
+      }
+    ],
+    "trigger": "always"
   },
   {
     "id": "focused",
@@ -103,28 +179,62 @@
     "wpCost": 0,
     "activation": "passive",
     "stackable": true,
-    "effects": [{ "hook": "maxWpBonus", "params": { "amount": 2 } }]
+    "effects": [
+      {
+        "hook": "maxWpBonus",
+        "params": {
+          "amount": 2
+        }
+      }
+    ],
+    "trigger": "always"
   },
   {
     "id": "veteran",
     "name": "역전의 용사",
     "description": "라운드 시작에 발동. 새 선제 카드를 뽑는 대신 지난 라운드의 카드를 유지한다. 액션 아님.",
     "kind": "heroic",
-    "requirement": { "skillIds": ["anyWeapon"], "level": 12 },
+    "requirement": {
+      "skillIds": [
+        "anyWeapon"
+      ],
+      "level": 12
+    },
     "wpCost": 1,
     "activation": "free",
     "stackable": false,
-    "effects": [{ "hook": "initiativeSwap", "params": { "mode": "keepPrevious" } }]
+    "effects": [
+      {
+        "hook": "initiativeSwap",
+        "params": {
+          "mode": "keepPrevious"
+        }
+      }
+    ],
+    "trigger": null
   },
   {
     "id": "dual-wield",
     "name": "쌍수",
     "description": "한손 무기 둘을 들었을 때 자기 턴에 발동. 보조 무기의 STR 요구 +3. 두 번째 무기로 추가 공격 1회(베인). 첫 공격의 피해까지 끝낸 뒤 두 번째 공격을 굴린다.",
     "kind": "heroic",
-    "requirement": { "skillIds": ["anyMeleeWeapon"], "level": 12 },
+    "requirement": {
+      "skillIds": [
+        "anyMeleeWeapon"
+      ],
+      "level": 12
+    },
     "wpCost": 3,
     "activation": "free",
     "stackable": false,
-    "effects": [{ "hook": "extraAttack", "params": { "bane": true } }]
+    "effects": [
+      {
+        "hook": "extraAttack",
+        "params": {
+          "bane": true
+        }
+      }
+    ],
+    "trigger": null
   }
 ]

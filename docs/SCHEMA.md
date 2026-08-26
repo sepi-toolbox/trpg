@@ -51,6 +51,7 @@ id 는 코드가 참조하므로 **바꾸지 않는다** (바꿔야 하면 참�
 - `wpCost` 🔧 숫자 | `"varies"` (0 = 소모 없음)
 - `activation` 🔧 action | free | reaction | passive
 - `stackable` 🔧 중복 습득 가능 여부 (강골·집중 류)
+- `trigger` 🔧 패시브 적용 시점: `"always"`(상시 — maxHpBonus 등) | `"stretchRest"`(휴식 시) | null(발동형)
 - `effects` 🔧 아래 "효과 훅" 참조
 - `name` `description` ✏️
 
