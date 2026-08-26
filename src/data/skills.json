@@ -1,0 +1,92 @@
+[
+  {
+    "id": "power_strike",
+    "name": "강타",
+    "description": "명중 판정에 불리함을 받는 대신 데미지 주사위를 크게 굴린다.",
+    "uses": 3,
+    "kind": "attack",
+    "power": "2d8+2",
+    "ability": "str",
+    "mode": "disadvantage",
+    "critRange": 20
+  },
+  {
+    "id": "second_wind",
+    "name": "재기",
+    "description": "숨을 고르고 생명력을 회복한다.",
+    "uses": 2,
+    "kind": "heal",
+    "power": "1d10+3",
+    "ability": "con"
+  },
+  {
+    "id": "backstab",
+    "name": "급소 찌르기",
+    "description": "정확한 일격. 18 이상이면 크리티컬이 터진다.",
+    "uses": 3,
+    "kind": "attack",
+    "power": "2d6+2",
+    "ability": "dex",
+    "mode": "normal",
+    "critRange": 18
+  },
+  {
+    "id": "evade",
+    "name": "회피 태세",
+    "description": "3라운드 동안 방어도가 +3 오른다.",
+    "uses": 2,
+    "kind": "buff",
+    "power": "3",
+    "ability": "dex",
+    "defenseBonus": 3
+  },
+  {
+    "id": "firebolt",
+    "name": "화염탄",
+    "description": "적을 불태운다. 이 게임에서 단발 화력이 가장 높은 기술.",
+    "uses": 5,
+    "kind": "attack",
+    "power": "3d6",
+    "ability": "int",
+    "mode": "normal",
+    "critRange": 20
+  },
+  {
+    "id": "arcane_ward",
+    "name": "비전 방벽",
+    "description": "4라운드 동안 방어도가 +5 오른다. 마법사의 유일한 방어 수단.",
+    "uses": 3,
+    "kind": "buff",
+    "power": "4",
+    "ability": "int",
+    "defenseBonus": 5
+  },
+  {
+    "id": "mend",
+    "name": "치유",
+    "description": "상처를 봉합해 생명력을 회복한다.",
+    "uses": 4,
+    "kind": "heal",
+    "power": "1d8+2",
+    "ability": "wis"
+  },
+  {
+    "id": "blessing",
+    "name": "축복",
+    "description": "3라운드 동안 방어도가 +3 오른다.",
+    "uses": 2,
+    "kind": "buff",
+    "power": "3",
+    "ability": "wis",
+    "defenseBonus": 3
+  },
+  {
+    "id": "siphon",
+    "name": "생명 흡수",
+    "description": "주변의 마력을 끌어와 상처를 메운다.",
+    "uses": 3,
+    "kind": "heal",
+    "power": "1d8+2",
+    "ability": "int"
+  }
+]

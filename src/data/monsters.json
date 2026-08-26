@@ -1,0 +1,74 @@
+[
+  {
+    "id": "giant_rat",
+    "name": "거대 쥐",
+    "level": 1,
+    "hp": "2d4+2",
+    "defense": 11,
+    "attackBonus": 2,
+    "damage": "1d4",
+    "initiativeBonus": 2,
+    "xp": 30,
+    "traits": ["무리"]
+  },
+  {
+    "id": "goblin",
+    "name": "고블린",
+    "level": 1,
+    "hp": "2d6+2",
+    "defense": 12,
+    "attackBonus": 3,
+    "damage": "1d6",
+    "initiativeBonus": 2,
+    "xp": 60,
+    "traits": ["교활함"]
+  },
+  {
+    "id": "skeleton",
+    "name": "해골 병사",
+    "level": 2,
+    "hp": "3d6+3",
+    "defense": 13,
+    "attackBonus": 4,
+    "damage": "1d6+1",
+    "initiativeBonus": 1,
+    "xp": 110,
+    "traits": ["언데드", "관통 저항"]
+  },
+  {
+    "id": "orc",
+    "name": "오크 전사",
+    "level": 3,
+    "hp": "4d8+8",
+    "defense": 14,
+    "attackBonus": 5,
+    "damage": "1d8+2",
+    "initiativeBonus": 1,
+    "xp": 200,
+    "traits": ["맹공"]
+  },
+  {
+    "id": "ogre",
+    "name": "오우거",
+    "level": 5,
+    "hp": "6d10+12",
+    "defense": 15,
+    "attackBonus": 6,
+    "damage": "2d6+3",
+    "initiativeBonus": 0,
+    "xp": 420,
+    "traits": ["거구", "둔중"]
+  },
+  {
+    "id": "dungeon_lord",
+    "name": "던전의 주인",
+    "level": 8,
+    "hp": "8d10+24",
+    "defense": 16,
+    "attackBonus": 7,
+    "damage": "2d8+3",
+    "initiativeBonus": 3,
+    "xp": 900,
+    "traits": ["보스", "공포"]
+  }
+]

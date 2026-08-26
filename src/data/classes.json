@@ -1,0 +1,115 @@
+[
+  {
+    "id": "warrior",
+    "name": "전사",
+    "description": "전열에서 버티는 근접 직업. 생명력 주사위가 가장 크고 방어도가 높다.",
+    "hitDie": "1d10",
+    "abilityBonus": {
+      "str": 2,
+      "con": 1
+    },
+    "abilityPriority": [
+      "str",
+      "con",
+      "dex",
+      "wis",
+      "cha",
+      "int"
+    ],
+    "startingWeapon": "longsword",
+    "startingArmor": "chainmail",
+    "proficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": [
+      "power_strike",
+      "second_wind"
+    ]
+  },
+  {
+    "id": "rogue",
+    "name": "도적",
+    "description": "명중과 크리티컬에 특화. 한 방이 크게 터지지만 맷집이 약하다.",
+    "hitDie": "1d8",
+    "abilityBonus": {
+      "dex": 2,
+      "cha": 1
+    },
+    "abilityPriority": [
+      "dex",
+      "con",
+      "cha",
+      "wis",
+      "str",
+      "int"
+    ],
+    "startingWeapon": "dagger",
+    "startingArmor": "leather",
+    "proficiencies": [
+      "dex",
+      "cha"
+    ],
+    "skills": [
+      "backstab",
+      "evade"
+    ]
+  },
+  {
+    "id": "mage",
+    "name": "마법사",
+    "description": "기술 한 방의 화력이 가장 높지만 맷집이 얇다. 네 클래스 중 가장 어렵다.",
+    "hitDie": "1d8",
+    "abilityBonus": {
+      "int": 2,
+      "wis": 1
+    },
+    "abilityPriority": [
+      "int",
+      "con",
+      "dex",
+      "wis",
+      "cha",
+      "str"
+    ],
+    "startingWeapon": "staff",
+    "startingArmor": "robe",
+    "proficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": [
+      "firebolt",
+      "arcane_ward",
+      "siphon"
+    ]
+  },
+  {
+    "id": "cleric",
+    "name": "성직자",
+    "description": "회복 담당. 화력은 낮지만 장기전 생존율이 가장 높다.",
+    "hitDie": "1d8",
+    "abilityBonus": {
+      "wis": 2,
+      "con": 1
+    },
+    "abilityPriority": [
+      "wis",
+      "con",
+      "str",
+      "dex",
+      "cha",
+      "int"
+    ],
+    "startingWeapon": "holy_mace",
+    "startingArmor": "chainmail",
+    "proficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": [
+      "mend",
+      "blessing"
+    ]
+  }
+]
