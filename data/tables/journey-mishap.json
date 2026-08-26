@@ -1,0 +1,19 @@
+{
+  "id": "journey-mishap",
+  "name": "여정 사고표",
+  "die": 12,
+  "rows": [
+    { "min": 1, "max": 1, "name": "짙은 안개", "description": "안개가 몰려온다. 이번 시프트 이동 거리 절반.", "effects": [{ "hook": "manual" }], "extra": { "distanceFactor": 0.5 } },
+    { "min": 2, "max": 2, "name": "막힌 길", "description": "낙석·쓰러진 나무·수렁이 길을 막는다. 각자 곡예 판정 — 성공자는 남을 도울 수 있다. 실패자는 이번 시프트 전진 없음.", "effects": [{ "hook": "manual" }] },
+    { "min": 3, "max": 3, "name": "찢어진 옷", "description": "가시덤불·바위 틈에서 무작위 1인의 옷이 망가진다. 누더기 취급.", "effects": [{ "hook": "manual" }] },
+    { "min": 4, "max": 4, "name": "길 잃음", "description": "맴돌고 있었다. 이번 시프트 전진 없음. 길잡이는 야외술 판정으로 길을 되찾아야 한다(도움 불가).", "effects": [{ "hook": "manual" }], "extra": { "distanceFactor": 0 } },
+    { "min": 5, "max": 5, "name": "떨어뜨린 짐", "description": "무작위 1인이 물건 하나를 떨어뜨리거나 망가뜨린다.", "effects": [{ "hook": "manual" }] },
+    { "min": 6, "max": 6, "name": "벌레 떼", "description": "모기·각다귀 떼의 습격. 망토 없는 전원이 격앙 상태.", "effects": [{ "hook": "manual" }], "extra": { "conditionWithoutCloak": "angry" } },
+    { "min": 7, "max": 7, "name": "접질린 발목", "description": "무작위 1인이 헛디뎌 D6 피해. 방어구 무효, 장화가 있으면 2 경감.", "effects": [{ "hook": "manual" }], "extra": { "damage": "D6", "bootsReduce": 2 } },
+    { "min": 8, "max": 8, "name": "폭우", "description": "폭우(계절 따라 눈보라). 망토 없는 전원 추위 판정. 대피 전까지 전진 없음.", "effects": [{ "hook": "manual" }], "extra": { "distanceFactor": 0 } },
+    { "min": 9, "max": 9, "name": "말벌집", "description": "길잡이가 벌집을 밟았다. 전원 회피 판정 — 실패자는 D6 피해 + 상태이상 1개(선택).", "effects": [{ "hook": "manual" }], "extra": { "damage": "D6" } },
+    { "min": 10, "max": 10, "name": "산사태", "description": "발밑이 무너진다. 전원 회피 판정 — 실패자는 D10 피해.", "effects": [{ "hook": "manual" }], "extra": { "damage": "D10" } },
+    { "min": 11, "max": 11, "name": "사나운 짐승", "description": "위협을 느낀 들짐승이 덮쳐 온다. 짐승 표에서 하나를 고른다.", "effects": [{ "hook": "manual" }] },
+    { "min": 12, "max": 12, "name": "유사(流沙)", "description": "땅이 꺼진다! 각자 야외술 판정 — 실패자는 상태이상 1개를 받고 재판정. 6종을 다 가진 채 실패하면 삼켜진다. 빠져나온 사람은 남을 도울 수 있다.", "effects": [{ "hook": "manual" }] }
+  ]
+}

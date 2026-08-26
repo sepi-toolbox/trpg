@@ -1,0 +1,13 @@
+{
+  "id": "hunting",
+  "name": "사냥감표",
+  "die": 6,
+  "rows": [
+    { "min": 1, "max": 1, "name": "다람쥐", "description": "무기 또는 덫으로 잡는다.", "effects": [], "extra": { "rations": "1", "trapAllowed": true } },
+    { "min": 2, "max": 2, "name": "까마귀", "description": "무기로만 잡는다.", "effects": [], "extra": { "rations": "1", "trapAllowed": false } },
+    { "min": 3, "max": 3, "name": "토끼", "description": "무기 또는 덫.", "effects": [], "extra": { "rations": "D3", "trapAllowed": true } },
+    { "min": 4, "max": 4, "name": "여우", "description": "무기 또는 덫.", "effects": [], "extra": { "rations": "D4", "trapAllowed": true } },
+    { "min": 5, "max": 5, "name": "멧돼지", "description": "무기로만. 사냥 판정에 실패하면 덤벼든다.", "effects": [], "extra": { "rations": "2D6", "trapAllowed": false, "attacksOnFailure": true } },
+    { "min": 6, "max": 6, "name": "사슴", "description": "무기로만.", "effects": [], "extra": { "rations": "2D8", "trapAllowed": false } }
+  ]
+}
