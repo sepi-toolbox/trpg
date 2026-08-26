@@ -67,6 +67,23 @@ export function SheetPanel({ data, state }: { data: GameData; state: GameState }
       </div>
       <div className="kv"><span className="k">식량</span><span className="v">{state.rations}{state.famished ? ' (굶주림!)' : ''}</span></div>
       <div className="kv"><span className="k">여정</span><span className="v">{state.kmTraveled}/{JOURNEY_TOTAL_KM}km · {state.day}일차</span></div>
+      {c.weaknessId !== null && (
+        <div className="kv">
+          <span className="k">약점</span>
+          <span className="v">
+            {data.tables.find((t) => t.id === 'weaknesses')?.rows.find((r) => r.min <= c.weaknessId! && c.weaknessId! <= r.max)?.name || `#${c.weaknessId}`}
+          </span>
+        </div>
+      )}
+      {c.mementoId !== null && (
+        <div className="kv">
+          <span className="k">기념품</span>
+          <span className="v">
+            {data.tables.find((t) => t.id === 'mementos')?.rows.find((r) => r.min <= c.mementoId! && c.mementoId! <= r.max)?.name || `#${c.mementoId}`}
+            {state.mementoUsed ? ' (사용함)' : ''}
+          </span>
+        </div>
+      )}
 
       {c.conditions.length > 0 && (
         <div style={{ marginTop: 10 }}>

@@ -161,6 +161,8 @@ export interface GameState {
   /** 정산 결과 */
   debrief: AdvancementRollResult[] | null
   bossDefeated: boolean
+  /** 기념품 효과 사용 여부 (모험당 1회 — 잠정 해석) */
+  mementoUsed: boolean
 }
 
 let _logSeq = 0
@@ -215,6 +217,7 @@ export function startGame(seed: number, character: Character): GameState {
     logSeq: 0,
     debrief: null,
     bossDefeated: false,
+    mementoUsed: false,
   }
   return log(
     base,
@@ -396,6 +399,20 @@ export function eveningRest(rng: RNG, data: GameData, state: GameState): GameSta
   } else {
     s = { ...s, character: withVitals(s.character, out.vitals), restUsage: out.usage }
     s = log(s, 'good', `휴식 — HP +${out.hpHealed}, WP +${out.wpHealed}${out.conditionsHealed.length ? ', 상태이상 회복' : ''}`)
+    // 기념품: 스트레치 휴식 시 상태이상 1개 추가 회복 (세션당 1회 — 모험당 1회로 잠정 처리)
+    if (
+      data.config.mementos &&
+      s.character.mementoId !== null &&
+      !s.mementoUsed &&
+      s.character.conditions.length > 0
+    ) {
+      s = {
+        ...s,
+        character: { ...s.character, conditions: s.character.conditions.slice(1) },
+        mementoUsed: true,
+      }
+      s = log(s, 'good', '기념품을 매만지며 마음을 다잡는다 — 상태이상 1개 추가 회복 (모험당 1회)')
+    }
   }
   return nightPhase(rng, data, s)
 }

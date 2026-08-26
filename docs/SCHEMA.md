@@ -127,6 +127,9 @@ id 는 코드가 참조하므로 **바꾸지 않는다** (바꿔야 하면 참�
 ### tables/*.json — 굴림표
 공포표·사고표·중상표 등. `die` 🔧 주사위 면수, `rows` 는 min~max 로 전 눈을 덮어야 한다.
 각 행: `effects` 🔧 + `name` `description` ✏️
+`weaknesses.json`·`mementos.json` (각 D20) 은 행 전체가 ✏️ 콘텐츠다 — 약점은 롤플레이용
+(굴복 시 정산 질문으로 성장 마크), 기념품은 스트레치 휴식 시 상태이상 +1 회복(모험당 1회)을
+엔진이 처리하므로 effects 는 비워 둔다.
 
 ## 효과 훅 (effects)
 

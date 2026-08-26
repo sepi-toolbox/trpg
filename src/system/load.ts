@@ -24,6 +24,8 @@ import severeInjuriesTable from '../../data/tables/severe-injuries.json'
 import magicalMishapTable from '../../data/tables/magical-mishap.json'
 import journeyMishapTable from '../../data/tables/journey-mishap.json'
 import huntingTable from '../../data/tables/hunting.json'
+import weaknessesTable from '../../data/tables/weaknesses.json'
+import mementosTable from '../../data/tables/mementos.json'
 
 /**
  * 이름 공란 채우기 — 내러티브(이름·묘사)는 데이터에서 비워 두는 것이 규칙이므로
@@ -67,6 +69,7 @@ export function loadGameData(): GameData {
     tables: [
       fearTable, meleeMishapTable, rangedMishapTable, severeInjuriesTable,
       magicalMishapTable, journeyMishapTable, huntingTable,
+      weaknessesTable, mementosTable,
     ],
   } as unknown as GameData
   fillNames(data)

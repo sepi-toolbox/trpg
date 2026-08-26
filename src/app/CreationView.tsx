@@ -47,6 +47,7 @@ export function CreationView({
   const [professionId, setProfessionId] = useState('fighter')
   const [ageId, setAgeId] = useState<'young' | 'adult' | 'old'>('adult')
   const [rollCount, setRollCount] = useState(0)
+  const [traitRoll, setTraitRoll] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   const seed = seedText.trim() === '' ? (Date.now() >>> 0) : hashSeed(seedText.trim())
@@ -70,6 +71,16 @@ export function CreationView({
   const profSkills = professionSkillIds(profession, variantId ?? null)
   const age = data.ageTable.find((a) => a.id === ageId)!
   const freeCount = age.extraTrainedSkills
+
+  // 약점·기념품 (옵션 룰) — D20 굴림, 재굴림 가능
+  const traitRng = createRNG(hashSeed(`${seedText}#traits#${traitRoll}`))
+  const weaknessId = data.config.weaknesses ? 1 + Math.floor(traitRng.next() * 20) : null
+  const mementoId = data.config.mementos ? 1 + Math.floor(traitRng.next() * 20) : null
+  const traitName = (tableId: string, n: number | null) => {
+    if (n === null) return null
+    const row = data.tables.find((t) => t.id === tableId)?.rows.find((r) => n >= r.min && n <= r.max)
+    return row?.name || `#${n}`
+  }
 
   // 훈련 스킬: 직업 6종 + 자유 선택
   const [chosenProf, setChosenProf] = useState<string[]>(profSkills.slice(0, 6))
@@ -110,8 +121,8 @@ export function CreationView({
         spellIds: isMage
           ? mageSpellPicks(data, profSkills.find((s) => data.skills.some((k) => k.id === s && k.kind === 'magic'))!)
           : undefined,
-        weaknessId: null,
-        mementoId: null,
+        weaknessId,
+        mementoId,
       }
       const character = createCharacter(createRNG(seed), data, input)
       onStart(character, seed)
@@ -171,6 +182,21 @@ export function CreationView({
             <button onClick={() => setRollCount((n) => n + 1)}>다시 굴리기</button>
           </div>
         </div>
+
+        {(weaknessId !== null || mementoId !== null) && (
+          <div className="field">
+            <label>약점 · 기념품 (D20)</label>
+            {weaknessId !== null && (
+              <div className="kv"><span className="k">약점</span><span className="v">{traitName('weaknesses', weaknessId)}</span></div>
+            )}
+            {mementoId !== null && (
+              <div className="kv"><span className="k">기념품</span><span className="v">{traitName('mementos', mementoId)}</span></div>
+            )}
+            <div className="button-row" style={{ marginTop: 6 }}>
+              <button onClick={() => setTraitRoll((n) => n + 1)}>다시 굴리기</button>
+            </div>
+          </div>
+        )}
 
         {error && <div className="event-card bad">{error}</div>}
         <button className="primary" style={{ width: '100%' }} onClick={start}>
