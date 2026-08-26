@@ -6,9 +6,12 @@ import type { Character } from '../system/character'
 import { SESSION_QUESTIONS } from '../system/character'
 import type { GameState } from './session'
 import {
+  eveningCastSpell,
   eveningHunt,
+  eveningPrepareSpells,
   eveningRest,
   eveningSkip,
+  preparedSpellLimit,
   runDebrief,
   startGame,
   travelShift,
@@ -115,6 +118,9 @@ function GameScreen({
                 바로 잔다
               </button>
             </div>
+            {state.character.knownSpellIds.length > 0 && (
+              <MagicEveningPanel data={data} rng={rng} state={state} setState={setState} />
+            )}
           </section>
         )}
 
@@ -162,6 +168,94 @@ function GameScreen({
 
         <LogPanel lines={state.log} />
       </div>
+    </div>
+  )
+}
+
+/** 저녁 마법 활동 — 준비 주문 교체(그리무아, 시프트 소모) + 비전투 시전 */
+function MagicEveningPanel({
+  data,
+  rng,
+  state,
+  setState,
+}: {
+  data: ReturnType<typeof loadGameData>
+  rng: RNG
+  state: GameState
+  setState: (s: GameState) => void
+}) {
+  const c = state.character
+  const limit = preparedSpellLimit(data, c)
+  const knownSpells = c.knownSpellIds
+    .map((id) => data.spells.find((s) => s.id === id)!)
+    .filter(Boolean)
+  const preparable = knownSpells.filter((s) => s.kind === 'spell')
+  const hasGrimoire = c.inventory.some((i) => i.itemId === 'grimoire' && i.qty > 0)
+
+  const [prepOpen, setPrepOpen] = useState(false)
+  const [castOpen, setCastOpen] = useState(false)
+  const [selection, setSelection] = useState<string[]>(c.preparedSpellIds)
+
+  const toggle = (id: string) =>
+    setSelection(selection.includes(id) ? selection.filter((x) => x !== id) : [...selection, id])
+
+  return (
+    <div style={{ marginTop: 14 }}>
+      <h3>마법 (WP {c.wp})</h3>
+      <p className="muted">
+        준비 주문 {c.preparedSpellIds.length}/{limit} (한도 = 지능 기본치).
+        미준비 주문은 그리무아에서 시간 ×2로 시전한다.
+      </p>
+      <div className="button-row" style={{ marginBottom: 8 }}>
+        <button disabled={!hasGrimoire} onClick={() => { setPrepOpen(!prepOpen); setCastOpen(false) }}>
+          주문 준비 교체 {hasGrimoire ? '(시프트 소모)' : '(그리무아 없음)'}
+        </button>
+        <button onClick={() => { setCastOpen(!castOpen); setPrepOpen(false) }}>
+          주문 시전 (저녁 소모)
+        </button>
+      </div>
+
+      {prepOpen && (
+        <div className="event-card">
+          {preparable.map((s) => (
+            <label key={s.id} style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: '0.9rem', margin: '4px 0' }}>
+              <input type="checkbox" checked={selection.includes(s.id)}
+                disabled={!selection.includes(s.id) && selection.length >= limit}
+                onChange={() => toggle(s.id)} />
+              {s.name} <span className="muted">({data.skills.find((k) => k.id === s.school)?.name ?? '일반'} · 위계 {s.rank})</span>
+            </label>
+          ))}
+          <button className="primary" style={{ marginTop: 6 }}
+            disabled={selection.length > limit}
+            onClick={() => setState(eveningPrepareSpells(rng, data, state, selection))}>
+            이 조합으로 준비하고 잔다 ({selection.length}/{limit})
+          </button>
+        </div>
+      )}
+
+      {castOpen && (
+        <div className="event-card">
+          {knownSpells.map((s) => {
+            const prepared = s.kind === 'trick' || c.preparedSpellIds.includes(s.id)
+            const grimoireOnly = !prepared
+            if (grimoireOnly && (!hasGrimoire || s.castingTime === 'reaction')) return null
+            const levels = s.kind === 'trick' ? [0] : s.usesPowerLevel ? [1, 2, 3] : [1]
+            return (
+              <div key={s.id} className="button-row" style={{ margin: '4px 0' }}>
+                {levels.map((pl) => {
+                  const cost = s.kind === 'trick' ? 1 : s.usesPowerLevel ? pl * 2 : 2
+                  return (
+                    <button key={pl} disabled={c.wp < cost}
+                      onClick={() => setState(eveningCastSpell(rng, data, state, s.id, Math.max(1, pl)))}>
+                      {s.name}{s.usesPowerLevel ? ` 위력${pl}` : ''} ({cost}WP{grimoireOnly ? ' · 그리무아 ×2' : ''})
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

@@ -23,6 +23,7 @@ import {
   pcAttack,
   pcCastSpell,
   pcPass,
+  resolveAmbush,
   resolveCritical,
   resolveReaction,
   startGame,
@@ -68,6 +69,11 @@ export function autoStep(data: GameData, rngSeed: number, state: GameState, tick
   const c = state.combat
 
   if (state.screen === 'combat' && c) {
+    if (c.prompt?.kind === 'ambush') {
+      // 평균적인 플레이어: 은신이 훈련돼 있으면 잠입, 아니면 정면 돌파
+      const sneaky = (c.pc.skills['sneaking'] ?? 0) >= 10
+      return resolveAmbush(rng, data, state, sneaky ? 'sneak' : 'open')
+    }
     if (c.prompt?.kind === 'reaction') {
       const lowHp = c.pc.hp < c.pc.maxHp * 0.5
       const choice = !lowHp ? 'none' : c.prompt.canParry ? 'parry' : c.prompt.canDodge ? 'dodge' : 'none'

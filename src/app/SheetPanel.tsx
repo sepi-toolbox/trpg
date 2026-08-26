@@ -1,6 +1,6 @@
 import type { GameData } from '../system/types'
 import { ATTRIBUTES } from '../system/types'
-import { baseChance, damageBonus, maxHp, maxWp, movementOf } from '../system/character'
+import { baseChance, damageBonus, encumbrance, maxHp, maxWp, movementOf } from '../system/character'
 import type { GameState } from './session'
 import { JOURNEY_TOTAL_KM } from './session'
 
@@ -18,6 +18,7 @@ export function SheetPanel({ data, state }: { data: GameData; state: GameState }
   const trained = c.trainedSkillIds
     .map((id) => data.skills.find((s) => s.id === id))
     .filter(Boolean)
+  const enc = encumbrance(data, c)
 
   return (
     <aside className="panel">
@@ -59,6 +60,10 @@ export function SheetPanel({ data, state }: { data: GameData; state: GameState }
         <span className="v">
           근력 {damageBonus(data, c.attributes.str) ?? '—'} / 민첩 {damageBonus(data, c.attributes.agl) ?? '—'}
         </span>
+      </div>
+      <div className="kv">
+        <span className="k">소지 한도</span>
+        <span className="v">{enc.carried}/{enc.limit}{enc.overEncumbered ? ' ⚠ 과적' : ''}</span>
       </div>
       <div className="kv"><span className="k">식량</span><span className="v">{state.rations}{state.famished ? ' (굶주림!)' : ''}</span></div>
       <div className="kv"><span className="k">여정</span><span className="v">{state.kmTraveled}/{JOURNEY_TOTAL_KM}km · {state.day}일차</span></div>

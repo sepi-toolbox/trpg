@@ -13,21 +13,29 @@ import type { RNG } from '../system/rng'
 import { rollDie } from '../system/rng'
 import type { GameData, ConditionId, DamageType, RollTableRow } from '../system/types'
 import type { Character } from '../system/character'
-import { maxHp, maxWp, resolveAdvancement, markAdvancement } from '../system/character'
+import { baseChance, encumbrance, maxHp, maxWp, movementOf, resolveAdvancement, markAdvancement } from '../system/character'
 import type { AdvancementRollResult } from '../system/character'
 import type { Combatant } from '../system/combatant'
 import { combatantFromCharacter, combatantFromNpc, weaponOf } from '../system/combatant'
 import type { AttackRoll, CriticalChoice } from '../system/combat'
 import {
   applyDamage,
+  canSwapInitiative,
   deathRoll,
   drawInitiative,
+  effectiveRange,
+  rangedDistanceState,
   rollAttack,
   rollDamage,
+  tryBreakFree,
   tryDodge,
   tryParry,
+  trySpecialDisarm,
+  trySpecialGrapple,
   trySpecialTopple,
   checkParryDurability,
+  findWeakSpotContext,
+  weaponReach,
 } from '../system/combat'
 import type { MonsterAttack } from '../system/types'
 import type { MonsterCombatant } from '../system/monster'
@@ -51,9 +59,10 @@ import {
 } from '../system/hazards'
 import { stretchRestBonus } from '../system/effects'
 import { pathfind, makeCamp, hunt, forcedMarch, KM_PER_SHIFT_FOOT } from '../system/journey'
-import { castSpell, rollSpellDice, isHealingSpell, spellOf } from '../system/magic'
-import { rollD20 } from '../system/roll'
+import { castSpell, prepareSpells, rollSpellDice, isHealingSpell, spellOf } from '../system/magic'
+import { conditionBanes, rollD20 } from '../system/roll'
 import { gatherMods } from '../system/combat'
+import { roll as rollDice } from '../system/dice'
 
 export const JOURNEY_TOTAL_KM = 60
 
@@ -68,8 +77,8 @@ export interface LogEntry {
 /* ─────────────────────────── 전투 세션 ─────────────────────────── */
 
 export type EnemyUnit =
-  | { kind: 'monster'; state: MonsterCombatant }
-  | { kind: 'npc'; state: Combatant }
+  | { kind: 'monster'; state: MonsterCombatant; distance: number }
+  | { kind: 'npc'; state: Combatant; distance: number }
 
 export interface TurnSlot {
   ownerId: string
@@ -94,6 +103,9 @@ export type PendingPrompt =
       enemyId: string
       choices: CriticalChoice[]
     }
+  | {
+      kind: 'ambush' // 전투 개시 전 — 몰래 접근할 것인가
+    }
 
 export interface CombatSession {
   round: number
@@ -105,6 +117,16 @@ export interface CombatSession {
   status: 'ongoing' | 'victory' | 'defeat'
   /** 능력 발동으로 다음 PC 공격에 걸리는 보온 */
   nextRollBoons: number
+  /** 무장 해제로 땅에 떨어진 무기 (unitId → weaponId[]). 줍기는 액션 */
+  droppedWeapons: Record<string, string[]>
+  /** PC가 붙잡고 있는 적 (붙잡기 특수 공격) */
+  grappledEnemyId: string | null
+  /** 이번 라운드에 이미 대기(카드 교환)했는가 */
+  pcWaited: boolean
+  /** 잠입 성공 — 다음 PC 공격이 암습(보온, 리액션 불가, subtle +1주사위) */
+  sneakPending: boolean
+  /** 이번 라운드에 무기 바꿔 들기(자유 행동)를 썼는가 */
+  drewWeaponThisRound: boolean
 }
 
 /* ─────────────────────────── 게임 상태 ─────────────────────────── */
@@ -212,10 +234,26 @@ export function travelShift(rng: RNG, data: GameData, state: GameState, forced =
   if (state.screen !== 'journey') return state
   let s = state
 
-  // 이미 도착한 상태 → 결전
+  // 이미 도착한 상태 → 결전 (PC 주도 개전 — 잠입 여부를 물을 수 있다)
   if (s.kmTraveled >= JOURNEY_TOTAL_KM && !s.bossDefeated) {
-    s = log(s, 'system', '무너진 문을 밀어젖힌다 — 수호자가 일어선다.')
-    return beginCombat(rng, data, s, [{ npcOrMonster: 'monster', id: 'stonehide' }])
+    s = log(s, 'system', '무너진 문 틈으로 홀 안이 보인다 — 수호자는 아직 이쪽을 모른다.')
+    return beginCombat(rng, data, s, [{ npcOrMonster: 'monster', id: 'stonehide', distance: 10 }], { ambushOption: true })
+  }
+
+  // 과적: 시프트 도보 이동마다 근력 판정 — 실패하면 이번 시프트는 제자리
+  {
+    const enc = encumbrance(data, s.character)
+    if (enc.overEncumbered) {
+      const banes = conditionBanes(new Set(s.character.conditions), 'str')
+      const strRoll = rollD20(rng, s.character.attributes.str, { banes })
+      if (!strRoll.success) {
+        s = log(s, 'bad', `과적 (${enc.carried}/${enc.limit}) — 짐에 눌려 나아가지 못했다. 짐을 줄이거나 버텨야 한다.`)
+        s = { ...s, shiftsTraveledToday: s.shiftsTraveledToday + 1 }
+        if (s.shiftsTraveledToday >= 2 || forced) return { ...s, screen: 'evening' }
+        return s
+      }
+      s = log(s, 'info', `과적 (${enc.carried}/${enc.limit}) — 근력으로 버티며 나아간다.`)
+    }
   }
 
   if (forced) {
@@ -263,8 +301,17 @@ export function travelShift(rng: RNG, data: GameData, state: GameState, forced =
   // 조우 판정 (D6 = 1: 약탈자)
   const encounterRoll = rollDie(rng, 6)
   if (encounterRoll === 1) {
-    s = log(s, 'bad', '수풀 너머에서 약탈자가 튀어나온다!')
-    return beginCombat(rng, data, s, [{ npcOrMonster: 'npc', id: 'raider' }])
+    // 매복 — 정황 판정(주의력)에 실패하면 적이 1라운드 카드를 고른다 (기습)
+    const aware = rollD20(rng, s.character.skillLevels['awareness'] ?? 0, {
+      banes: conditionBanes(new Set(s.character.conditions), 'int'),
+    })
+    s = trackMark(s, 'awareness', aware.dragon, aware.demon)
+    if (aware.success) {
+      s = log(s, 'bad', '수풀의 기척을 먼저 알아챘다 — 약탈자다!')
+      return beginCombat(rng, data, s, [{ npcOrMonster: 'npc', id: 'raider', distance: 6 }])
+    }
+    s = log(s, 'bad', '수풀 너머에서 약탈자가 튀어나온다 — 허를 찔렸다!')
+    return beginCombat(rng, data, s, [{ npcOrMonster: 'npc', id: 'raider', distance: 4 }], { surprise: 'enemies' })
   }
 
   // 하루 이동 한계 → 저녁
@@ -358,6 +405,104 @@ export function eveningSkip(rng: RNG, data: GameData, state: GameState): GameSta
   return nightPhase(rng, data, state)
 }
 
+/** 준비 주문 한도 = INT 기본치 */
+export function preparedSpellLimit(data: GameData, character: Character): number {
+  return baseChance(data, character.attributes.int)
+}
+
+/**
+ * 저녁: 준비 주문 교체 — 그리무아를 펴고 한 시프트를 쓴다 (저녁 활동 소모).
+ * 한도 = INT 기본치. 그리무아가 있어야 한다.
+ */
+export function eveningPrepareSpells(rng: RNG, data: GameData, state: GameState, spellIds: string[]): GameState {
+  if (state.screen !== 'evening') return state
+  if (!hasItem(state.character, 'grimoire')) {
+    return log(state, 'info', '그리무아가 없다 — 준비 주문을 바꿀 수 없다.')
+  }
+  const limit = preparedSpellLimit(data, state.character)
+  const caster = casterViewOf(state)
+  const out = prepareSpells(data, caster, spellIds, limit)
+  if ('rejected' in out) {
+    return log(state, 'info',
+      out.rejected === 'over-limit' ? `준비 한도 초과 — 최대 ${limit}개.`
+      : out.rejected === 'trick' ? '트릭은 준비할 필요가 없다.'
+      : `모르는 주문: ${out.offending}`)
+  }
+  let s: GameState = { ...state, character: { ...state.character, preparedSpellIds: out.preparedSpellIds } }
+  s = log(s, 'good', `그리무아를 펴고 주문을 준비했다. (${out.preparedSpellIds.length}/${limit})`)
+  return nightPhase(rng, data, s)
+}
+
+/**
+ * 저녁: 비전투 시전 — 준비된 주문은 그대로, 미준비 주문은 그리무아에서 (시간 ×2).
+ * 치유 주문은 실제로 회복하고, 그 외에는 효과 요약만 기록한다 (수동 적용).
+ * 저녁 활동을 소모한다.
+ */
+export function eveningCastSpell(
+  rng: RNG,
+  data: GameData,
+  state: GameState,
+  spellId: string,
+  powerLevel: number,
+): GameState {
+  if (state.screen !== 'evening') return state
+  const spell = spellOf(data, spellId)
+  const prepared = spell.kind === 'trick' || state.character.preparedSpellIds.includes(spellId)
+  if (!prepared && !hasItem(state.character, 'grimoire')) {
+    return log(state, 'info', '미준비 주문은 그리무아가 있어야 시전할 수 있다.')
+  }
+
+  const caster = casterViewOf(state)
+  const out = castSpell(rng, data, caster, {
+    spellId,
+    powerLevel,
+    fromGrimoire: !prepared,
+    available: { word: true, gesture: true, focus: true, ingredient: true },
+  })
+  if ('rejected' in out) return log(state, 'info', `시전 불가: ${out.rejected}`)
+
+  let s: GameState = { ...state, character: { ...state.character, wp: state.character.wp - out.wpSpent } }
+  const magicSkill = spell.school === 'general'
+    ? Object.keys(s.character.skillLevels).find((id) => data.skills.some((k) => k.id === id && k.kind === 'magic'))
+    : spell.school
+  if (out.roll) s = trackMark(s, magicSkill ?? null, out.roll.dragon, out.roll.demon)
+
+  if (!out.success) {
+    s = log(s, 'bad', `${spell.name} 시전 실패 (WP -${out.wpSpent})`)
+    if (out.mishap) s = log(s, 'bad', `마법 사고 — ${out.mishap.name}: ${out.mishap.description}`)
+    return nightPhase(rng, data, s)
+  }
+
+  s = log(s, out.dragon ? 'crit' : 'good',
+    `${spell.name} 시전 성공${!prepared ? ' (그리무아 — 시간 ×2)' : ''}${out.dragon ? ' — 용!' : ''} (WP -${out.wpSpent})`)
+
+  if (isHealingSpell(spell)) {
+    const heal = rollSpellDice(rng, spell, powerLevel, 'heal')
+    if (heal) {
+      const amount = out.dragon ? heal.total * 2 : heal.total
+      const hp = Math.min(maxHp(data, s.character), s.character.hp + amount)
+      s = { ...s, character: { ...s.character, hp } }
+      s = log(s, 'good', `HP ${amount} 회복 (${hp})`)
+    }
+  } else {
+    s = log(s, 'info', `(비전투 시전) ${spell.description || '효과는 수동 적용.'}`)
+  }
+  return nightPhase(rng, data, s)
+}
+
+/** Character → CasterState 뷰 (비전투: 손에 든 것 전부) */
+function casterViewOf(state: GameState) {
+  return {
+    wp: state.character.wp,
+    conditions: state.character.conditions,
+    skillLevels: state.character.skillLevels,
+    knownSpellIds: state.character.knownSpellIds,
+    preparedSpellIds: state.character.preparedSpellIds,
+    armorIds: [state.character.armorId, state.character.helmetId].filter(Boolean) as string[],
+    atHandIds: [...state.character.weaponsAtHand],
+  }
+}
+
 /** 야간: 식사 → 야영 판정 → 수면(시프트 휴식) → 다음 날 */
 function nightPhase(rng: RNG, data: GameData, state: GameState, skipCamp = false): GameState {
   let s = state
@@ -420,14 +565,29 @@ function hasItem(character: Character, itemId: string): boolean {
 interface EnemySpec {
   npcOrMonster: 'npc' | 'monster'
   id: string
+  /** 개전 시 거리(m). 기본 2 (이미 교전 거리) */
+  distance?: number
 }
 
-export function beginCombat(rng: RNG, data: GameData, state: GameState, specs: EnemySpec[]): GameState {
+interface BeginCombatOptions {
+  /** PC가 상황을 주도하는 개전 — 잠입(암습) 선택 프롬프트를 띄운다 */
+  ambushOption?: boolean
+  /** 1라운드 기습: 어느 쪽이 카드를 고르는가 */
+  surprise?: 'pc' | 'enemies' | null
+}
+
+export function beginCombat(
+  rng: RNG,
+  data: GameData,
+  state: GameState,
+  specs: EnemySpec[],
+  options: BeginCombatOptions = {},
+): GameState {
   const pc = combatantFromCharacter(data, state.character)
   const enemies: EnemyUnit[] = specs.map((spec, i) =>
     spec.npcOrMonster === 'monster'
-      ? { kind: 'monster', state: spawnMonster(data, spec.id, `${spec.id}#${i}`) }
-      : { kind: 'npc', state: combatantFromNpc(data, spec.id, `${spec.id}#${i}`) },
+      ? { kind: 'monster', state: spawnMonster(data, spec.id, `${spec.id}#${i}`), distance: spec.distance ?? 2 }
+      : { kind: 'npc', state: combatantFromNpc(data, spec.id, `${spec.id}#${i}`), distance: spec.distance ?? 2 },
   )
 
   const session: CombatSession = {
@@ -439,22 +599,70 @@ export function beginCombat(rng: RNG, data: GameData, state: GameState, specs: E
     prompt: null,
     status: 'ongoing',
     nextRollBoons: 0,
+    droppedWeapons: {},
+    grappledEnemyId: null,
+    pcWaited: false,
+    sneakPending: false,
+    drewWeaponThisRound: false,
   }
 
   let s: GameState = { ...state, screen: 'combat', combat: session }
-  s = startRound(rng, s)
+
+  // PC 주도 개전 — 잠입 여부를 먼저 묻는다 (라운드는 아직 시작 전)
+  if (options.ambushOption) {
+    return { ...s, combat: { ...session, prompt: { kind: 'ambush' } } }
+  }
+
+  s = startRound(rng, s, options.surprise ?? null)
   return advanceCombat(rng, data, s)
 }
 
-function startRound(rng: RNG, state: GameState): GameState {
+/**
+ * 잠입 선택 응답.
+ *  - open: 정면 돌파 — 통상 선제
+ *  - sneak: 은신 판정 (근접 무기뿐이면 접근 베인). 성공 → 기습(최저 카드) + 첫 공격 암습.
+ *    실패 → 들킴, 통상 선제.
+ */
+export function resolveAmbush(rng: RNG, data: GameData, state: GameState, choice: 'sneak' | 'open'): GameState {
+  const c = state.combat
+  if (!c?.prompt || c.prompt.kind !== 'ambush') return state
+  let s: GameState = { ...state, combat: { ...c, prompt: null } }
+
+  if (choice === 'open') {
+    s = startRound(rng, s, null)
+    return advanceCombat(rng, data, s)
+  }
+
+  // 근접 공격 거리(2m)까지 접근해야 하면 베인 — 원거리 수단이 손에 없을 때
+  const hasRangedMeans = c.pc.weaponsAtHand.some((id) => {
+    const w = weaponOf(data, id)
+    return effectiveRange(w, c.pc.attributes?.str ?? null) !== null
+  })
+  const mods = gatherMods(data, c.pc, 'sneaking', { banes: hasRangedMeans ? 0 : 1 })
+  const result = rollD20(rng, c.pc.skills['sneaking'] ?? 0, mods)
+  s = trackMark(s, 'sneaking', result.dragon, result.demon)
+
+  if (result.success) {
+    s = log(s, 'good', '그림자에 붙어 접근한다 — 적은 아직 모른다. (기습: 첫 공격 암습)')
+    s = { ...s, combat: { ...s.combat!, sneakPending: true } }
+    s = startRound(rng, s, 'pc')
+  } else {
+    s = log(s, 'bad', '발밑에서 돌이 굴렀다 — 들켰다!')
+    s = startRound(rng, s, null)
+  }
+  return advanceCombat(rng, data, s)
+}
+
+function startRound(rng: RNG, state: GameState, surprise: 'pc' | 'enemies' | null = null): GameState {
   const c = state.combat!
   const requests = [
-    { combatantId: 'pc', cards: 1 },
+    { combatantId: 'pc', cards: 1, choosesCard: surprise === 'pc' },
     ...c.enemies
       .filter((e) => !isDead(e))
       .map((e) => ({
         combatantId: unitId(e),
         cards: e.kind === 'monster' ? e.state.ferocity : 1,
+        choosesCard: surprise === 'enemies',
       })),
   ]
   const assignments = drawInitiative(rng, requests)
@@ -475,8 +683,48 @@ function startRound(rng: RNG, state: GameState): GameState {
       turnIndex: 0,
       pc: { ...c.pc, acted: false },
       enemies,
+      pcWaited: false,
+      drewWeaponThisRound: false,
     },
   }
+}
+
+/* ─────────────────────────── 거리 헬퍼 ─────────────────────────── */
+
+/** 적의 라운드당 이동력 — 몬스터는 데이터, NPC는 기본 10 */
+function enemyMovement(data: GameData, e: EnemyUnit): number {
+  if (e.kind === 'monster') {
+    return data.monsters.find((m) => m.id === e.state.monsterId)?.movement.land ?? 10
+  }
+  return 10
+}
+
+function pcMovement(data: GameData, state: GameState): number {
+  return movementOf(data, state.character)
+}
+
+function setDistance(state: GameState, id: string, distance: number): GameState {
+  const c = state.combat!
+  return {
+    ...state,
+    combat: {
+      ...c,
+      enemies: c.enemies.map((e) => (unitId(e) === id ? { ...e, distance: Math.max(0, distance) } : e)),
+    },
+  }
+}
+
+/**
+ * 과적 상태에서의 이동 판정 (STR). 과적이 아니면 항상 통과.
+ * 실패하면 이번 이동은 무산 — 짐을 버리는 선택은 UI 밖(수동)이다.
+ */
+function encumberedMoveCheck(rng: RNG, data: GameData, state: GameState): { ok: boolean; state: GameState } {
+  const enc = encumbrance(data, state.character)
+  if (!enc.overEncumbered) return { ok: true, state }
+  const banes = conditionBanes(new Set(state.character.conditions), 'str')
+  const result = rollD20(rng, state.character.attributes.str, { banes })
+  if (result.success) return { ok: true, state }
+  return { ok: false, state: log(state, 'bad', '과적 — 짐에 눌려 움직이지 못한다! (근력 판정 실패)') }
 }
 
 function unitId(e: EnemyUnit): string {
@@ -538,6 +786,11 @@ export function advanceCombat(rng: RNG, data: GameData, state: GameState): GameS
         s = consumeSlot(s)
         continue
       }
+      // 넘어져 있으면 일어난다 (자유 행동) — 붙잡는 중에는 일어날 수 없다
+      if (c.pc.prone && c.pc.hp > 0 && !c.grappledEnemyId) {
+        s = { ...s, combat: { ...c, pc: { ...c.pc, prone: false } } }
+        s = log(s, 'info', '몸을 일으킨다.')
+      }
       return s // 플레이어 입력 대기
     }
 
@@ -565,13 +818,44 @@ function consumeSlot(state: GameState): GameState {
 function enemyTurn(rng: RNG, data: GameData, state: GameState, enemy: EnemyUnit): GameState {
   let s = state
   const c = s.combat!
+  const id = unitId(enemy)
 
   // PC가 쓰러져 있으면 적은 관망 (초벌 AI)
   if (c.pc.hp === 0) return s
 
+  // 붙잡힌 적: 벗어나기(격투 대결)만 가능 — 벗어나기 자체는 자유 행동이지만 달리 할 것이 없다
+  if (c.grappledEnemyId === id && enemy.kind === 'npc') {
+    const out = tryBreakFree(rng, data, enemy.state, c.pc)
+    if (out.freed) {
+      s = { ...s, combat: { ...s.combat!, grappledEnemyId: null } }
+      return log(s, 'combat', `${enemy.state.name}이(가) 몸부림쳐 붙잡기에서 벗어났다!`)
+    }
+    return log(s, 'combat', `${enemy.state.name}이(가) 벗어나려 하지만 꽉 붙잡혀 있다.`)
+  }
+
+  // 넘어져 있으면 일어난다 (자유 행동 — 이동·행동은 그대로 진행)
+  if (enemy.kind === 'npc' && enemy.state.prone) {
+    s = updateEnemy(s, id, { ...enemy, state: { ...enemy.state, prone: false } })
+    enemy = s.combat!.enemies.find((e) => unitId(e) === id)!
+  } else if (enemy.kind === 'monster' && enemy.state.prone) {
+    s = updateEnemy(s, id, { ...enemy, state: { ...enemy.state, prone: false } })
+    enemy = s.combat!.enemies.find((e) => unitId(e) === id)!
+  }
+
+  const movement = enemyMovement(data, enemy)
+
   if (enemy.kind === 'monster') {
+    // 몬스터 공격 간격 2m — 자유 이동으로 닿으면 공격, 아니면 돌진(이동 ×2)
+    if (enemy.distance > 2) {
+      if (enemy.distance - movement <= 2) {
+        s = setDistance(s, id, 2)
+      } else {
+        s = setDistance(s, id, Math.max(2, enemy.distance - movement * 2))
+        return log(s, 'combat', `${enemy.state.name}이(가) 돌진해 온다! (${s.combat!.enemies.find((e) => unitId(e) === id)!.distance}m)`)
+      }
+    }
     const { monster, pick } = rollMonsterAttack(rng, data, enemy.state)
-    s = updateEnemy(s, monster.id, { kind: 'monster', state: monster })
+    s = updateEnemy(s, monster.id, { kind: 'monster', state: monster, distance: 2 })
     s = log(s, 'combat', `${monster.name}의 ${pick.attack.name}!`)
 
     const canDodge = pick.attack.canDodge && !c.pc.acted
@@ -595,13 +879,70 @@ function enemyTurn(rng: RNG, data: GameData, state: GameState, enemy: EnemyUnit)
     return applyMonsterAttackToPc(rng, data, s, pick.attack)
   }
 
-  // NPC 적: 근접 공격
+  // NPC 적
   const npc = enemy.state
-  const weaponId = npc.drawnWeaponIds[0]
-  if (!weaponId) return s
+  let weaponId = npc.drawnWeaponIds[0]
+
+  // 무장 해제당한 무기 줍기 (액션)
+  if (!weaponId) {
+    const dropped = c.droppedWeapons[id] ?? []
+    if (dropped.length > 0) {
+      const picked = dropped[0]!
+      s = updateEnemy(s, id, {
+        ...enemy,
+        state: { ...npc, drawnWeaponIds: [picked], weaponsAtHand: [...npc.weaponsAtHand, picked] },
+      })
+      s = {
+        ...s,
+        combat: { ...s.combat!, droppedWeapons: { ...s.combat!.droppedWeapons, [id]: dropped.slice(1) } },
+      }
+      return log(s, 'combat', `${npc.name}이(가) 떨어진 무기를 주워 든다.`)
+    }
+    // 맨손: 접근 후 격투 (간이 — 성공 시 D6)
+    if (enemy.distance > 2) {
+      s = setDistance(s, id, Math.max(2, enemy.distance - movement * 2))
+      return log(s, 'combat', `${npc.name}이(가) 달려든다. (${s.combat!.enemies.find((e) => unitId(e) === id)!.distance}m)`)
+    }
+    const brawl = rollD20(rng, npc.skills['brawling'] ?? 5)
+    if (!brawl.success) return log(s, 'combat', `${npc.name}의 주먹이 허공을 가른다.`)
+    const dmg = rollDie(rng, 6)
+    const applied = applyDamage(data, c.pc, {
+      total: dmg, weaponDice: [dmg], bonusDice: [], ignoreArmor: false, damageType: 'bludgeoning', breakdown: `D6=${dmg}`,
+    }, { melee: true })
+    s = log(s, 'bad', `${npc.name}의 주먹 — ${applied.taken} 피해 (HP ${applied.defender.hp})`)
+    return { ...s, character: { ...s.character, hp: applied.defender.hp }, combat: { ...s.combat!, pc: applied.defender } }
+  }
+
+  let weapon = weaponOf(data, weaponId)
+  const isRangedUse = effectiveRange(weapon, null) !== null
+
+  // 원거리 무기 소지 + 거리 밖: 사거리 안이면 사격, 아니면 접근
+  let attackKind: 'melee' | 'ranged' = 'melee'
+  let situational = 0
+  if (enemy.distance > weaponReach(weapon)) {
+    const rState = isRangedUse ? rangedDistanceState(weapon, null, enemy.distance) : 'out-of-range'
+    if (rState === 'normal' || rState === 'long') {
+      attackKind = 'ranged'
+      if (rState === 'long') situational += 1
+    } else {
+      // 접근: 자유 이동으로 닿으면 공격, 아니면 돌진
+      if (enemy.distance - movement <= weaponReach(weapon)) {
+        s = setDistance(s, id, weaponReach(weapon))
+      } else {
+        s = setDistance(s, id, Math.max(2, enemy.distance - movement * 2))
+        return log(s, 'combat', `${npc.name}이(가) 거리를 좁힌다. (${s.combat!.enemies.find((e) => unitId(e) === id)!.distance}m)`)
+      }
+    }
+  } else if (isRangedUse && weapon.category === 'ranged' && enemy.distance <= 2) {
+    // 2m 이내 사격은 베인 — NPC는 그냥 근접 무기가 없으니 감수한다
+    attackKind = 'ranged'
+    situational += 1
+  }
+
   const attack = rollAttack(rng, data, npc, weaponId, { id: 'pc', prone: c.pc.prone }, {
-    kind: 'melee',
-    damageType: weaponOf(data, weaponId).damageTypes[0] ?? null,
+    kind: attackKind,
+    damageType: weapon.damageTypes[0] ?? null,
+    extra: { banes: situational },
   })
   if ('rejected' in attack) return s
 
@@ -621,7 +962,8 @@ function enemyTurn(rng: RNG, data: GameData, state: GameState, enemy: EnemyUnit)
           enemyId: npc.id,
           npcAttack: attack,
           canDodge: true,
-          canParry: c.pc.drawnWeaponIds.length > 0,
+          // 원거리 패리는 방패 필요 — 방패는 초벌에서 뽑아 들 수 없으므로 근접만
+          canParry: attackKind === 'melee' && c.pc.drawnWeaponIds.length > 0,
         },
       },
     }
@@ -634,6 +976,20 @@ function updateEnemy(state: GameState, id: string, unit: EnemyUnit): GameState {
   return {
     ...state,
     combat: { ...c, enemies: c.enemies.map((e) => (unitId(e) === id ? unit : e)) },
+  }
+}
+
+/** 상태만 갈아끼우기 — kind·distance 는 유지 */
+function updateEnemyState(state: GameState, id: string, newState: MonsterCombatant | Combatant): GameState {
+  const c = state.combat!
+  return {
+    ...state,
+    combat: {
+      ...c,
+      enemies: c.enemies.map((e) =>
+        unitId(e) === id ? ({ ...e, state: newState } as EnemyUnit) : e,
+      ),
+    },
   }
 }
 
@@ -801,7 +1157,7 @@ function applyNpcAttackToPc(rng: RNG, data: GameData, state: GameState, attack: 
   if (!npc) return s
 
   const dmg = rollDamage(rng, data, npc, attack, attack.critical ? 'doubleDice' : null)
-  const applied = applyDamage(data, c.pc, dmg, { melee: true })
+  const applied = applyDamage(data, c.pc, dmg, { melee: attack.context.kind === 'melee' })
   s = log(s, 'bad', `${dmg.total} 피해 (방어구 ${applied.absorbed} 흡수 → HP ${applied.defender.hp})`)
   if (applied.droppedToZero) s = log(s, 'bad', '쓰러졌다! 죽음의 문턱에서 버텨야 한다.')
   if (applied.instantDeath) s = log(s, 'bad', '치명상 — 즉사.')
@@ -823,22 +1179,69 @@ export function pcAttack(
   weaponId: string,
   targetId: string,
   damageType: DamageType | null,
+  special: 'weakSpot' | null = null,
 ): GameState {
   const c = state.combat
   if (!c || c.status !== 'ongoing' || c.prompt) return state
   const enemy = c.enemies.find((e) => unitId(e) === targetId)
   if (!enemy || isDead(enemy)) return state
-
-  const targetProne = enemy.kind === 'monster' ? enemy.state.prone : enemy.state.prone
-  const attack = rollAttack(rng, data, c.pc, weaponId, { id: targetId, prone: targetProne }, {
-    kind: 'melee',
-    damageType,
-    extra: { boons: c.nextRollBoons },
-  })
-  let s: GameState = { ...state, combat: { ...c, nextRollBoons: 0 } }
-  if ('rejected' in attack) return log(s, 'info', `공격 불가: ${attack.rejected}`)
+  if (c.grappledEnemyId) return log(state, 'info', '붙잡은 상대를 놓기 전에는 다른 행동을 할 수 없다.')
 
   const weapon = weaponOf(data, weaponId)
+  const reach = weaponReach(weapon)
+  const str = c.pc.attributes?.str ?? null
+  let s: GameState = { ...state, combat: { ...c, nextRollBoons: 0 } }
+
+  // ── 거리 해결 ──
+  let attackKind: 'melee' | 'ranged' = 'melee'
+  let situational = 0
+  let distance = enemy.distance
+
+  if (distance > reach) {
+    const rState = rangedDistanceState(weapon, str, distance)
+    if (rState === 'normal' || rState === 'long') {
+      // 원거리/투척 사격
+      attackKind = 'ranged'
+      if (rState === 'long') situational += 1
+    } else {
+      // 자유 이동으로 접근 (과적이면 근력 판정)
+      const move = encumberedMoveCheck(rng, data, s)
+      s = move.state
+      if (!move.ok) return finishPcAction(rng, data, s)
+      const movement = pcMovement(data, s)
+      if (distance - movement <= reach) {
+        s = setDistance(s, targetId, reach)
+        distance = reach
+      } else {
+        // 닿지 않는다 — 액션을 돌진(이동 ×2)으로 전환
+        s = setDistance(s, targetId, Math.max(reach, distance - movement * 2))
+        s = log(s, 'info', `너무 멀다 — 달려붙는다. (${s.combat!.enemies.find((e) => unitId(e) === targetId)!.distance}m)`)
+        return finishPcAction(rng, data, s)
+      }
+    }
+  } else if (weapon.category === 'ranged') {
+    // 2m 이내 사격 — 베인
+    attackKind = 'ranged'
+    situational += 1
+  }
+
+  // ── 암습 (잠입 성공 직후 첫 공격) ──
+  const sneak = s.combat!.sneakPending
+  if (sneak) s = { ...s, combat: { ...s.combat!, sneakPending: false } }
+
+  const context = {
+    kind: attackKind,
+    damageType,
+    sneak,
+    extra: { boons: c.nextRollBoons, banes: situational },
+  } as const
+  const targetProne = enemy.kind === 'monster' ? enemy.state.prone : enemy.state.prone
+  const attack = rollAttack(
+    rng, data, s.combat!.pc, weaponId, { id: targetId, prone: targetProne },
+    special === 'weakSpot' ? findWeakSpotContext(context) : context,
+  )
+  if ('rejected' in attack) return log(s, 'info', `공격 불가: ${attack.rejected}`)
+
   s = trackMark(s, weapon.skillId, attack.result.dragon, attack.result.demon)
 
   if (attack.result.demon) {
@@ -863,8 +1266,8 @@ export function pcAttack(
     }
   }
 
-  s = log(s, 'combat', `명중 (${attack.result.natural})`)
-  s = dealPcDamage(rng, data, s, attack, targetId, null)
+  s = log(s, 'combat', `${sneak ? '암습 ' : ''}${special === 'weakSpot' ? '약점 ' : ''}명중 (${attack.result.natural})`)
+  s = dealPcDamage(rng, data, s, attack, targetId, null, { forceIgnoreArmor: special === 'weakSpot' })
   return finishPcAction(rng, data, s)
 }
 
@@ -895,27 +1298,31 @@ function dealPcDamage(
   attack: AttackRoll,
   targetId: string,
   critical: CriticalChoice | null,
+  options: { forceIgnoreArmor?: boolean } = {},
 ): GameState {
   let s = state
   const c = s.combat!
   const enemy = c.enemies.find((e) => unitId(e) === targetId)
   if (!enemy) return s
 
+  // 암습은 리액션 불가 (원문: 회피·패리 모두 불가)
+  const canReact = !attack.context.sneak
+
   // 몬스터의 회피/패리 (AI: 체력이 절반 이하로 몰렸을 때만 행동을 소모해 회피)
-  if (enemy.kind === 'monster' && enemy.state.actionsLeft > 0 && enemy.state.hp <= enemy.state.maxHp / 2) {
+  if (canReact && enemy.kind === 'monster' && enemy.state.actionsLeft > 0 && enemy.state.hp <= enemy.state.maxHp / 2) {
     const def = monsterDefense(rng, data, enemy.state, attack, 'dodge')
     if (!('rejected' in def)) {
-      s = updateEnemy(s, targetId, { kind: 'monster', state: def.monster })
+      s = updateEnemy(s, targetId, { ...enemy, state: def.monster })
       if (def.avoided) {
         return log(s, 'combat', `${enemy.state.name}이(가) 몸을 틀어 피했다.`)
       }
     }
   }
   // NPC의 패리 (AI: 체력이 절반 이하일 때만 턴을 소모해 패리)
-  if (enemy.kind === 'npc' && !enemy.state.acted && enemy.state.drawnWeaponIds.length > 0 && enemy.state.hp <= enemy.state.maxHp / 2) {
+  if (canReact && enemy.kind === 'npc' && !enemy.state.acted && enemy.state.drawnWeaponIds.length > 0 && enemy.state.hp <= enemy.state.maxHp / 2) {
     const parry = tryParry(rng, data, enemy.state, attack, enemy.state.drawnWeaponIds[0]!)
     if (!('rejected' in parry)) {
-      s = updateEnemy(s, targetId, { kind: 'npc', state: { ...enemy.state, acted: true } })
+      s = updateEnemy(s, targetId, { ...enemy, state: { ...enemy.state, acted: true } })
       if (parry.parried) {
         return log(s, 'combat', `${enemy.state.name}이(가) 받아넘겼다.`)
       }
@@ -923,7 +1330,7 @@ function dealPcDamage(
   }
 
   const dmg = rollDamage(rng, data, c.pc, attack, critical)
-  return damageEnemyUnit(s, data, targetId, dmg.total, dmg.damageType, dmg.ignoreArmor)
+  return damageEnemyUnit(s, data, targetId, dmg.total, dmg.damageType, dmg.ignoreArmor || !!options.forceIgnoreArmor)
 }
 
 function damageEnemyUnit(
@@ -939,7 +1346,7 @@ function damageEnemyUnit(
 
   if (enemy.kind === 'monster') {
     const out = applyDamageToMonster(data, enemy.state, { total, damageType, ignoreArmor })
-    let s = updateEnemy(state, targetId, { kind: 'monster', state: out.monster })
+    let s = updateEnemyState(state, targetId, out.monster)
     if (out.immune) return log(s, 'info', `${enemy.state.name}에게는 통하지 않는다! (면역)`)
     s = log(
       s,
@@ -970,7 +1377,7 @@ function damageNpc(
     damageType,
     breakdown: String(total),
   }, { melee: true })
-  let s = updateEnemy(state, targetId, { kind: 'npc', state: applied.defender })
+  let s = updateEnemyState(state, targetId, applied.defender)
   s = log(s, 'combat', `${enemy.state.name}에게 ${applied.taken} 피해${applied.absorbed ? ` (방어 ${applied.absorbed} 흡수)` : ''}`)
   if (applied.defender.dead) s = log(s, 'good', `${enemy.state.name}을(를) 쓰러뜨렸다!`)
   return s
@@ -980,20 +1387,191 @@ function damageNpc(
 export function pcTopple(rng: RNG, data: GameData, state: GameState, weaponId: string, targetId: string): GameState {
   const c = state.combat
   if (!c || c.status !== 'ongoing' || c.prompt) return state
+  if (c.grappledEnemyId) return log(state, 'info', '붙잡은 상대를 놓기 전에는 다른 행동을 할 수 없다.')
   const enemy = c.enemies.find((e) => unitId(e) === targetId)
   if (!enemy || isDead(enemy)) return state
+  if (enemy.distance > weaponReach(weaponOf(data, weaponId))) return log(state, 'info', '너무 멀다 — 먼저 접근해야 한다.')
 
   let s = state
   if (enemy.kind === 'monster') {
     const out = toppleMonster(rng, data, c.pc, weaponId, enemy.state)
-    s = updateEnemy(s, targetId, { kind: 'monster', state: out.monster })
+    s = updateEnemyState(s, targetId, out.monster)
     s = log(s, out.success ? 'good' : 'combat', out.success ? `${enemy.state.name}을(를) 넘어뜨렸다!` : '넘어뜨리지 못했다.')
   } else {
     const out = trySpecialTopple(rng, data, c.pc, weaponId, enemy.state)
-    s = updateEnemy(s, targetId, { kind: 'npc', state: out.defender })
+    s = updateEnemyState(s, targetId, out.defender)
     s = log(s, out.success ? 'good' : 'combat', out.success ? `${enemy.state.name}을(를) 넘어뜨렸다!` : '넘어뜨리지 못했다.')
   }
   return finishPcAction(rng, data, s)
+}
+
+/** 무장 해제 특수 공격 — 대상의 뽑아 든 무기를 대결로 떨어뜨린다. 몬스터 불가 (원문). */
+export function pcDisarm(rng: RNG, data: GameData, state: GameState, weaponId: string, targetId: string): GameState {
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt) return state
+  if (c.grappledEnemyId) return log(state, 'info', '붙잡은 상대를 놓기 전에는 다른 행동을 할 수 없다.')
+  const enemy = c.enemies.find((e) => unitId(e) === targetId)
+  if (!enemy || isDead(enemy)) return state
+  if (enemy.kind === 'monster') return log(state, 'info', '몬스터는 무장 해제할 수 없다.')
+  if (enemy.distance > weaponReach(weaponOf(data, weaponId))) return log(state, 'info', '너무 멀다 — 먼저 접근해야 한다.')
+  const targetWeaponId = enemy.state.drawnWeaponIds[0]
+  if (!targetWeaponId) return log(state, 'info', '상대는 무기를 들고 있지 않다.')
+
+  const out = trySpecialDisarm(rng, data, c.pc, weaponId, enemy.state, targetWeaponId)
+  let s = state
+  if (out.rejected) return log(s, 'info', out.rejected)
+  if (out.success) {
+    s = updateEnemyState(s, targetId, out.defender)
+    s = {
+      ...s,
+      combat: {
+        ...s.combat!,
+        droppedWeapons: {
+          ...s.combat!.droppedWeapons,
+          [targetId]: [...(s.combat!.droppedWeapons[targetId] ?? []), targetWeaponId],
+        },
+      },
+    }
+    s = log(s, 'good', `무장 해제! ${enemy.state.name}의 무기가 ${out.distance}m 밖으로 날아갔다.`)
+  } else {
+    s = log(s, 'combat', '무장 해제 실패 — 상대가 무기를 지켜냈다.')
+  }
+  return finishPcAction(rng, data, s)
+}
+
+/** 붙잡기 특수 공격 — 격투 대결. 성공 시 둘 다 넘어지고 상대는 붙잡힌다. 몬스터 불가 (원문). */
+export function pcGrapple(rng: RNG, data: GameData, state: GameState, targetId: string): GameState {
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt) return state
+  if (c.grappledEnemyId) return log(state, 'info', '이미 붙잡고 있다.')
+  const enemy = c.enemies.find((e) => unitId(e) === targetId)
+  if (!enemy || isDead(enemy)) return state
+  if (enemy.kind === 'monster') return log(state, 'info', '몬스터는 붙잡을 수 없다.')
+  if (enemy.distance > 2) return log(state, 'info', '너무 멀다 — 먼저 접근해야 한다.')
+
+  const out = trySpecialGrapple(rng, data, c.pc, enemy.state)
+  let s: GameState = { ...state, combat: { ...c, pc: out.attacker } }
+  if (out.success) {
+    s = updateEnemyState(s, targetId, out.defender)
+    s = { ...s, combat: { ...s.combat!, grappledEnemyId: targetId } }
+    s = log(s, 'good', `${enemy.state.name}을(를) 바닥에 깔아 붙잡았다! 상대는 벗어나기만 할 수 있다.`)
+  } else {
+    s = log(s, 'bad', '붙잡기 실패 — 뒤엉키다 바닥에 넘어졌다.')
+  }
+  return finishPcAction(rng, data, s)
+}
+
+/** 조르기 — 붙잡은 상대에게 맨손 공격 (보온, 회피·패리 불가) */
+export function pcGrappleCrush(rng: RNG, data: GameData, state: GameState): GameState {
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt || !c.grappledEnemyId) return state
+  const enemy = c.enemies.find((e) => unitId(e) === c.grappledEnemyId)
+  if (!enemy || isDead(enemy)) return state
+
+  const mods = gatherMods(data, c.pc, 'brawling', { boons: 1 })
+  const result = rollD20(rng, c.pc.skills['brawling'] ?? 0, mods)
+  let s = trackMark(state, 'brawling', result.dragon, result.demon)
+  if (!result.success) {
+    s = log(s, 'combat', '상대가 몸을 비틀어 조르기를 버텼다.')
+    return finishPcAction(rng, data, s)
+  }
+  // 맨손 피해 D6 + STR 피해 보너스, 크리티컬이면 2배
+  const base = result.dragon ? rollDie(rng, 6) + rollDie(rng, 6) : rollDie(rng, 6)
+  const bonus = c.pc.damageBonusStr ? rollDice(rng, c.pc.damageBonusStr).total : 0
+  s = log(s, result.dragon ? 'crit' : 'combat', `조르기${result.dragon ? ' — 크리티컬!' : ''}`)
+  s = damageEnemyUnit(s, data, c.grappledEnemyId, base + bonus, 'bludgeoning', false)
+  // 상대가 쓰러졌으면 붙잡기도 풀린다
+  const after = s.combat!.enemies.find((e) => unitId(e) === c.grappledEnemyId)
+  if (after && isDead(after)) s = { ...s, combat: { ...s.combat!, grappledEnemyId: null } }
+  return finishPcAction(rng, data, s)
+}
+
+/** 놓아주기 (자유 행동) — 붙잡기를 풀고 일어설 수 있게 된다 */
+export function pcReleaseGrapple(rng: RNG, data: GameData, state: GameState): GameState {
+  void rng
+  void data
+  const c = state.combat
+  if (!c || !c.grappledEnemyId) return state
+  return log({ ...state, combat: { ...c, grappledEnemyId: null } }, 'info', '붙잡기를 풀었다.')
+}
+
+/** 돌진/거리 벌리기 — 액션으로 이동 ×2 */
+export function pcDash(
+  rng: RNG,
+  data: GameData,
+  state: GameState,
+  direction: 'close' | 'away',
+  targetId?: string,
+): GameState {
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt) return state
+  if (c.grappledEnemyId) return log(state, 'info', '붙잡은 상대를 놓기 전에는 이동할 수 없다.')
+
+  const move = encumberedMoveCheck(rng, data, state)
+  let s = move.state
+  if (!move.ok) return finishPcAction(rng, data, s)
+
+  const dist = pcMovement(data, s) * 2
+  if (direction === 'close' && targetId) {
+    const enemy = c.enemies.find((e) => unitId(e) === targetId)
+    if (!enemy) return state
+    s = setDistance(s, targetId, Math.max(2, enemy.distance - dist))
+    s = log(s, 'info', `달려 거리를 좁혔다. (${s.combat!.enemies.find((e) => unitId(e) === targetId)!.distance}m)`)
+  } else {
+    for (const e of c.enemies) {
+      if (!isDead(e)) s = setDistance(s, unitId(e), e.distance + dist)
+    }
+    s = log(s, 'info', `물러나 거리를 벌렸다. (+${dist}m)`)
+  }
+  return finishPcAction(rng, data, s)
+}
+
+/**
+ * 대기 — 내 선제 카드를 뒤 순번의 다른 참가자와 교환한다 (상대는 거부할 수 없다).
+ * 이미 행동한 상대·이미 대기한 라운드에는 불가. 라운드당 1회.
+ */
+export function pcWait(rng: RNG, data: GameData, state: GameState, targetSlotIndex: number): GameState {
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt || c.pcWaited) return state
+  const mySlotIndex = c.order.findIndex((slot, i) => slot.ownerId === 'pc' && !slot.done && i >= c.turnIndex)
+  const mySlot = c.order[mySlotIndex]
+  const theirSlot = c.order[targetSlotIndex]
+  if (!mySlot || !theirSlot || theirSlot.done || theirSlot.ownerId === 'pc') return state
+
+  const them = c.enemies.find((e) => unitId(e) === theirSlot.ownerId)
+  const theyActed = them ? (them.kind === 'npc' ? them.state.acted : false) : true
+  if (!canSwapInitiative(mySlot.card, theirSlot.card, theyActed)) {
+    return log(state, 'info', '그 상대와는 카드를 바꿀 수 없다.')
+  }
+
+  const order = c.order.map((slot, i) => {
+    if (i === mySlotIndex) return { ...slot, ownerId: theirSlot.ownerId }
+    if (i === targetSlotIndex) return { ...slot, ownerId: 'pc' }
+    return slot
+  })
+  let s: GameState = { ...state, combat: { ...c, order, pcWaited: true } }
+  s = log(s, 'info', `대기 — 선제 카드를 교환했다. (${mySlot.card} ↔ ${theirSlot.card})`)
+  return advanceCombat(rng, data, s)
+}
+
+/** 무기 바꿔 들기 (자유 행동, 라운드 1회) — 손에 지닌 무기를 뽑아 든다 */
+export function pcDrawWeapon(rng: RNG, data: GameData, state: GameState, weaponId: string): GameState {
+  void rng
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt) return state
+  if (c.drewWeaponThisRound) return log(state, 'info', '이번 라운드에는 이미 무기를 바꿔 들었다.')
+  if (!c.pc.weaponsAtHand.includes(weaponId)) return state
+  const weapon = weaponOf(data, weaponId)
+  let s: GameState = {
+    ...state,
+    combat: {
+      ...c,
+      pc: { ...c.pc, drawnWeaponIds: [weaponId] },
+      drewWeaponThisRound: true,
+    },
+  }
+  s = log(s, 'info', `${weapon.name}을(를) 뽑아 들었다. (자유 행동)`)
+  return s
 }
 
 /** 주문 시전 (전투) */
@@ -1007,8 +1585,25 @@ export function pcCastSpell(
 ): GameState {
   const c = state.combat
   if (!c || c.status !== 'ongoing' || c.prompt) return state
+  if (c.grappledEnemyId) return log(state, 'info', '붙잡은 상대를 놓기 전에는 다른 행동을 할 수 없다.')
 
   const spell = spellOf(data, spellId)
+
+  // 사거리 검사 — meters 는 명시 거리, touch 는 2m, personal 은 자기 자신만
+  if (targetId !== 'self') {
+    const enemy = c.enemies.find((e) => unitId(e) === targetId)
+    if (enemy) {
+      const maxRange =
+        spell.range.kind === 'meters' ? (spell.range.meters ?? 10)
+        : spell.range.kind === 'touch' ? 2
+        : 0
+      if (spell.range.kind === 'personal') return log(state, 'info', '자기 자신에게만 걸 수 있는 주문이다.')
+      if (enemy.distance > maxRange) {
+        return log(state, 'info', `사거리 밖이다. (${enemy.distance}m > ${maxRange}m)`)
+      }
+    }
+  }
+
   const caster = {
     wp: state.character.wp,
     conditions: state.character.conditions,

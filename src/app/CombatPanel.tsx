@@ -2,15 +2,24 @@ import { useState } from 'react'
 import type { GameData, DamageType } from '../system/types'
 import type { RNG } from '../system/rng'
 import { weaponOf } from '../system/combatant'
+import { effectiveRange, rangedDistanceState, weaponReach } from '../system/combat'
 import type { GameState, EnemyUnit } from './session'
 import {
   pcAttack,
+  pcDash,
+  pcDisarm,
+  pcDrawWeapon,
   pcFlee,
+  pcGrapple,
+  pcGrappleCrush,
+  pcReleaseGrapple,
   pcTopple,
+  pcWait,
   pcCastSpell,
   pcActivateAbility,
   pcPass,
   pcSelfRally,
+  resolveAmbush,
   resolveCritical,
   resolveReaction,
 } from './session'
@@ -55,6 +64,43 @@ export function CombatPanel({
     .map((id) => weaponOf(data, id))
     .filter((w) => w.category !== 'shield' && !c.pc.damagedWeaponIds.includes(w.id))
 
+  const targetUnit = c.enemies.find((e) => e.state.id === currentTarget && !e.state.dead)
+  const pcStr = c.pc.attributes?.str ?? null
+
+  /** 무기별 거리 상황 표시 — null 이면 그대로 근접 */
+  function attackHint(weaponId: string): string | null {
+    if (!targetUnit) return null
+    const w = weaponOf(data, weaponId)
+    const d = targetUnit.distance
+    if (d <= weaponReach(w)) {
+      return w.category === 'ranged' ? '근접 사격 (베인)' : null
+    }
+    const rs = rangedDistanceState(w, pcStr, d)
+    if (rs === 'normal') return `사격 ${effectiveRange(w, pcStr)}m`
+    if (rs === 'long') return '장거리 (베인)'
+    if (w.category === 'ranged') return '사거리 밖'
+    return '접근 후 공격'
+  }
+
+  /** 손에 있지만 뽑지 않은 무기 (바꿔 들기 후보) */
+  const sheathed = c.pc.weaponsAtHand
+    .filter((id) => !c.pc.drawnWeaponIds.includes(id))
+    .map((id) => weaponOf(data, id))
+    .filter((w) => w.category !== 'shield' && !c.pc.damagedWeaponIds.includes(w.id))
+
+  /** 대기(카드 교환) 가능한 뒤 순번 슬롯 */
+  const pcSlotIdx = c.order.findIndex((s, i) => s.ownerId === 'pc' && !s.done && i >= c.turnIndex)
+  const waitTargets = c.order
+    .map((slot, index) => ({ slot, index }))
+    .filter(({ slot, index }) => {
+      if (pcSlotIdx < 0 || index <= pcSlotIdx || slot.done || slot.ownerId === 'pc') return false
+      if (c.order[pcSlotIdx] && slot.card <= c.order[pcSlotIdx]!.card) return false
+      const them = c.enemies.find((e) => e.state.id === slot.ownerId)
+      if (!them || them.state.dead) return false
+      return !(them.kind === 'npc' && them.state.acted)
+    })
+    .slice(0, 3)
+
   const attackSpells = state.character.preparedSpellIds
     .map((id) => data.spells.find((s) => s.id === id)!)
     .filter((s) => s.effects.some((e) => e.hook === 'damage' || e.hook === 'heal'))
@@ -90,8 +136,10 @@ export function CombatPanel({
                 <span className="name">{enemyName(e)}</span>
                 <span className="meta">
                   HP {hp}/{maxHp}
+                  {` · ${e.distance}m`}
                   {e.kind === 'monster' ? ` · 흉포도 ${e.state.ferocity}` : ''}
                   {e.state.prone ? ' · 넘어짐' : ''}
+                  {c.grappledEnemyId === e.state.id ? ' · 붙잡힘' : ''}
                 </span>
               </div>
               <div className="bar"><span style={{ width: `${(hp / maxHp) * 100}%` }} /></div>
@@ -99,6 +147,24 @@ export function CombatPanel({
           )
         })}
       </div>
+
+      {/* 잠입 프롬프트 — 개전 전 */}
+      {c.prompt?.kind === 'ambush' && (
+        <div className="event-card">
+          <p style={{ marginTop: 0 }}>
+            <strong>적은 아직 이쪽을 모른다.</strong> 몰래 접근하면(은신 판정) 기습 —
+            원하는 선제 카드 + 첫 공격이 암습이 된다. 들키면 통상 개전.
+          </p>
+          <div className="button-row">
+            <button className="primary" onClick={() => setState(resolveAmbush(rng, data, state, 'sneak'))}>
+              잠입한다 (은신 판정)
+            </button>
+            <button onClick={() => setState(resolveAmbush(rng, data, state, 'open'))}>
+              정면 돌파
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 리액션 프롬프트 */}
       {c.prompt?.kind === 'reaction' && (
@@ -149,25 +215,98 @@ export function CombatPanel({
         </div>
       )}
 
-      {/* PC 턴 액션 */}
-      {isPcTurn && !downed && (
+      {/* PC 턴 액션 — 붙잡기 유지 중이면 조르기/놓아주기만 */}
+      {isPcTurn && !downed && c.grappledEnemyId && (
+        <div className="event-card">
+          <p style={{ marginTop: 0 }}>
+            <strong>{c.enemies.find((e) => e.state.id === c.grappledEnemyId)?.state.name}</strong>
+            을(를) 깔아 붙잡고 있다 — 조르기와 놓아주기만 할 수 있다.
+          </p>
+          <div className="button-row">
+            <button className="primary" onClick={() => setState(pcGrappleCrush(rng, data, state))}>
+              조르기 (격투, 보온 — 회피·패리 불가)
+            </button>
+            <button onClick={() => setState(pcReleaseGrapple(rng, data, state))}>
+              놓아준다 (자유)
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isPcTurn && !downed && !c.grappledEnemyId && (
         <>
-          <h3>공격</h3>
+          <h3>공격{targetUnit ? ` — 목표 ${targetUnit.distance}m` : ''}</h3>
           <div className="button-row" style={{ marginBottom: 8 }}>
-            {weapons.flatMap((w) =>
-              (w.damageTypes.length ? w.damageTypes : [null]).map((t) => (
-                <button key={`${w.id}-${t}`} className="primary" disabled={!currentTarget}
+            {weapons.flatMap((w) => {
+              const hint = attackHint(w.id)
+              return (w.damageTypes.length ? w.damageTypes : [null]).map((t) => (
+                <button key={`${w.id}-${t}`} className="primary"
+                  disabled={!currentTarget || hint === '사거리 밖'}
+                  title={hint ?? undefined}
                   onClick={() => setState(pcAttack(rng, data, state, w.id, currentTarget, t))}>
-                  {w.name} {w.damage}{t ? ` (${DMG_LABEL[t]})` : ''}
+                  {w.name} {w.damage}{t ? ` (${DMG_LABEL[t]})` : ''}{hint ? ` · ${hint}` : ''}
                 </button>
-              )),
-            )}
-            {weapons[0] && (
-              <button disabled={!currentTarget}
-                onClick={() => setState(pcTopple(rng, data, state, weapons[0]!.id, currentTarget))}>
-                넘어뜨리기
+              ))
+            })}
+          </div>
+
+          {sheathed.length > 0 && (
+            <div className="button-row" style={{ marginBottom: 8 }}>
+              {sheathed.map((w) => (
+                <button key={w.id} disabled={c.drewWeaponThisRound}
+                  onClick={() => setState(pcDrawWeapon(rng, data, state, w.id))}>
+                  {w.name} 바꿔 들기 (자유{c.drewWeaponThisRound ? ' — 사용함' : ''})
+                </button>
+              ))}
+            </div>
+          )}
+
+          {data.config.specialAttacks && weapons[0] && targetUnit && (
+            <>
+              <h3>특수 공격</h3>
+              <div className="button-row" style={{ marginBottom: 8 }}>
+                <button disabled={!currentTarget}
+                  onClick={() => setState(pcTopple(rng, data, state, weapons[0]!.id, currentTarget))}>
+                  넘어뜨리기
+                </button>
+                {targetUnit.kind === 'npc' && targetUnit.state.drawnWeaponIds.length > 0 && (
+                  <button onClick={() => setState(pcDisarm(rng, data, state, weapons[0]!.id, currentTarget))}>
+                    무장 해제
+                  </button>
+                )}
+                {targetUnit.kind === 'npc' && (
+                  <button onClick={() => setState(pcGrapple(rng, data, state, currentTarget))}>
+                    붙잡기 (격투 대결)
+                  </button>
+                )}
+                {data.config.damageTypes && weapons.some((w) => w.damageTypes.includes('piercing')) && (
+                  <button
+                    onClick={() => {
+                      const w = weapons.find((x) => x.damageTypes.includes('piercing'))!
+                      setState(pcAttack(rng, data, state, w.id, currentTarget, 'piercing', 'weakSpot'))
+                    }}>
+                    약점 찌르기 (베인, 방어구 무시)
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+
+          <h3>이동·순서</h3>
+          <div className="button-row" style={{ marginBottom: 8 }}>
+            <button disabled={!currentTarget || (targetUnit?.distance ?? 0) <= 2}
+              onClick={() => setState(pcDash(rng, data, state, 'close', currentTarget))}>
+              돌진 (이동 ×2)
+            </button>
+            <button onClick={() => setState(pcDash(rng, data, state, 'away'))}>
+              거리 벌리기 (이동 ×2)
+            </button>
+            {waitTargets.map(({ index, slot }) => (
+              <button key={index} disabled={c.pcWaited}
+                onClick={() => setState(pcWait(rng, data, state, index))}>
+                대기 — [{slot.card}] {c.enemies.find((e) => e.state.id === slot.ownerId)?.state.name ?? slot.ownerId}와 교환
               </button>
-            )}
+            ))}
           </div>
 
           {attackSpells.length > 0 && (

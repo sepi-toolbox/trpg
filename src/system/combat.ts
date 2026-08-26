@@ -501,6 +501,45 @@ export function checkAttackerWeaponDurability(
   }
 }
 
+/* ─────────────────────────── 거리·사거리 ─────────────────────────── */
+
+/** 근접 간격: 기본 2m, long 무기는 4m */
+export function weaponReach(weapon: Weapon): number {
+  return weapon.features.includes('long') ? 4 : 2
+}
+
+/**
+ * 원거리 유효 사거리(m). 투척 무기는 STR 기반 ("STR" | "STRx2").
+ * 유효 사거리의 2배까지는 베인을 받고 쏠 수 있다. 근접 전용 무기는 null.
+ */
+export function effectiveRange(weapon: Weapon, strScore: number | null): number | null {
+  const isRangedUse = weapon.category === 'ranged' || weapon.features.includes('thrown')
+  if (!isRangedUse) return null
+  if (typeof weapon.range === 'number') return weapon.range
+  if (weapon.range === 'STR') return strScore ?? 10
+  if (weapon.range === 'STRx2') return (strScore ?? 10) * 2
+  return null
+}
+
+/**
+ * 원거리 공격 거리 판정.
+ *  - 2m 이내: 사격 가능하나 베인
+ *  - 유효 사거리 이내: 정상
+ *  - 유효 사거리 ×2 이내: 베인
+ *  - 그 밖: 불가
+ */
+export function rangedDistanceState(
+  weapon: Weapon,
+  strScore: number | null,
+  distance: number,
+): 'point-blank' | 'normal' | 'long' | 'out-of-range' {
+  const range = effectiveRange(weapon, strScore)
+  if (range === null || distance > range * 2) return 'out-of-range'
+  if (distance <= 2) return 'point-blank'
+  if (distance <= range) return 'normal'
+  return 'long'
+}
+
 /* ─────────────────────────── 특수 공격 (옵션 룰) ─────────────────────────── */
 
 export type SpecialAttackKind = 'topple' | 'disarm' | 'grapple' | 'findWeakSpot'
@@ -572,6 +611,53 @@ export function trySpecialDisarm(
     },
     distance: rollDie(rng, 6),
   }
+}
+
+/**
+ * 붙잡기: 인간형 상대에게 격투(BRAWLING) 대결. 회피·패리 불가.
+ *  - 실패: 내가 넘어진다
+ *  - 성공: 둘 다 넘어지고 상대는 붙잡힘 — 상대는 벗어나기(격투 대결, 상대에겐 자유 행동)만 가능
+ *  - 붙잡은 쪽은 조르기(보온 맨손 공격, 회피·패리 불가)와 놓아주기(자유)만 가능
+ * 몬스터는 붙잡을 수 없다 (원문 — 호출부에서 거부).
+ */
+export function trySpecialGrapple(
+  rng: RNG,
+  data: GameData,
+  attacker: Combatant,
+  defender: Combatant,
+): { success: boolean; attacker: Combatant; defender: Combatant } {
+  const opposed = rollOpposed(
+    rng,
+    skillLevelOf(attacker, 'brawling'),
+    skillLevelOf(defender, 'brawling'),
+    gatherMods(data, attacker, 'brawling'),
+    gatherMods(data, defender, 'brawling'),
+  )
+  if (!opposed.success) {
+    return { success: false, attacker: { ...attacker, prone: true }, defender }
+  }
+  return {
+    success: true,
+    attacker: { ...attacker, prone: true },
+    defender: { ...defender, prone: true },
+  }
+}
+
+/** 붙잡힌 쪽의 벗어나기 — 격투 대결 (벗어나는 쪽 기준 판정, 성공 시 풀려남) */
+export function tryBreakFree(
+  rng: RNG,
+  data: GameData,
+  grappled: Combatant,
+  grappler: Combatant,
+): { freed: boolean } {
+  const opposed = rollOpposed(
+    rng,
+    skillLevelOf(grappled, 'brawling'),
+    skillLevelOf(grappler, 'brawling'),
+    gatherMods(data, grappled, 'brawling'),
+    gatherMods(data, grappler, 'brawling'),
+  )
+  return { freed: opposed.success }
 }
 
 /**
