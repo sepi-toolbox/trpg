@@ -1,6 +1,11 @@
 # SEPI TRPG
 
+[![CI](https://github.com/sepi-toolbox/trpg/actions/workflows/ci.yml/badge.svg)](https://github.com/sepi-toolbox/trpg/actions/workflows/ci.yml)
+[![Deploy](https://github.com/sepi-toolbox/trpg/actions/workflows/deploy.yml/badge.svg)](https://github.com/sepi-toolbox/trpg/actions/workflows/deploy.yml)
+
 테이블탑 RPG 규칙을 그대로 구현한 브라우저 던전 크롤러.
+
+**플레이: https://sepi-toolbox.github.io/trpg/**
 
 d20 판정 · 선제 순서 · 유리함/불리함 · 크리티컬 같은 TRPG 규칙을 **순수 함수로 구현한 규칙 엔진**과,
 클래스 · 몬스터 · 기술 · 층 구성을 전부 담은 **JSON 데이터 테이블**, 그리고 그걸 굴려 보는 웹 UI로 이루어져 있습니다.
