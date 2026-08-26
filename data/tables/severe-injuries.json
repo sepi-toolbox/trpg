@@ -4,109 +4,259 @@
   "die": 20,
   "rows": [
     {
-      "min": 1, "max": 2,
+      "min": 1,
+      "max": 2,
       "name": "코뼈 골절",
       "description": "경계 판정 전부에 베인.",
-      "effects": [{ "hook": "bane", "params": { "roll": { "skills": ["awareness"] } } }],
-      "extra": { "healingTime": "D6" }
+      "effects": [
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "skills": [
+                "awareness"
+              ]
+            }
+          }
+        }
+      ],
+      "extra": {
+        "healingTime": "D6"
+      }
     },
     {
-      "min": 3, "max": 4,
+      "min": 3,
+      "max": 4,
       "name": "얼굴 흉터",
       "description": "공연·설득 판정 전부에 베인.",
-      "effects": [{ "hook": "bane", "params": { "roll": { "skills": ["performance", "persuasion"] } } }],
-      "extra": { "healingTime": "2D6" }
+      "effects": [
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "skills": [
+                "performance",
+                "persuasion"
+              ]
+            }
+          }
+        }
+      ],
+      "extra": {
+        "healingTime": "2D6"
+      }
     },
     {
-      "min": 5, "max": 6,
+      "min": 5,
+      "max": 6,
       "name": "이가 부러짐",
       "description": "공연·설득 스킬 레벨 영구 −2 (최소 3).",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "permanent": true, "skillPenalty": { "skills": ["performance", "persuasion"], "amount": 2, "min": 3 } }
+      "effects": [],
+      "extra": {
+        "permanent": true,
+        "skillPenalty": {
+          "skills": [
+            "performance",
+            "persuasion"
+          ],
+          "amount": 2,
+          "min": 3
+        }
+      }
     },
     {
-      "min": 7, "max": 8,
+      "min": 7,
+      "max": 8,
       "name": "갈비뼈 골절",
       "description": "STR·AGL 기반 스킬 전부에 베인.",
       "effects": [
-        { "hook": "bane", "params": { "roll": { "attribute": "str" } } },
-        { "hook": "bane", "params": { "roll": { "attribute": "agl" } } }
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "attribute": "str"
+            }
+          }
+        },
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "attribute": "agl"
+            }
+          }
+        }
       ],
-      "extra": { "healingTime": "D6" }
+      "extra": {
+        "healingTime": "D6"
+      }
     },
     {
-      "min": 9, "max": 10,
+      "min": 9,
+      "max": 10,
       "name": "뇌진탕",
       "description": "INT 기반 스킬 전부에 베인.",
-      "effects": [{ "hook": "bane", "params": { "roll": { "attribute": "int" } } }],
-      "extra": { "healingTime": "D6" }
+      "effects": [
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "attribute": "int"
+            }
+          }
+        }
+      ],
+      "extra": {
+        "healingTime": "D6"
+      }
     },
     {
-      "min": 11, "max": 12,
+      "min": 11,
+      "max": 12,
       "name": "깊은 자상",
       "description": "STR·AGL 기반 스킬에 베인, 그 스킬을 굴릴 때마다 D6 피해.",
       "effects": [
-        { "hook": "bane", "params": { "roll": { "attribute": "str" } } },
-        { "hook": "bane", "params": { "roll": { "attribute": "agl" } } },
-        { "hook": "manual" }
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "attribute": "str"
+            }
+          }
+        },
+        {
+          "hook": "bane",
+          "params": {
+            "roll": {
+              "attribute": "agl"
+            }
+          }
+        },
+        {
+          "hook": "manual"
+        }
       ],
-      "extra": { "healingTime": "2D6", "damagePerUse": "D6" }
+      "extra": {
+        "healingTime": "2D6",
+        "damagePerUse": "D6"
+      }
     },
     {
-      "min": 13, "max": 13,
+      "min": 13,
+      "max": 13,
       "name": "다리 골절",
       "description": "이동력 절반.",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "healingTime": "3D6", "movementHalved": true }
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ],
+      "extra": {
+        "healingTime": "3D6",
+        "movementHalved": true
+      }
     },
     {
-      "min": 14, "max": 14,
+      "min": 14,
+      "max": 14,
       "name": "팔 골절",
       "description": "양손 무기·쌍수 불가, 두 팔을 쓰는 행동에 베인.",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "healingTime": "3D6" }
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ],
+      "extra": {
+        "healingTime": "3D6"
+      }
     },
     {
-      "min": 15, "max": 15,
+      "min": 15,
+      "max": 15,
       "name": "발가락 절단",
       "description": "이동력 영구 −2 (최소 4).",
-      "effects": [{ "hook": "movementBonus", "params": { "amount": -2 } }],
-      "extra": { "permanent": true, "movementMin": 4 }
+      "effects": [
+        {
+          "hook": "movementBonus",
+          "params": {
+            "amount": -2
+          }
+        }
+      ],
+      "extra": {
+        "permanent": true,
+        "movementMin": 4
+      }
     },
     {
-      "min": 16, "max": 16,
+      "min": 16,
+      "max": 16,
       "name": "손가락 절단",
       "description": "모든 무기 스킬 레벨 영구 −1 (최소 3).",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "permanent": true, "skillPenalty": { "kind": "weapon", "amount": 1, "min": 3 } }
+      "effects": [],
+      "extra": {
+        "permanent": true,
+        "skillPenalty": {
+          "kind": "weapon",
+          "amount": 1,
+          "min": 3
+        }
+      }
     },
     {
-      "min": 17, "max": 17,
+      "min": 17,
+      "max": 17,
       "name": "한쪽 눈 실명",
       "description": "수색 스킬 레벨 영구 −2 (최소 3).",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "permanent": true, "skillPenalty": { "skills": ["spot-hidden"], "amount": 2, "min": 3 } }
+      "effects": [],
+      "extra": {
+        "permanent": true,
+        "skillPenalty": {
+          "skills": [
+            "spot-hidden"
+          ],
+          "amount": 2,
+          "min": 3
+        }
+      }
     },
     {
-      "min": 18, "max": 18,
+      "min": 18,
+      "max": 18,
       "name": "악몽",
       "description": "잠드는 시프트마다 공포 저항 판정. 실패하면 그 시프트는 잔 것으로 치지 않는다.",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "healingTime": "2D6" }
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ],
+      "extra": {
+        "healingTime": "2D6"
+      }
     },
     {
-      "min": 19, "max": 19,
+      "min": 19,
+      "max": 19,
       "name": "성격 변화",
       "description": "새 약점을 무작위로 얻는다 (옵션 룰).",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "permanent": true }
+      "effects": [],
+      "extra": {
+        "permanent": true
+      }
     },
     {
-      "min": 20, "max": 20,
+      "min": 20,
+      "max": 20,
       "name": "기억 상실",
       "description": "자신과 동료가 누구인지 기억하지 못한다. 롤플레이로 표현.",
-      "effects": [{ "hook": "manual" }],
-      "extra": { "healingTime": "D6" }
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ],
+      "extra": {
+        "healingTime": "D6"
+      }
     }
   ]
 }

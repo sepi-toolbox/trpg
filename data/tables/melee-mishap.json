@@ -3,11 +3,77 @@
   "name": "근접 대실패 사고표",
   "die": 6,
   "rows": [
-    { "min": 1, "max": 1, "name": "무기 낙하", "description": "무기를 발밑에 떨어뜨린다. 줍는 것은 액션.", "effects": [{ "hook": "manual" }] },
-    { "min": 2, "max": 2, "name": "빈틈 노출", "description": "적에게 빈틈을 보인다. 적이 회피·패리 불가능한 자유 공격 1회.", "effects": [{ "hook": "manual" }] },
-    { "min": 3, "max": 3, "name": "무기 박힘", "description": "무기가 깊이 박힌다. 뽑으려면 STR 판정(액션).", "effects": [{ "hook": "manual" }] },
-    { "min": 4, "max": 4, "name": "무기 투척", "description": "무기가 D3+3m 날아간다. 회수는 이동+액션.", "effects": [{ "hook": "manual" }] },
-    { "min": 5, "max": 5, "name": "무기 손상", "description": "단단한 곳을 때려 무기가 상한다. 수리 전까지 사용에 베인.", "effects": [{ "hook": "manual" }] },
-    { "min": 6, "max": 6, "name": "자해", "description": "자신을 때린다. 피해 보너스 없이 무기 피해를 굴린다.", "effects": [{ "hook": "manual" }] }
+    {
+      "min": 1,
+      "max": 1,
+      "name": "무기 낙하",
+      "description": "무기를 발밑에 떨어뜨린다. 줍는 것은 액션.",
+      "effects": [
+        {
+          "hook": "dropWeapon"
+        }
+      ]
+    },
+    {
+      "min": 2,
+      "max": 2,
+      "name": "빈틈 노출",
+      "description": "적에게 빈틈을 보인다. 적이 회피·패리 불가능한 자유 공격 1회.",
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
+    },
+    {
+      "min": 3,
+      "max": 3,
+      "name": "무기 박힘",
+      "description": "무기가 깊이 박힌다. 뽑으려면 STR 판정(액션).",
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
+    },
+    {
+      "min": 4,
+      "max": 4,
+      "name": "무기 투척",
+      "description": "무기가 D3+3m 날아간다. 회수는 이동+액션.",
+      "effects": [
+        {
+          "hook": "dropWeapon",
+          "params": {
+            "distanceDice": "D3+3"
+          }
+        }
+      ]
+    },
+    {
+      "min": 5,
+      "max": 5,
+      "name": "무기 손상",
+      "description": "단단한 곳을 때려 무기가 상한다. 수리 전까지 사용에 베인.",
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
+    },
+    {
+      "min": 6,
+      "max": 6,
+      "name": "자해",
+      "description": "자신을 때린다. 피해 보너스 없이 무기 피해를 굴린다.",
+      "effects": [
+        {
+          "hook": "selfHit",
+          "params": {
+            "damageBonus": false
+          }
+        }
+      ]
+    }
   ]
 }

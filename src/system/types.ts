@@ -95,6 +95,16 @@ export type EffectHook =
   | 'movementBonus' // params: { amount }
   | 'armorBonus' //  params: { amount }
   | 'light' //       params: { radius, duration: TimeUnit }
+  | 'immuneFear' //           공포 자동 저항 (패시브 마커)
+  | 'parryRangedWithMelee' // 방패 없이 근접 무기로 원거리 패리 (패시브 마커)
+  | 'ignoreLongRangeBane' //  장거리 사격 베인 무시 (패시브 마커)
+  | 'throwAnyMelee' //        한손 근접 무기 투척 가능 (패시브 마커)
+  | 'reduceFallDamage' //     낙하 피해 주사위 감소 — params: { perWpDice }
+  | 'autoActivity' //         활동 자동 성공 — params: { activity: 'camp' | 'cook' }
+  | 'lifeDrain' //            준 피해만큼 자기 HP 회복 (몬스터 공격)
+  | 'selfHit' //              자신을 타격 (사고표) — params: { damageBonus?: boolean }
+  | 'dropWeapon' //           무기를 떨어뜨림 (사고표)
+  | 'outOfAmmo' //            화살 소진 (사고표)
   | 'manual' //      구조화 불가 — description 표시 후 수동 처리
 
 /** boon/bane 훅이 어느 판정에 걸리는지 지정 */

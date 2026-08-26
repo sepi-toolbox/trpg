@@ -1619,7 +1619,7 @@
             "params": {}
           },
           {
-            "hook": "manual"
+            "hook": "lifeDrain"
           }
         ]
       },
@@ -1642,7 +1642,7 @@
             "params": {}
           },
           {
-            "hook": "manual"
+            "hook": "lifeDrain"
           }
         ]
       },
@@ -1661,7 +1661,7 @@
             }
           },
           {
-            "hook": "manual"
+            "hook": "lifeDrain"
           }
         ]
       },
@@ -1680,7 +1680,7 @@
             }
           },
           {
-            "hook": "manual"
+            "hook": "lifeDrain"
           }
         ]
       }

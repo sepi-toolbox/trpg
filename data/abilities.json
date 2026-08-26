@@ -345,7 +345,10 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "reduceFallDamage",
+        "params": {
+          "perWpDice": "D6"
+        }
       }
     ]
   },
@@ -434,7 +437,7 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "parryRangedWithMelee"
       }
     ]
   },
@@ -522,7 +525,7 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "ignoreLongRangeBane"
       }
     ]
   },
@@ -578,7 +581,7 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "immuneFear"
       }
     ]
   },
@@ -740,7 +743,10 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "autoActivity",
+        "params": {
+          "activity": "camp"
+        }
       }
     ]
   },
@@ -838,7 +844,10 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "autoActivity",
+        "params": {
+          "activity": "cook"
+        }
       }
     ]
   },
@@ -971,7 +980,10 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "autoActivity",
+        "params": {
+          "activity": "camp"
+        }
       }
     ]
   },
@@ -1039,7 +1051,7 @@
     "trigger": null,
     "effects": [
       {
-        "hook": "manual"
+        "hook": "throwAnyMelee"
       }
     ]
   },

@@ -12,6 +12,7 @@ import {
   pcFlee,
   pcGrapple,
   pcGrappleCrush,
+  pcPickUpWeapon,
   pcReleaseGrapple,
   pcTopple,
   pcWait,
@@ -62,7 +63,8 @@ export function CombatPanel({
 
   const weapons = c.pc.drawnWeaponIds
     .map((id) => weaponOf(data, id))
-    .filter((w) => w.category !== 'shield' && !c.pc.damagedWeaponIds.includes(w.id))
+    .filter((w) => w.category !== 'shield' && !c.pc.damagedWeaponIds.includes(w.id)
+      && !c.outOfAmmoWeaponIds.includes(w.id))
 
   const targetUnit = c.enemies.find((e) => e.state.id === currentTarget && !e.state.dead)
   const pcStr = c.pc.attributes?.str ?? null
@@ -253,7 +255,7 @@ export function CombatPanel({
             })}
           </div>
 
-          {sheathed.length > 0 && (
+          {(sheathed.length > 0 || c.pcDroppedWeaponIds.length > 0) && (
             <div className="button-row" style={{ marginBottom: 8 }}>
               {sheathed.map((w) => (
                 <button key={w.id} disabled={c.drewWeaponThisRound}
@@ -261,6 +263,11 @@ export function CombatPanel({
                   {w.name} 바꿔 들기 (자유{c.drewWeaponThisRound ? ' — 사용함' : ''})
                 </button>
               ))}
+              {c.pcDroppedWeaponIds.length > 0 && (
+                <button onClick={() => setState(pcPickUpWeapon(rng, data, state))}>
+                  떨어진 {weaponOf(data, c.pcDroppedWeaponIds[0]!).name} 줍기 (액션)
+                </button>
+              )}
             </div>
           )}
 

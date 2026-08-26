@@ -381,13 +381,19 @@ export function diseaseRoll<T extends Vitals>(
  * 낙하 피해: ⌊높이/2⌋ 개의 D6 (타격, 방어구 무효). 2m 미만 무해.
  * 곡예 성공 시 주사위 절반(올림). 곡예 판정은 호출부가 굴려 성공 여부만 전달.
  */
-export function fallDamage(rng: RNG, heightMeters: number, acrobaticsSuccess: boolean): {
+export function fallDamage(
+  rng: RNG,
+  heightMeters: number,
+  acrobaticsSuccess: boolean,
+  options: { reduceDice?: number } = {},
+): {
   dice: number
   damage: number
 } {
   if (heightMeters < 2) return { dice: 0, damage: 0 }
   let dice = Math.floor(heightMeters / 2)
   if (acrobaticsSuccess) dice = Math.ceil(dice / 2)
+  dice = Math.max(0, dice - (options.reduceDice ?? 0)) // 고양이 몸놀림 등 — WP당 1개
   let damage = 0
   for (let i = 0; i < dice; i++) damage += rollDie(rng, 6)
   return { dice, damage }

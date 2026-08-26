@@ -38,6 +38,10 @@ export interface Directive {
     | 'extraDodge'
     | 'initiativeSwap'
     | 'knockback'
+    | 'lifeDrain'
+    | 'selfHit'
+    | 'dropWeapon'
+    | 'outOfAmmo'
     | 'fearAttackOnOthers' // 광역 공포 등 대상이 자신이 아닌 경우
     | 'light'
   params: Record<string, unknown>
@@ -63,6 +67,8 @@ export interface ApplyOptions {
   maxWp?: number
   /** damage 훅에서 방어구 차감량 (기본 0 — 자신 대상 효과는 방어구 무시가 일반적) */
   armorRating?: number
+  /** 공포 면역 (immuneFear 마커 보유) */
+  immuneFear?: boolean
 }
 
 /**
@@ -145,6 +151,10 @@ export function applyEffects<T extends Vitals>(
         break
       }
       case 'fearAttack': {
+        if (options.immuneFear) {
+          applied.push({ hook: 'fearAttack', detail: '공포 면역 — 흔들리지 않는다' })
+          break
+        }
         const result = fearAttack(rng, data, out, {
           bane: effect.params?.['bane'] === true,
         })
@@ -232,6 +242,22 @@ export function applyEffects<T extends Vitals>(
       case 'movementBonus':
       case 'armorBonus': {
         // 상시 보정 — 파생치 계산(character.ts / combatant.ts)에서 반영. 여기서는 무시.
+        break
+      }
+      // 패시브 마커 — 발동 시점에는 아무것도 하지 않는다 (판정 경로가 소유 여부를 검사)
+      case 'immuneFear':
+      case 'parryRangedWithMelee':
+      case 'ignoreLongRangeBane':
+      case 'throwAnyMelee':
+      case 'reduceFallDamage':
+      case 'autoActivity':
+        break
+      // 게임 루프가 소비하는 지시
+      case 'lifeDrain':
+      case 'selfHit':
+      case 'dropWeapon':
+      case 'outOfAmmo': {
+        directives.push({ kind: effect.hook, params: effect.params ?? {} })
         break
       }
       case 'manual':
@@ -431,4 +457,22 @@ export function applyMishapRow<T extends Vitals>(
   }
 
   return { ...result, target: out }
+}
+
+/** 캐릭터가 특정 패시브 마커 훅을 보유했는가 (activity 등 파라미터 일치 검사 포함) */
+export function hasAbilityHook(
+  data: GameData,
+  abilities: Record<string, number>,
+  hook: string,
+  params?: Record<string, unknown>,
+): boolean {
+  for (const id of Object.keys(abilities)) {
+    const ability = data.abilities.find((a) => a.id === id)
+    for (const e of ability?.effects ?? []) {
+      if (e.hook !== hook) continue
+      if (params && Object.entries(params).some(([k, v]) => e.params?.[k] !== v)) continue
+      return true
+    }
+  }
+  return false
 }

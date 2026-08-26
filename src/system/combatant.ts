@@ -42,6 +42,8 @@ export interface Combatant {
   naturalAttack?: { skillLevel: number; damage: string; name: string } | null
   /** 라운드당 이동력 (미기재 시 게임 루프 기본값) */
   movement?: number
+  /** 보유 능력의 패시브 마커 훅 목록 (parryRangedWithMelee 등) */
+  abilityHooks?: string[]
 }
 
 /** NPC 미기재 스킬 기본치 */
@@ -56,6 +58,9 @@ export function skillLevelOf(c: Combatant, skillId: string): number {
 export function combatantFromCharacter(data: GameData, character: Character): Combatant {
   // 손에 든 무기가 하나도 없으면 맨손(격투)으로 싸운다
   const atHand = character.weaponsAtHand.length > 0 ? [...character.weaponsAtHand] : ['unarmed']
+  const abilityHooks = Object.keys(character.abilities).flatMap((id) =>
+    (data.abilities.find((a) => a.id === id)?.effects ?? []).map((e) => e.hook as string),
+  )
   return {
     id: 'pc',
     name: character.name,
@@ -79,6 +84,7 @@ export function combatantFromCharacter(data: GameData, character: Character): Co
     damagedWeaponIds: [],
     deathRolls: null,
     dead: false,
+    abilityHooks,
   }
 }
 

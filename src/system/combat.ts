@@ -274,7 +274,10 @@ export function tryParry(
   if (weapon.features.includes('noParry')) return { rejected: 'no-parry-weapon' }
   if (weapon.features.includes('unarmed')) return { rejected: 'unarmed' }
   if (attack.context.kind === 'ranged' && weapon.category !== 'shield') {
-    return { rejected: 'shield-required' }
+    // 화살 쳐내기(패시브): 방패 없이도 근접 무기로 원거리 패리 가능
+    if (!defender.abilityHooks?.includes('parryRangedWithMelee')) {
+      return { rejected: 'shield-required' }
+    }
   }
 
   const skillId =

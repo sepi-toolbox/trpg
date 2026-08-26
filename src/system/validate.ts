@@ -26,6 +26,8 @@ const KNOWN_HOOKS: EffectHook[] = [
   'condition', 'healCondition', 'fearAttack', 'knockback', 'prone', 'poison',
   'extraAttack', 'extraParry', 'extraDodge', 'initiativeSwap',
   'maxHpBonus', 'maxWpBonus', 'movementBonus', 'armorBonus', 'light',
+  'immuneFear', 'parryRangedWithMelee', 'ignoreLongRangeBane', 'throwAnyMelee',
+  'reduceFallDamage', 'autoActivity', 'lifeDrain', 'selfHit', 'dropWeapon', 'outOfAmmo',
   'manual',
 ]
 

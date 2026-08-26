@@ -3,11 +3,74 @@
   "name": "원거리 대실패 사고표",
   "die": 6,
   "rows": [
-    { "min": 1, "max": 1, "name": "무기 낙하", "description": "무기를 발밑에 떨어뜨린다. 줍는 것은 액션.", "effects": [{ "hook": "manual" }] },
-    { "min": 2, "max": 2, "name": "화살 소진", "description": "화살이 다 떨어졌다. 보충 전까지 사용 불가. 투석구·투척 무기면 다시 굴린다.", "effects": [{ "hook": "manual" }] },
-    { "min": 3, "max": 3, "name": "귀중품 명중", "description": "근처의 값지거나 중요한 물건을 맞힌다.", "effects": [{ "hook": "manual" }] },
-    { "min": 4, "max": 4, "name": "무기 파손", "description": "무기가 부서진다. 수리 전까지 사용에 베인.", "effects": [{ "hook": "manual" }] },
-    { "min": 5, "max": 5, "name": "오사", "description": "무작위 아군을 맞힌다. 피해 보너스 포함 피해를 굴린다.", "effects": [{ "hook": "manual" }] },
-    { "min": 6, "max": 6, "name": "자해", "description": "자신을 맞힌다. 피해 보너스 없이 피해를 굴린다.", "effects": [{ "hook": "manual" }] }
+    {
+      "min": 1,
+      "max": 1,
+      "name": "무기 낙하",
+      "description": "무기를 발밑에 떨어뜨린다. 줍는 것은 액션.",
+      "effects": [
+        {
+          "hook": "dropWeapon"
+        }
+      ]
+    },
+    {
+      "min": 2,
+      "max": 2,
+      "name": "화살 소진",
+      "description": "화살이 다 떨어졌다. 보충 전까지 사용 불가. 투석구·투척 무기면 다시 굴린다.",
+      "effects": [
+        {
+          "hook": "outOfAmmo"
+        }
+      ]
+    },
+    {
+      "min": 3,
+      "max": 3,
+      "name": "귀중품 명중",
+      "description": "근처의 값지거나 중요한 물건을 맞힌다.",
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
+    },
+    {
+      "min": 4,
+      "max": 4,
+      "name": "무기 파손",
+      "description": "무기가 부서진다. 수리 전까지 사용에 베인.",
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
+    },
+    {
+      "min": 5,
+      "max": 5,
+      "name": "오사",
+      "description": "무작위 아군을 맞힌다. 피해 보너스 포함 피해를 굴린다.",
+      "effects": [
+        {
+          "hook": "manual"
+        }
+      ]
+    },
+    {
+      "min": 6,
+      "max": 6,
+      "name": "자해",
+      "description": "자신을 맞힌다. 피해 보너스 없이 피해를 굴린다.",
+      "effects": [
+        {
+          "hook": "selfHit",
+          "params": {
+            "damageBonus": false
+          }
+        }
+      ]
+    }
   ]
 }

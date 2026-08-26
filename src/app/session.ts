@@ -48,11 +48,12 @@ import {
   spawnMonster,
   toppleMonster,
 } from '../system/monster'
-import { applyEffects } from '../system/effects'
+import { applyEffects, hasAbilityHook } from '../system/effects'
 import type { Vitals, RestUsage } from '../system/hazards'
 import {
   FRESH_REST_USAGE,
   coldExposureFailure,
+  rollSevereInjury,
   stretchRest,
   shiftRest,
   sufferCondition,
@@ -130,6 +131,10 @@ export interface CombatSession {
   drewWeaponThisRound: boolean
   /** 사냥감 전투 — 승리 시 얻는 식량 주사위 */
   preyRations: string | null
+  /** 사고로 떨어뜨린 PC 무기 (줍기는 액션) */
+  pcDroppedWeaponIds: string[]
+  /** 화살이 떨어진 무기 (이번 전투 동안 사용 불가) */
+  outOfAmmoWeaponIds: string[]
 }
 
 /* ─────────────────────────── 게임 상태 ─────────────────────────── */
@@ -596,16 +601,20 @@ function nightPhase(rng: RNG, data: GameData, state: GameState, skipCamp = false
     }
   }
 
-  // 야영 + 수면
+  // 야영 + 수면 (병참 장교·외로운 늑대: 야영 자동 성공)
+  const autoCamp = !skipCamp && pcHasHook(data, s, 'autoActivity', { activity: 'camp' })
   const camp = skipCamp
     ? { success: false }
-    : makeCamp(rng, data, {
-        skillLevels: s.character.skillLevels,
-        conditions: s.character.conditions,
-      }, {
-        hasSleepingFur: hasItem(s.character, 'sleeping-fur'),
-        usingTent: hasItem(s.character, 'tent-small') || hasItem(s.character, 'tent-large'),
-      })
+    : autoCamp
+      ? { success: true }
+      : makeCamp(rng, data, {
+          skillLevels: s.character.skillLevels,
+          conditions: s.character.conditions,
+        }, {
+          hasSleepingFur: hasItem(s.character, 'sleeping-fur'),
+          usingTent: hasItem(s.character, 'tent-small') || hasItem(s.character, 'tent-large'),
+        })
+  if (autoCamp) s = log(s, 'info', '손에 익은 솜씨로 자리를 편다 — 야영 자동 성공.')
 
   if (!skipCamp && 'roll' in camp) {
     s = trackMark(s, 'bushcraft', camp.roll.dragon, camp.roll.demon)
@@ -684,6 +693,8 @@ export function beginCombat(
     sneakPending: false,
     drewWeaponThisRound: false,
     preyRations: options.preyRations ?? null,
+    pcDroppedWeaponIds: [],
+    outOfAmmoWeaponIds: [],
   }
 
   let s: GameState = { ...state, screen: 'combat', combat: session }
@@ -767,6 +778,11 @@ function startRound(rng: RNG, state: GameState, surprise: 'pc' | 'enemies' | nul
       drewWeaponThisRound: false,
     },
   }
+}
+
+/** PC(캐릭터)가 패시브 마커 훅을 보유했는가 */
+function pcHasHook(data: GameData, state: GameState, hook: string, params?: Record<string, unknown>): boolean {
+  return hasAbilityHook(data, state.character.abilities, hook, params)
 }
 
 /* ─────────────────────────── 거리 헬퍼 ─────────────────────────── */
@@ -867,6 +883,10 @@ export function advanceCombat(rng: RNG, data: GameData, state: GameState): GameS
           ...s,
           character: { ...s.character, hp: out.combatant.hp },
           combat: { ...s.combat!, pc: out.combatant },
+        }
+        // 중상표 (옵션 룰): 사경을 헤매다 살아나면 체력 판정 — 실패 시 중상
+        if (out.recovered && data.config.severeInjuries) {
+          s = applySevereInjuryRoll(rng, data, s)
         }
         s = consumeSlot(s)
         continue
@@ -1072,6 +1092,25 @@ function enemyTurn(rng: RNG, data: GameData, state: GameState, enemy: EnemyUnit)
   if ('rejected' in attack) return s
 
   if (!attack.result.success && !attack.critical) {
+    // 대실패 — 사고표의 무기 낙하는 NPC 에게도 적용
+    if (attack.result.demon && attack.mishap?.effects.some((e) => e.hook === 'dropWeapon')) {
+      s = updateEnemyState(s, id, {
+        ...npc,
+        drawnWeaponIds: npc.drawnWeaponIds.filter((w) => w !== weaponId),
+        weaponsAtHand: npc.weaponsAtHand.filter((w) => w !== weaponId),
+      })
+      s = {
+        ...s,
+        combat: {
+          ...s.combat!,
+          droppedWeapons: {
+            ...s.combat!.droppedWeapons,
+            [id]: [...(s.combat!.droppedWeapons[id] ?? []), weaponId!],
+          },
+        },
+      }
+      return log(s, 'combat', `${npc.name}이(가) 대실패로 무기를 떨어뜨렸다!`)
+    }
     return log(s, 'combat', `${npc.name}의 공격 — 빗나감 (${attack.result.natural})`)
   }
   s = log(s, attack.critical ? 'crit' : 'combat', `${npc.name}의 공격이 명중${attack.critical ? ' — 크리티컬!' : ''} (${attack.result.natural})`)
@@ -1245,6 +1284,7 @@ function applyMonsterAttackToPc(
     armorRating: pcArmor,
     maxHp: maxHp(data, s.character),
     maxWp: maxWp(data, s.character),
+    immuneFear: pcHasHook(data, s, 'immuneFear'),
   })
 
   // Vitals → character + combat pc 동기화
@@ -1270,6 +1310,22 @@ function applyMonsterAttackToPc(
   for (const m of result.manual) {
     void m
     s = log(s, 'info', `(수동 효과) ${attack.description}`)
+  }
+
+  // 흡혈 — 준 피해만큼 그 몬스터가 회복
+  if (enemyId && result.directives.some((d) => d.kind === 'lifeDrain')) {
+    const drained = result.applied
+      .filter((a) => a.hook === 'damage' || (a.hook === 'knockback' && a.detail.includes('피해')))
+      .reduce((sum, a) => sum + (a.amount ?? 0), 0)
+    if (drained > 0) {
+      const enemy = s.combat!.enemies.find((e) => unitId(e) === enemyId)
+      if (enemy && !isDead(enemy)) {
+        const healed = Math.min(enemy.state.maxHp, enemy.state.hp + drained)
+        const amount = healed - enemy.state.hp
+        s = updateEnemyState(s, enemyId, { ...enemy.state, hp: healed } as typeof enemy.state)
+        if (amount > 0) s = log(s, 'bad', `${enemy.state.name}이(가) 피를 마시고 ${amount} 회복했다. (HP ${healed})`)
+      }
+    }
   }
 
   // 0 HP 처리 — 이번 공격으로 실제로 쓰러졌을 때만
@@ -1359,17 +1415,29 @@ export function pcAttack(
 
   let s: GameState = { ...state, combat: { ...c, nextRollBoons: 0 } }
 
+  // 화살 소진 (사고표) — 이번 전투 동안 사용 불가
+  if (c.outOfAmmoWeaponIds.includes(weaponId)) {
+    return log(s, 'info', '화살이 다 떨어졌다 — 이 무기는 보충 전까지 못 쓴다.')
+  }
+
   // ── 거리 해결 ──
   let attackKind: 'melee' | 'ranged' = 'melee'
   let situational = 0
   let distance = enemy.distance
 
   if (distance > reach) {
-    const rState = rangedDistanceState(weapon, str, distance)
+    // 던지기 팔 능력: 한손 근접 무기도 STR 사거리로 투척 가능
+    const canImproviseThrow =
+      weapon.category === 'melee' && weapon.grip === '1H' &&
+      !weapon.features.includes('thrown') && str !== null &&
+      pcHasHook(data, state, 'throwAnyMelee')
+    const rState = canImproviseThrow
+      ? (distance <= (str ?? 10) ? 'normal' : distance <= (str ?? 10) * 2 ? 'long' : 'out-of-range')
+      : rangedDistanceState(weapon, str, distance)
     if (rState === 'normal' || rState === 'long') {
       // 원거리/투척 사격
       attackKind = 'ranged'
-      if (rState === 'long') situational += 1
+      if (rState === 'long' && !pcHasHook(data, state, 'ignoreLongRangeBane')) situational += 1
     } else {
       // 자유 이동으로 접근 (과적이면 근력 판정)
       const move = encumberedMoveCheck(rng, data, s)
@@ -1415,6 +1483,37 @@ export function pcAttack(
     s = log(s, 'bad', `대실패!${attack.mishap ? ` ${attack.mishap.name} — ${attack.mishap.description}` : ''}`)
     if (attack.mishap?.name === '무기 손상') {
       s = { ...s, combat: { ...s.combat!, pc: { ...s.combat!.pc, damagedWeaponIds: [...s.combat!.pc.damagedWeaponIds, weaponId] } } }
+    }
+    // 구조화된 사고 효과 (dropWeapon / selfHit / outOfAmmo)
+    for (const eff of attack.mishap?.effects ?? []) {
+      if (eff.hook === 'dropWeapon') {
+        const cc = s.combat!
+        s = {
+          ...s,
+          combat: {
+            ...cc,
+            pc: { ...cc.pc, drawnWeaponIds: cc.pc.drawnWeaponIds.filter((w) => w !== weaponId) },
+            pcDroppedWeaponIds: [...cc.pcDroppedWeaponIds, weaponId],
+          },
+        }
+        s = log(s, 'bad', '무기가 손에서 떨어졌다! (줍기는 액션)')
+      } else if (eff.hook === 'outOfAmmo') {
+        s = { ...s, combat: { ...s.combat!, outOfAmmoWeaponIds: [...s.combat!.outOfAmmoWeaponIds, weaponId] } }
+        s = log(s, 'bad', '화살이 다 떨어졌다!')
+      } else if (eff.hook === 'selfHit') {
+        const wdmg = rollDice(rng, weapon.damage).total
+        const applied = applyDamage(data, s.combat!.pc, {
+          total: wdmg, weaponDice: [wdmg], bonusDice: [], ignoreArmor: false,
+          damageType: weapon.damageTypes[0] ?? null, breakdown: String(wdmg),
+        }, { melee: attackKind === 'melee' })
+        s = {
+          ...s,
+          character: { ...s.character, hp: applied.defender.hp },
+          combat: { ...s.combat!, pc: applied.defender },
+        }
+        s = log(s, 'bad', `자신을 맞혔다 — ${applied.taken} 피해 (HP ${applied.defender.hp})`)
+        if (applied.droppedToZero) s = log(s, 'bad', '쓰러졌다! 죽음의 문턱에서 버텨야 한다.')
+      }
     }
     return finishPcAction(rng, data, s)
   }
@@ -1898,6 +1997,58 @@ export function pcFlee(rng: RNG, data: GameData, state: GameState): GameState {
   }
   s = log(s, 'bad', '도주 실패 — 퇴로가 막혔다.')
   return finishPcAction(rng, data, s)
+}
+
+/** 떨어뜨린 무기 줍기 (액션) */
+export function pcPickUpWeapon(rng: RNG, data: GameData, state: GameState): GameState {
+  const c = state.combat
+  if (!c || c.status !== 'ongoing' || c.prompt || c.pcDroppedWeaponIds.length === 0) return state
+  const weaponId = c.pcDroppedWeaponIds[0]!
+  let s: GameState = {
+    ...state,
+    combat: {
+      ...c,
+      pc: { ...c.pc, drawnWeaponIds: [weaponId] },
+      pcDroppedWeaponIds: c.pcDroppedWeaponIds.slice(1),
+    },
+  }
+  s = log(s, 'info', `${weaponOf(data, weaponId).name}을(를) 주워 들었다.`)
+  return finishPcAction(rng, data, s)
+}
+
+/**
+ * 중상 굴림 + 구조화된 항목 자동 적용.
+ * 영구 스킬 페널티(extra.skillPenalty)·새 약점(성격 변화)은 즉시 반영,
+ * 치유 기간이 있는 항목은 규칙 요약을 로그로 남긴다 (수동).
+ */
+function applySevereInjuryRoll(rng: RNG, data: GameData, state: GameState): GameState {
+  const out = rollSevereInjury(rng, data, vitalsOf(state.character))
+  if (!out.injured || !out.row) {
+    return log(state, 'good', '중상 판정 (체력) — 몸이 버텨냈다.')
+  }
+  const row = out.row
+  let s = log(state, 'bad', `중상! ${row.name || `#${row.min}`} — ${row.description}`)
+  if (out.healingDays) s = log(s, 'info', `치유 기간: ${out.healingDays}일`)
+
+  const pen = row.extra?.['skillPenalty'] as
+    | { skills?: string[]; kind?: string; amount: number; min: number }
+    | undefined
+  if (row.extra?.['permanent'] === true && pen) {
+    const targets = pen.skills ?? data.skills.filter((k) => k.kind === pen.kind).map((k) => k.id)
+    const skillLevels = { ...s.character.skillLevels }
+    for (const id of targets) {
+      if (skillLevels[id] !== undefined) skillLevels[id] = Math.max(pen.min, skillLevels[id]! - pen.amount)
+    }
+    s = { ...s, character: { ...s.character, skillLevels } }
+    s = log(s, 'bad', `스킬 레벨 영구 −${pen.amount} (${targets.length}종, 최소 ${pen.min})`)
+  }
+  // 성격 변화 — 새 약점을 무작위로
+  if (row.min === 19 && data.config.weaknesses) {
+    const newWeakness = 1 + Math.floor(rng.next() * 20)
+    s = { ...s, character: { ...s.character, weaknessId: newWeakness } }
+    s = log(s, 'bad', `새 약점을 얻었다 (#${newWeakness})`)
+  }
+  return s
 }
 
 /** 턴 넘기기 */
