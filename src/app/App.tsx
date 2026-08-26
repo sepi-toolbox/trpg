@@ -22,6 +22,7 @@ import {
 import { CreationView } from './CreationView'
 import { SheetPanel } from './SheetPanel'
 import { CombatPanel } from './CombatPanel'
+import { GmPanel } from './GmPanel'
 import { LogPanel } from './LogPanel'
 
 export default function App() {
@@ -78,12 +79,19 @@ function GameScreen({
   onReset: () => void
 }) {
   const [answers, setAnswers] = useState<boolean[]>(SESSION_QUESTIONS.map(() => false))
+  const [gmMode, setGmMode] = useState(false)
 
   return (
     <div className="grid grid-2">
       <SheetPanel data={data} state={state} />
 
       <div>
+        <div className="button-row" style={{ marginBottom: 12 }}>
+          <button className={gmMode ? 'primary' : ''} onClick={() => setGmMode(!gmMode)}>
+            {gmMode ? 'GM 모드 켜짐 — 대화로 진행' : 'GM 모드 (LLM 마스터와 대화로 플레이)'}
+          </button>
+        </div>
+        {gmMode && <GmPanel data={data} rng={rng} state={state} setState={setState} />}
         {state.screen === 'journey' && (
           <section className="panel">
             <h2>{state.day}일차 — 황야</h2>
