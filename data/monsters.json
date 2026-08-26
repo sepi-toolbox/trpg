@@ -5,11 +5,17 @@
     "description": "(임시) 늪지의 안개 속을 떠도는 원령. 산 자의 온기를 탐한다.",
     "ferocity": 2,
     "size": "normal",
-    "movement": { "land": 12 },
+    "movement": {
+      "land": 12
+    },
     "armor": null,
     "hp": 27,
     "resistances": [],
-    "immunities": ["slashing", "piercing", "bludgeoning"],
+    "immunities": [
+      "slashing",
+      "piercing",
+      "bludgeoning"
+    ],
     "persuadable": true,
     "defenseSkill": 15,
     "skills": {},
@@ -25,7 +31,16 @@
         "description": "10m 내 대상에게 달려들어 후려친다. 2D6m 밀려나고 그만큼 타격 피해, 넘어진다.",
         "canParry": false,
         "canDodge": true,
-        "effects": [{ "hook": "knockback", "params": { "dice": "2D6", "damagePerMeter": true, "prone": true } }]
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D6",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
       },
       {
         "roll": 2,
@@ -34,8 +49,19 @@
         "canParry": false,
         "canDodge": true,
         "effects": [
-          { "hook": "damage", "params": { "dice": "2D10", "ignoreArmor": true } },
-          { "hook": "condition", "params": { "condition": "scared" } }
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "ignoreArmor": true
+            }
+          },
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "scared"
+            }
+          }
         ]
       },
       {
@@ -44,7 +70,14 @@
         "description": "10m 내 전원에게 공포 공격.",
         "canParry": false,
         "canDodge": false,
-        "effects": [{ "hook": "fearAttack", "params": { "radius": 10 } }]
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
       },
       {
         "roll": 4,
@@ -53,8 +86,18 @@
         "canParry": false,
         "canDodge": false,
         "effects": [
-          { "hook": "condition", "params": { "condition": "scared" } },
-          { "hook": "fearAttack", "params": { "bane": true } }
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "scared"
+            }
+          },
+          {
+            "hook": "fearAttack",
+            "params": {
+              "bane": true
+            }
+          }
         ]
       },
       {
@@ -64,8 +107,19 @@
         "canParry": false,
         "canDodge": true,
         "effects": [
-          { "hook": "damage", "params": { "dice": "3D6", "type": "bludgeoning" } },
-          { "hook": "condition", "params": { "condition": "dazed" } }
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "3D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "dazed"
+            }
+          }
         ]
       },
       {
@@ -75,8 +129,140 @@
         "canParry": false,
         "canDodge": true,
         "effects": [
-          { "hook": "damage", "params": { "dice": "2D8", "ignoreArmor": true } },
-          { "hook": "manual" }
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "ignoreArmor": true
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stonehide",
+    "name": "돌가죽 거한",
+    "description": "(임시) 바위 같은 가죽을 두른 거구. 느리지만 한 방이 무겁다.",
+    "ferocity": 1,
+    "size": "large",
+    "movement": {
+      "land": 8
+    },
+    "armor": 3,
+    "hp": 44,
+    "resistances": [
+      "slashing"
+    ],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "둔중",
+      "참격 저항"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "내려찍기",
+        "description": "거대한 주먹을 내리친다. 2D8 타격 피해.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "bludgeoning"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "휩쓸기",
+        "description": "팔을 휩쓴다. 2D6 타격 피해, 넘어진다.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "돌팔매",
+        "description": "바위를 집어 던진다. 10m, D12 타격 피해.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D12",
+              "type": "bludgeoning"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "포효",
+        "description": "가슴을 두드리며 포효한다. 10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "움켜쥐기",
+        "description": "한 명을 움켜쥐고 던진다. 2D6m 날아가 그만큼 타격 피해, 넘어진다.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D6",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "짓밟기",
+        "description": "쓰러진 자를 짓밟는다. 3D6 타격 피해.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "3D6",
+              "type": "bludgeoning"
+            }
+          }
         ]
       }
     ]
