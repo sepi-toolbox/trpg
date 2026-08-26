@@ -263,10 +263,27 @@ export function validateGameData(data: GameData): string[] {
     for (const g of n.gearIds) {
       if (!gearIds.has(g)) err(`npc:${n.id} → 없는 장비 "${g}"`)
     }
-    if (n.kind === 'minion' && n.wp !== null) err(`npc:${n.id}: 미니언은 wp 를 null 로`)
+    // 미니언은 WP 를 추적하지 않는다 — 단, 주문을 쓰는 미니언은 시전 자원으로 WP 가 필요하다.
+    if (n.kind === 'minion' && n.wp !== null && !(n.spellIds && n.spellIds.length > 0)) {
+      err(`npc:${n.id}: 미니언은 wp 를 null 로 (주문 보유 시 예외)`)
+    }
+    for (const sp of n.spellIds ?? []) {
+      if (!spellIds.has(sp)) err(`npc:${n.id} → 없는 주문 "${sp}"`)
+    }
     for (const [attr, die] of Object.entries(n.damageBonus)) {
       if (!['str', 'agl'].includes(attr)) err(`npc:${n.id}: 피해 보너스 능력치는 str/agl 만`)
       if (die && !isValidDice(die)) err(`npc:${n.id}: 잘못된 피해 보너스 "${die}"`)
+    }
+  }
+
+  /* ── 동물 ── */
+  checkUnique('animals', data.animals)
+  for (const a of data.animals) {
+    if (!isValidDice(a.attack.damage)) err(`animal:${a.id}: 잘못된 피해 표기 "${a.attack.damage}"`)
+    if (a.attack.skillLevel < 1) err(`animal:${a.id}: 공격 스킬이 1 미만`)
+    if (a.hp < 1) err(`animal:${a.id}: HP가 1 미만`)
+    for (const s of Object.keys(a.skills)) {
+      if (!skillIds.has(s)) err(`animal:${a.id} → 없는 스킬 "${s}"`)
     }
   }
 

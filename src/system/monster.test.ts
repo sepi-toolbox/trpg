@@ -117,7 +117,7 @@ describe('몬스터 피해 — 방어구·저항·면역', () => {
     expect(out.absorbed).toBe(2)
     expect(out.resisted).toBe(true)
     expect(out.taken).toBe(5)
-    expect(out.monster.hp).toBe(30 - 5)
+    expect(out.monster.hp).toBe(m.hp - 5)
   })
 
   it('저항 절반은 올림', () => {

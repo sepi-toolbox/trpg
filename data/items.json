@@ -178,5 +178,1679 @@
     "effects": [],
     "extinguishDie": null,
     "metal": false
+  },
+  {
+    "id": "boots",
+    "name": "",
+    "category": "clothes",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "일부 여정 사고의 피해 경감(사고표 참조).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "cloak",
+    "name": "",
+    "category": "clothes",
+    "cost": {
+      "amount": 8,
+      "unit": "silver"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "일부 여정 사고(벌레 떼·폭우) 무효.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "fine-garments",
+    "name": "",
+    "category": "clothes",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "상황에 따라 CHA 기반 판정에 보온.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "fur-coat",
+    "name": "",
+    "category": "clothes",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "추위 저항 야외술 판정에 보온.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "rags",
+    "name": "",
+    "category": "clothes",
+    "cost": {
+      "amount": 5,
+      "unit": "copper"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "상황에 따라 CHA 기반 판정에 베인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "simple-clothes",
+    "name": "",
+    "category": "clothes",
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "없으면 CHA 기반 판정에 베인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "bagpipe",
+    "name": "",
+    "category": "instrument",
+    "cost": {
+      "amount": 30,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "musician 능력의 WP 비용 1로, 사거리 50m로.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "drum",
+    "name": "",
+    "category": "instrument",
+    "cost": {
+      "amount": 4,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "musician 사거리 20m.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "flute",
+    "name": "",
+    "category": "instrument",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "musician WP 비용 2.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "harp",
+    "name": "",
+    "category": "instrument",
+    "cost": {
+      "amount": 8,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 2,
+    "description": "musician WP 비용 1.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "horn",
+    "name": "",
+    "category": "instrument",
+    "cost": {
+      "amount": 6,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "musician 사거리 100m.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "lyre",
+    "name": "",
+    "category": "instrument",
+    "cost": {
+      "amount": 20,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "musician WP 비용 1.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "abacus",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "수리 계산 INT 판정에 보온.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "blanket",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "없으면 추위 저항 판정에 베인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "field-kitchen",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 4,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 2,
+    "description": "조리 판정에만 보온.",
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "bushcraft"
+            ]
+          }
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "grappling-hook",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "밧줄 고정. 곡예 판정으로 STR 미터까지 투척(STR×2는 베인).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "lockpicks-advanced",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 20,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "weight": 1,
+    "description": "자물쇠 따기에만 보온.",
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "sleight-of-hand"
+            ]
+          }
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "lockpicks-simple",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "없으면 자물쇠 따기에 베인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "magnifying-glass",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 30,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "수색 판정에 보온.",
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "spot-hidden"
+            ]
+          }
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "map",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "없으면 길찾기 판정에 베인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "marbles",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "10m 내 인간형에게 투척(액션) — 다음 턴 이동하려면 회피 판정(액션 아님).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "padlock",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "문·상자를 잠근다. HP 20, 방어 등급 5.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "perfume",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "10회분. 상황에 따라 CHA 판정에 보온.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "quiver-wooden",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "활·석궁 사격에 필요. 상대 방어구 효과 2배.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "rope-hemp",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "10m. 고정돼 있으면 등반 곡예에 보온.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "rope-silk",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "10m. 고정돼 있으면 등반 곡예에 보온.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "saddle",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "없으면 마상 전투 판정 전부 베인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "spyglass",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 50,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "weight": 1,
+    "description": "길찾기 판정에만 보온.",
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "bushcraft"
+            ]
+          }
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "tent-small",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 2,
+    "description": "2인용. 야영 판정 보온 — 설치자 1인만 굴리고 성공 시 수용 인원 전원 적용.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "tent-large",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 4,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 4,
+    "description": "6인용. 효과는 소형 텐트와 동일.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "whistle",
+    "name": "",
+    "category": "tradeGoods",
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "100m 밖까지 들린다.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "book",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 25,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "특정 주제의 판정에 보온. 가격은 주제에 따라 변동.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "brooch",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "주문 매개체(focus).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "chalk",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 1,
+      "unit": "copper"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "주문 매개체(focus).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "hourglass",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 25,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "weight": 1,
+    "description": "주문 매개체(focus).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "notebook",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "빈 책 — 그리무아로 사용 가능.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "paper-sheet",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 2,
+      "unit": "silver"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "주문 기록용.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "parchment-sheet",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 1,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "주문 기록용.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "quill-ink",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "주문 기록용.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "reliquary",
+    "name": "",
+    "category": "study",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "주문 매개체(focus).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "lamp-oil",
+    "name": "",
+    "category": "lightSource",
+    "cost": {
+      "amount": 3,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "10회분. 1회분 = 램프·랜턴 1시프트.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "lantern",
+    "name": "",
+    "category": "lightSource",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "스트레치마다 D8 — 1이면 꺼짐(재급유·재점화는 액션).",
+    "effects": [
+      {
+        "hook": "light",
+        "params": {
+          "radius": 10,
+          "duration": "shift"
+        }
+      }
+    ],
+    "extinguishDie": 8,
+    "metal": true
+  },
+  {
+    "id": "oil-lamp",
+    "name": "",
+    "category": "lightSource",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "스트레치마다 D6 — 1이면 꺼짐.",
+    "effects": [
+      {
+        "hook": "light",
+        "params": {
+          "radius": 10,
+          "duration": "shift"
+        }
+      }
+    ],
+    "extinguishDie": 6,
+    "metal": false
+  },
+  {
+    "id": "tallow-candle",
+    "name": "",
+    "category": "lightSource",
+    "cost": {
+      "amount": 1,
+      "unit": "copper"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "반경 4m. 스트레치마다(또는 소지자가 공격하거나 공격받으면) D4 — 1이면 꺼짐.",
+    "effects": [
+      {
+        "hook": "light",
+        "params": {
+          "radius": 4,
+          "duration": "shift"
+        }
+      }
+    ],
+    "extinguishDie": 4,
+    "metal": false
+  },
+  {
+    "id": "crowbar",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "문·벽에 2D6 피해, 자동 명중, 도구 파손 없음.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "hammer",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "문·벽에 2D4 피해, 자동 명중.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "needle-thread",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 3,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "제작 판정으로 옷 수선.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "pickaxe",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "문·벽에 2D8 피해, 자동 명중.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "saw",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "1스트레치에 금속·목재 절단.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "shovel",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "굴착 시간 절반.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "sledgehammer",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 2,
+    "description": "문·벽에 2D10 피해, 자동 명중.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "blacksmith-tools",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 20,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "제작(대장일)에 필요.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "carpentry-tools",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 8,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "제작(목공)에 필요.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "tanning-tools",
+    "name": "",
+    "category": "tool",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "제작(무두질)에 필요.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "backpack",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "소지 한도 +2. 1인 1개.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "barrel",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 2,
+    "description": "15무게 수납. HP 10, 방어 3.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "basket",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 4,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "10무게 수납.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "bottle",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "액체 1단위.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "bucket",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 5,
+      "unit": "copper"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "액체 5단위.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "chest",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 3,
+    "description": "20무게 수납. HP 25, 방어 5.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "clay-jug",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "액체 1단위.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "saddlebag",
+    "name": "",
+    "category": "container",
+    "cost": {
+      "amount": 6,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "동물의 적재 +2. 동물당 최대 2개.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "poison-lethal",
+    "name": "",
+    "category": "medicine",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "1회분. 가격 = 2골드 × 강도. potency 는 제조 강도로 교체.",
+    "effects": [
+      {
+        "hook": "poison",
+        "params": {
+          "kind": "lethal",
+          "potency": 9
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "poison-paralyzing",
+    "name": "",
+    "category": "medicine",
+    "cost": {
+      "amount": 12,
+      "unit": "silver"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "1회분. 가격 = 12실버 × 강도.",
+    "effects": [
+      {
+        "hook": "poison",
+        "params": {
+          "kind": "paralyzing",
+          "potency": 9
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "poison-sleeping",
+    "name": "",
+    "category": "medicine",
+    "cost": {
+      "amount": 6,
+      "unit": "silver"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "1회분. 가격 = 6실버 × 강도.",
+    "effects": [
+      {
+        "hook": "poison",
+        "params": {
+          "kind": "sleeping",
+          "potency": 9
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "herbal-concoction",
+    "name": "",
+    "category": "medicine",
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "질병 저항 치료 판정에 보온. 1회분.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "surgical-instruments",
+    "name": "",
+    "category": "medicine",
+    "cost": {
+      "amount": 15,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "소생 판정에만 보온.",
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "healing"
+            ]
+          }
+        }
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "bear-trap",
+    "name": "",
+    "category": "hunting",
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 1,
+    "description": "덫 사냥에 사용.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": true
+  },
+  {
+    "id": "fishing-rod",
+    "name": "",
+    "category": "hunting",
+    "cost": {
+      "amount": 8,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "낚시 성공 시 D4 식량.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "fishing-net",
+    "name": "",
+    "category": "hunting",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 2,
+    "description": "낚시 성공 시 D6 식량.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "snare",
+    "name": "",
+    "category": "hunting",
+    "cost": {
+      "amount": 5,
+      "unit": "copper"
+    },
+    "supply": "common",
+    "weight": 1,
+    "description": "덫 사냥 1회용.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "canoe",
+    "name": "",
+    "category": "vehicle",
+    "cost": {
+      "amount": 6,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 8,
+    "description": "2인 + 10무게.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "cart",
+    "name": "",
+    "category": "vehicle",
+    "cost": {
+      "amount": 15,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 8,
+    "description": "말·당나귀 1마리 견인. 2인 + 50무게.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "rowing-boat",
+    "name": "",
+    "category": "vehicle",
+    "cost": {
+      "amount": 15,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 8,
+    "description": "4인 + 50무게.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "sailing-boat",
+    "name": "",
+    "category": "vehicle",
+    "cost": {
+      "amount": 40,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 8,
+    "description": "6인 + 100무게.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "wagon",
+    "name": "",
+    "category": "vehicle",
+    "cost": {
+      "amount": 30,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 8,
+    "description": "말·당나귀 2마리 견인. 4인 + 100무게.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-chicken",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 4,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "도축 시 식량 1 (조리 필요).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-warhorse",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 400,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "weight": 0,
+    "description": "전투 훈련 — 마상 전투 가능. 기수 1 + 10무게 또는 2인.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-cow",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "우유 하루 D4 식량, 도축 2D10 식량(조리 필요).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-donkey",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 12,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "10무게 적재. 기승 불가.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-guard-dog",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 15,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "주인을 지킨다. 스탯은 동물 표의 dog.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-homing-pigeon",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "풀어주면 제 둥지로 날아간다.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-pig",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "도축 2D6 식량(조리 필요).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-riding-horse",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 60,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "weight": 0,
+    "description": "기수 1 + 10무게 또는 2인. 이동 30km/시프트.",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
+  },
+  {
+    "id": "buy-sheep",
+    "name": "",
+    "category": "animal",
+    "cost": {
+      "amount": 3,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "weight": 0,
+    "description": "도축 2D4 식량(조리 필요).",
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ],
+    "extinguishDie": null,
+    "metal": false
   }
 ]

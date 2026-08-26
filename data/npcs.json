@@ -66,5 +66,443 @@
       "short-sword",
       "leather-armor"
     ]
+  },
+  {
+    "id": "cultist",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "evade": 14,
+      "knives": 14
+    },
+    "heroicAbilities": [],
+    "damageBonus": {
+      "agl": "D4"
+    },
+    "hp": 12,
+    "wp": null,
+    "gearIds": [
+      "dagger"
+    ]
+  },
+  {
+    "id": "thief",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "evade": 12,
+      "knives": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {
+      "agl": "D4"
+    },
+    "hp": 10,
+    "wp": null,
+    "gearIds": [
+      "knife"
+    ]
+  },
+  {
+    "id": "villager",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "brawling": 8
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 8,
+    "wp": null,
+    "gearIds": [
+      "club-small"
+    ]
+  },
+  {
+    "id": "hunter-npc",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 12,
+      "bows": 13
+    },
+    "heroicAbilities": [],
+    "damageBonus": {
+      "agl": "D4"
+    },
+    "hp": 13,
+    "wp": null,
+    "gearIds": [
+      "longbow",
+      "leather-armor"
+    ]
+  },
+  {
+    "id": "bandit",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "bows": 12,
+      "evade": 10,
+      "swords": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 12,
+    "wp": null,
+    "gearIds": [
+      "short-sword",
+      "short-bow"
+    ]
+  },
+  {
+    "id": "adventurer",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 10,
+      "swords": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {
+      "str": "D4"
+    },
+    "hp": 13,
+    "wp": null,
+    "gearIds": [
+      "broadsword",
+      "studded-leather"
+    ]
+  },
+  {
+    "id": "scholar",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "languages": 13,
+      "myths-legends": 13,
+      "staves": 8
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 7,
+    "wp": null,
+    "gearIds": [
+      "staff"
+    ]
+  },
+  {
+    "id": "knight-champion",
+    "name": "",
+    "kind": "boss",
+    "skills": {
+      "brawling": 14,
+      "swords": 16
+    },
+    "heroicAbilities": [
+      {
+        "abilityId": "defensive",
+        "count": 1
+      },
+      {
+        "abilityId": "double-slash",
+        "count": 1
+      },
+      {
+        "abilityId": "focused",
+        "count": 6
+      },
+      {
+        "abilityId": "robust",
+        "count": 6
+      }
+    ],
+    "damageBonus": {
+      "str": "D6"
+    },
+    "hp": 28,
+    "wp": 26,
+    "gearIds": [
+      "longsword",
+      "shield-large",
+      "plate-armor",
+      "great-helm"
+    ]
+  },
+  {
+    "id": "archmage",
+    "name": "",
+    "kind": "boss",
+    "skills": {
+      "spirit-magic": 15,
+      "staves": 13
+    },
+    "heroicAbilities": [
+      {
+        "abilityId": "focused",
+        "count": 6
+      },
+      {
+        "abilityId": "master-spellcaster",
+        "count": 1
+      },
+      {
+        "abilityId": "robust",
+        "count": 4
+      }
+    ],
+    "damageBonus": {},
+    "hp": 22,
+    "wp": 30,
+    "gearIds": [
+      "staff",
+      "grimoire"
+    ],
+    "spellIds": [
+      "storm-lash",
+      "mend-flesh",
+      "root-snare",
+      "unbind",
+      "spark-flick",
+      "glimmer",
+      "unseen-hand"
+    ]
+  },
+  {
+    "id": "goblin-scout",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 10,
+      "evade": 10,
+      "sneaking": 12,
+      "bows": 12,
+      "swords": 10
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 9,
+    "wp": null,
+    "gearIds": [
+      "short-bow",
+      "quiver-iron",
+      "short-sword",
+      "leather-armor"
+    ],
+    "traits": [
+      "야행성 — 직사광선 아래 모든 판정에 베인 + 스트레치당 D6 피해. 짙은 구름·전신 복장으로 무효",
+      "몬스터 아님 — 일반 NPC"
+    ]
+  },
+  {
+    "id": "goblin-warrior",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 10,
+      "evade": 10,
+      "sneaking": 12,
+      "spears": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 10,
+    "wp": null,
+    "gearIds": [
+      "long-spear",
+      "studded-leather"
+    ],
+    "traits": [
+      "야행성 — 직사광선 아래 모든 판정에 베인 + 스트레치당 D6 피해. 짙은 구름·전신 복장으로 무효",
+      "몬스터 아님 — 일반 NPC"
+    ]
+  },
+  {
+    "id": "orc-warrior",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 10,
+      "evade": 8,
+      "swords": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {
+      "str": "D4"
+    },
+    "hp": 12,
+    "wp": null,
+    "gearIds": [
+      "scimitar",
+      "studded-leather"
+    ],
+    "traits": [
+      "야행성 — 직사광선 아래 모든 판정에 베인 + 스트레치당 D6 피해. 짙은 구름·전신 복장으로 무효",
+      "몬스터 아님 — 일반 NPC"
+    ]
+  },
+  {
+    "id": "orc-shaman",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "spirit-magic": 14,
+      "awareness": 12,
+      "evade": 8,
+      "staves": 10
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 10,
+    "wp": 16,
+    "gearIds": [
+      "staff"
+    ],
+    "spellIds": [
+      "root-snare",
+      "storm-lash",
+      "mend-flesh"
+    ],
+    "traits": [
+      "야행성 — 직사광선 아래 모든 판정에 베인 + 스트레치당 D6 피해. 짙은 구름·전신 복장으로 무효"
+    ]
+  },
+  {
+    "id": "orc-chieftain",
+    "name": "",
+    "kind": "boss",
+    "skills": {
+      "awareness": 14,
+      "evade": 12,
+      "swords": 16
+    },
+    "heroicAbilities": [
+      {
+        "abilityId": "veteran",
+        "count": 1
+      },
+      {
+        "abilityId": "defensive",
+        "count": 1
+      },
+      {
+        "abilityId": "dual-wield",
+        "count": 1
+      },
+      {
+        "abilityId": "robust",
+        "count": 4
+      }
+    ],
+    "damageBonus": {
+      "str": "D6"
+    },
+    "hp": 24,
+    "wp": 15,
+    "gearIds": [
+      "scimitar",
+      "chainmail"
+    ],
+    "traits": [
+      "야행성 — 직사광선 아래 모든 판정에 베인 + 스트레치당 D6 피해. 짙은 구름·전신 복장으로 무효"
+    ]
+  },
+  {
+    "id": "skeleton-warrior",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 8,
+      "evade": 6,
+      "swords": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 8,
+    "wp": null,
+    "gearIds": [
+      "short-sword",
+      "studded-leather"
+    ],
+    "resistances": [
+      "piercing"
+    ],
+    "traits": [
+      "공포·설득 면역",
+      "몬스터 아님 — 일반 NPC"
+    ]
+  },
+  {
+    "id": "skeleton-archer",
+    "name": "",
+    "kind": "minion",
+    "skills": {
+      "awareness": 8,
+      "evade": 6,
+      "knives": 10,
+      "crossbows": 12
+    },
+    "heroicAbilities": [],
+    "damageBonus": {},
+    "hp": 8,
+    "wp": null,
+    "gearIds": [
+      "dagger",
+      "crossbow-light",
+      "quiver-iron",
+      "leather-armor"
+    ],
+    "resistances": [
+      "piercing"
+    ],
+    "traits": [
+      "공포·설득 면역",
+      "몬스터 아님 — 일반 NPC"
+    ]
+  },
+  {
+    "id": "skeleton-champion",
+    "name": "",
+    "kind": "boss",
+    "skills": {
+      "awareness": 12,
+      "evade": 8,
+      "swords": 16
+    },
+    "heroicAbilities": [
+      {
+        "abilityId": "veteran",
+        "count": 1
+      },
+      {
+        "abilityId": "defensive",
+        "count": 1
+      },
+      {
+        "abilityId": "double-slash",
+        "count": 1
+      },
+      {
+        "abilityId": "robust",
+        "count": 4
+      }
+    ],
+    "damageBonus": {
+      "str": "D6"
+    },
+    "hp": 24,
+    "wp": 15,
+    "gearIds": [
+      "longsword",
+      "shield-large",
+      "chainmail"
+    ],
+    "resistances": [
+      "piercing"
+    ],
+    "traits": [
+      "공포·설득 면역",
+      "몬스터 아님 — 일반 NPC"
+    ]
   }
 ]

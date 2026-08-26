@@ -200,5 +200,594 @@
     "features": [],
     "category": "shield",
     "metal": true
+  },
+  {
+    "id": "blunt-light",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "1H",
+    "strRequirement": null,
+    "range": "STR",
+    "damage": "D8",
+    "durability": 3,
+    "cost": null,
+    "supply": null,
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "thrown"
+    ],
+    "category": "melee",
+    "metal": false
+  },
+  {
+    "id": "blunt-heavy",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "2H",
+    "strRequirement": 16,
+    "range": 2,
+    "damage": "2D8",
+    "durability": 3,
+    "cost": null,
+    "supply": null,
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": false
+  },
+  {
+    "id": "dagger",
+    "name": "",
+    "skillId": "knives",
+    "grip": "1H",
+    "strRequirement": null,
+    "range": "STR",
+    "damage": "D8",
+    "durability": 9,
+    "cost": {
+      "amount": 1,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
+    "features": [
+      "subtle",
+      "thrown"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "parrying-dagger",
+    "name": "",
+    "skillId": "knives",
+    "grip": "1H",
+    "strRequirement": null,
+    "range": 2,
+    "damage": "D6",
+    "durability": 15,
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
+    "features": [
+      "subtle"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "longsword",
+    "name": "",
+    "skillId": "swords",
+    "grip": "1H",
+    "strRequirement": 13,
+    "range": 2,
+    "damage": "2D8",
+    "durability": 15,
+    "cost": {
+      "amount": 25,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "greatsword",
+    "name": "",
+    "skillId": "swords",
+    "grip": "2H",
+    "strRequirement": 16,
+    "range": 2,
+    "damage": "2D10",
+    "durability": 15,
+    "cost": {
+      "amount": 50,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "scimitar",
+    "name": "",
+    "skillId": "swords",
+    "grip": "1H",
+    "strRequirement": 10,
+    "range": 2,
+    "damage": "2D6",
+    "durability": 12,
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "slashing"
+    ],
+    "features": [
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "handaxe",
+    "name": "",
+    "skillId": "axes",
+    "grip": "1H",
+    "strRequirement": 7,
+    "range": "STR",
+    "damage": "2D6",
+    "durability": 9,
+    "cost": {
+      "amount": 2,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "slashing"
+    ],
+    "features": [
+      "toppling",
+      "thrown"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "battleaxe",
+    "name": "",
+    "skillId": "axes",
+    "grip": "1H",
+    "strRequirement": 13,
+    "range": 2,
+    "damage": "2D8",
+    "durability": 9,
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "slashing"
+    ],
+    "features": [
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "two-handed-axe",
+    "name": "",
+    "skillId": "axes",
+    "grip": "2H",
+    "strRequirement": 16,
+    "range": 2,
+    "damage": "2D10",
+    "durability": 9,
+    "cost": {
+      "amount": 25,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "slashing"
+    ],
+    "features": [
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "mace",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "1H",
+    "strRequirement": 7,
+    "range": 2,
+    "damage": "2D4",
+    "durability": 12,
+    "cost": {
+      "amount": 8,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "morningstar",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "1H",
+    "strRequirement": 13,
+    "range": 2,
+    "damage": "2D8",
+    "durability": 12,
+    "cost": {
+      "amount": 14,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "flail",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "1H",
+    "strRequirement": 13,
+    "range": 2,
+    "damage": "2D8",
+    "durability": null,
+    "cost": {
+      "amount": 16,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "toppling",
+      "noParry"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "warhammer-light",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "1H",
+    "strRequirement": 10,
+    "range": 2,
+    "damage": "2D6",
+    "durability": 12,
+    "cost": {
+      "amount": 10,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "warhammer-heavy",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "2H",
+    "strRequirement": 16,
+    "range": 2,
+    "damage": "2D10",
+    "durability": 12,
+    "cost": {
+      "amount": 20,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "club-small",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "1H",
+    "strRequirement": 7,
+    "range": 2,
+    "damage": "D8",
+    "durability": 9,
+    "cost": {
+      "amount": 1,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": false
+  },
+  {
+    "id": "club-large",
+    "name": "",
+    "skillId": "hammers",
+    "grip": "2H",
+    "strRequirement": 16,
+    "range": 2,
+    "damage": "2D8",
+    "durability": 12,
+    "cost": {
+      "amount": 2,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [],
+    "category": "melee",
+    "metal": false
+  },
+  {
+    "id": "short-spear",
+    "name": "",
+    "skillId": "spears",
+    "grip": "1H",
+    "strRequirement": 7,
+    "range": "STRx2",
+    "damage": "D10",
+    "durability": 9,
+    "cost": {
+      "amount": 5,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "thrown"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "lance",
+    "name": "",
+    "skillId": "spears",
+    "grip": "1H",
+    "strRequirement": 13,
+    "range": 4,
+    "damage": "2D10",
+    "durability": 12,
+    "cost": {
+      "amount": 12,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "long",
+      "requiresMount"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "halberd",
+    "name": "",
+    "skillId": "spears",
+    "grip": "2H",
+    "strRequirement": 13,
+    "range": 4,
+    "damage": "2D8",
+    "durability": 12,
+    "cost": {
+      "amount": 20,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "damageTypes": [
+      "piercing",
+      "slashing"
+    ],
+    "features": [
+      "long",
+      "toppling"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "trident",
+    "name": "",
+    "skillId": "spears",
+    "grip": "1H",
+    "strRequirement": 10,
+    "range": "STR",
+    "damage": "2D6",
+    "durability": 9,
+    "cost": {
+      "amount": 5,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "toppling",
+      "thrown"
+    ],
+    "category": "melee",
+    "metal": true
+  },
+  {
+    "id": "shield-large",
+    "name": "",
+    "skillId": "swords",
+    "grip": "1H",
+    "strRequirement": 13,
+    "range": 2,
+    "damage": "D8",
+    "durability": 18,
+    "cost": {
+      "amount": 12,
+      "unit": "gold"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [],
+    "category": "shield",
+    "metal": true
+  },
+  {
+    "id": "sling",
+    "name": "",
+    "skillId": "slings",
+    "grip": "1H",
+    "strRequirement": null,
+    "range": 20,
+    "damage": "D8",
+    "durability": null,
+    "cost": {
+      "amount": 1,
+      "unit": "silver"
+    },
+    "supply": "common",
+    "damageTypes": [
+      "bludgeoning"
+    ],
+    "features": [
+      "tiny"
+    ],
+    "category": "ranged",
+    "metal": false
+  },
+  {
+    "id": "longbow",
+    "name": "",
+    "skillId": "bows",
+    "grip": "2H",
+    "strRequirement": 13,
+    "range": 100,
+    "damage": "D12",
+    "durability": 6,
+    "cost": {
+      "amount": 50,
+      "unit": "gold"
+    },
+    "supply": "uncommon",
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "requiresQuiver"
+    ],
+    "category": "ranged",
+    "metal": false
+  },
+  {
+    "id": "crossbow-heavy",
+    "name": "",
+    "skillId": "crossbows",
+    "grip": "2H",
+    "strRequirement": 13,
+    "range": 60,
+    "damage": "2D8",
+    "durability": 9,
+    "cost": {
+      "amount": 200,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "requiresQuiver",
+      "noDamageBonus"
+    ],
+    "category": "ranged",
+    "metal": true
+  },
+  {
+    "id": "crossbow-hand",
+    "name": "",
+    "skillId": "crossbows",
+    "grip": "1H",
+    "strRequirement": 7,
+    "range": 30,
+    "damage": "2D6",
+    "durability": 6,
+    "cost": {
+      "amount": 90,
+      "unit": "gold"
+    },
+    "supply": "rare",
+    "damageTypes": [
+      "piercing"
+    ],
+    "features": [
+      "requiresQuiver",
+      "noDamageBonus"
+    ],
+    "category": "ranged",
+    "metal": true
   }
 ]

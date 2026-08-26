@@ -266,5 +266,1424 @@
         ]
       }
     ]
+  },
+  {
+    "id": "abyss-fiend",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "large",
+    "movement": {
+      "land": 16
+    },
+    "armor": 4,
+    "hp": 64,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "저주(공격 3)의 D6 세부는 마법 사고표 11~14·17~19행과 동일 계열 — 해주(위력 1)로 해제 가능(6번 제외)"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "2D10 참격. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "10m 내 1인에게 저주(D6 표: 1 거짓말 시 개구리 / 2 금은이 재로 / 3 실명 / 4 기억상실 / 5 동물 변화 / 6 한 단계 노화·영구). 회피 불가.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "10m 내 1인이 2D8m 날아가 같은 피해(타격), 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D8",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "D12 관통 + 1점 이상 피해 시 강도 16 마비독. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D12",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "poison",
+            "params": {
+              "kind": "paralyzing",
+              "potency": 16
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "10m 내 1인 지배 — WIL 판정(베인, 액션 아님) 실패 시 즉시 이동+지정 액션(WP 소모 제외) 수행, 다음 턴 상실.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "manual"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "elder-wyrm",
+    "name": "",
+    "description": "",
+    "ferocity": 3,
+    "size": "huge",
+    "movement": {
+      "land": 24,
+      "fly": 24
+    },
+    "armor": 6,
+    "hp": 84,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "날개 — 자유 비행"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "20m 내 전원 공포 공격, WIL 판정에 베인.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 20,
+              "bane": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "두 명에게 각각 2D10 참격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "10m 내 전원 — 사람 크기 이하는 2D6m 날아가 같은 피해(타격), 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D6",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "6m 내 전원 2D8 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "한 명에게 4D10 참격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "4D10",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "길이 10m 원뿔 화염 — 명중자 3D10, 방어구 무효.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "3D10",
+              "ignoreArmor": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hill-colossus",
+    "name": "",
+    "description": "",
+    "ferocity": 1,
+    "size": "huge",
+    "movement": {
+      "land": 18
+    },
+    "armor": null,
+    "hp": 74,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "무기 상실 시 공격 1·4는 다시 굴림",
+      "정수리 약점 — 명중 시 피해 2배. 높은 곳에서 베인 원거리, 또는 곡예(베인)로 기어올라 매턴 곡예 판정(액션 아님) 실패 시 2D6 낙하"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "4D10 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "4D10",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "4m 내 두 명에게 각각 4D6 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "4D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "10m 내 전원 2D10 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "한 명을 붙잡아 던진다 — 4D8 타격, 같은 미터 수만큼 날아가 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "4D8",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "2m 내 전원 3D6 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "3D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "web-stalker",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "normal",
+    "movement": {
+      "land": 24
+    },
+    "armor": null,
+    "hp": 36,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "2D8 참격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "2m 내 전원 D8 관통.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D8",
+              "type": "piercing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "D10 관통 + 1점 이상 피해 시 강도 16 마비독. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D10",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "poison",
+            "params": {
+              "kind": "paralyzing",
+              "potency": 16
+            }
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "STR 최고 대상에게 거미줄 — 회피 판정(액션 아님) 실패 시 결박. 탈출은 STR 판정(베인, 액션). 타인 도움 가능.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "2D6 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sky-talon",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "large",
+    "movement": {
+      "land": 10,
+      "fly": 30
+    },
+    "armor": null,
+    "hp": 38,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "날개 — 자유 비행"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "2D8 관통.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "piercing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "D6회 연속 타격, 각 D8 참격 — 회피·패리는 한 번에 하나씩만.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "2m 내 전원 D8 참격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D8",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "부리로 물어 던진다 — 2D6 관통, 같은 미터 수만큼 날아가 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "10m 내 전원이 D6m 날아가 같은 피해(타격).",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "D6",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "움켜쥐고 2D6+6m 상공으로 — 회피 실패 시 다음 몬스터 턴에 떨어뜨림(낙하 피해).",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "manual"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "carrion-shrieker",
+    "name": "",
+    "description": "",
+    "ferocity": 1,
+    "size": "normal",
+    "movement": {
+      "land": 8,
+      "fly": 24
+    },
+    "armor": null,
+    "hp": 12,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "무리 — 공격은 여러 마리가 함께 수행하되 1마리의 턴만 소모",
+      "무리 절반 사망 시 도주",
+      "비행 — 원거리 무기 또는 긴 무기로만 교전 가능"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "금속을 가장 많이 걸친 대상에게 2D6 참격 + 명중 시 D3+3m 높이에서 낙하.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "10m 내 전원 D6 타격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D6",
+              "type": "bludgeoning"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "한 명에게 2D6 관통 + 1스트레치 실명(완전한 어둠 취급).",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "개체 수만큼의 대상에게 각각 D8 참격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D8",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "10m 내 전원 — 원하는 상태이상 1개. 방패로 패리 가능.",
+        "canParry": true,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "choice"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dread-prowler",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "large",
+    "movement": {
+      "land": 16
+    },
+    "armor": null,
+    "hp": 44,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "20m 내 원거리 — D12 관통 + 강도 12 마비독. 방패로만 패리.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D12",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "poison",
+            "params": {
+              "kind": "paralyzing",
+              "potency": 12
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "3D8 참격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "3D8",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "달려들어 넘어뜨리고 할퀸다 — 2D8 참격 + 엎드린 대상 추가 D6.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "prone"
+          },
+          {
+            "hook": "extraDamageDie",
+            "params": {
+              "dice": "D6"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "두 명에게 각각 2D6 참격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "10m 내 STR 최고 대상에게 돌진 — 3D6 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "3D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "10m 내 전원 D10 관통 + 강도 12 마비독.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D10",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "poison",
+            "params": {
+              "kind": "paralyzing",
+              "potency": 12
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "horn-brute",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "large",
+    "movement": {
+      "land": 16
+    },
+    "armor": null,
+    "hp": 32,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "장비: 양손 도끼(공격 4·5의 '무기 피해' = 2D10)"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "2D6 타격 + 방어구로 막혀도 휘청임.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "dazed"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "발굽 — 2D6m 날아가 같은 피해(타격), 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D6",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "2m 내 두 명에게 각각 2D8 관통 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "무기 피해 + 추가 D10. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "extraDamageDie",
+            "params": {
+              "dice": "D10"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "2m 내 전원 무기 피해.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "type": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "뛰어올라 내리찍기 — 2D10 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D10",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "moss-hulk",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "large",
+    "movement": {
+      "land": 10
+    },
+    "armor": null,
+    "hp": 38,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": true,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "재생 — 자기 턴마다 D6 HP 자동 회복",
+      "햇빛에 라운드당 D6 피해·재생 불가, 이로 인해 0 HP 도달 시 석화",
+      "설득 가능하나 베인"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "6m 내 전원 — 원하는 상태이상 1개.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "choice"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "D10 참격 + 피해를 입으면 병독성 10 질병. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D10",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "2D8 관통 + 물림 — 매라운드 STR 판정(액션)으로 탈출, 실패 시 추가 2D8.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "piercing"
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "2D6m 무작위 방향으로 던져져 같은 피해(타격), 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D6",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "2m 내 전원 2D6 타격.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "bludgeoning"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "가장 가까운 이를 무기 삼아 다른 이에게 휘두른다 — 둘 다 2D8 타격 + 넘어짐.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "barrow-lord",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "normal",
+    "movement": {
+      "land": 10
+    },
+    "armor": 4,
+    "hp": 38,
+    "resistances": [],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "비마법 무기 피해 절반(올림) — 화염은 정상",
+      "장비: 모닝스타(공격 4·6의 '무기 피해' = 2D8)·사슬 갑옷(방어 4)"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "한 명 — 겁먹음 + 공포 공격(WIL 베인).",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "condition",
+            "params": {
+              "condition": "scared"
+            }
+          },
+          {
+            "hook": "fearAttack",
+            "params": {
+              "bane": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "10m 내 1인이 2D4m 날아가 같은 피해, 넘어짐. 회피 불가.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "knockback",
+            "params": {
+              "dice": "2D4",
+              "damagePerMeter": true,
+              "prone": true
+            }
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "2m 내 전원 무기 피해. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D8",
+              "type": "bludgeoning"
+            }
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "D6 피해(방어구 무효) + 다음 턴 회피 판정(액션 아님) 실패 시 행동 불가 + 추위 상태(회복 불가).",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D6",
+              "ignoreArmor": true
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "무기 주사위 2배 피해 + 넘어짐. 패리 가능.",
+        "canParry": true,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "4D8",
+              "type": "bludgeoning"
+            }
+          },
+          {
+            "hook": "prone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blood-flit",
+    "name": "",
+    "description": "",
+    "ferocity": 2,
+    "size": "swarm",
+    "movement": {
+      "land": 4,
+      "fly": 24
+    },
+    "armor": null,
+    "hp": 18,
+    "resistances": [
+      "slashing",
+      "piercing",
+      "bludgeoning"
+    ],
+    "immunities": [],
+    "persuadable": false,
+    "defenseSkill": 15,
+    "skills": {},
+    "traits": [
+      "무리 — 물리 무기 피해 절반(올림, 마법 무기 포함). 화염은 정상 (저항 필드로 구현)"
+    ],
+    "attacks": [
+      {
+        "roll": 1,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 2,
+        "name": "",
+        "description": "10m 내 전원 공포 공격.",
+        "canParry": false,
+        "canDodge": false,
+        "effects": [
+          {
+            "hook": "fearAttack",
+            "params": {
+              "radius": 10
+            }
+          }
+        ]
+      },
+      {
+        "roll": 3,
+        "name": "",
+        "description": "CON 최고 대상에게 2D6 참격 + 공포 공격, 무리는 같은 양의 HP 회복.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "fearAttack",
+            "params": {}
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 4,
+        "name": "",
+        "description": "CON 최고 대상에게 2D6 참격 + 공포 공격, 무리는 같은 양의 HP 회복.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "2D6",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "fearAttack",
+            "params": {}
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 5,
+        "name": "",
+        "description": "10m 내 전원 D8 참격, 무리는 같은 양의 HP 회복.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D8",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      },
+      {
+        "roll": 6,
+        "name": "",
+        "description": "10m 내 전원 D8 참격, 무리는 같은 양의 HP 회복.",
+        "canParry": false,
+        "canDodge": true,
+        "effects": [
+          {
+            "hook": "damage",
+            "params": {
+              "dice": "D8",
+              "type": "slashing"
+            }
+          },
+          {
+            "hook": "manual"
+          }
+        ]
+      }
+    ]
   }
 ]

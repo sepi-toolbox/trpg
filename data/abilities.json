@@ -236,5 +236,871 @@
       }
     ],
     "trigger": null
+  },
+  {
+    "id": "assassin",
+    "name": "",
+    "description": "암습에만 사용. 명중 굴림 후·피해 굴림 전에 발동해 피해 +D8. backstabbing 과 중첩 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "knives"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "extraDamageDie",
+        "params": {
+          "dice": "D8"
+        }
+      }
+    ]
+  },
+  {
+    "id": "backstabbing",
+    "name": "",
+    "description": "다른 아군의 2m 내에 있는 적을 근접 공격할 때 발동(액션 아님). 공격이 암습으로 취급 — 회피·패리 불가, 보온, 피해 주사위 +1. subtle 무기 전용.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "knives"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "battle-cry",
+    "name": "",
+    "description": "전투 중 액션. 소리가 닿는 모든 아군이 원하는 상태이상 1개를 즉시 회복.",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 3,
+    "activation": "action",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "berserker",
+    "name": "",
+    "description": "격앙 상태가 되어 가장 가까운 적을 근접 공격. 이미 격앙이면 다른 상태이상 선택. 시야의 적이 전멸하거나 0 HP까지 전투 지속. 근접 공격에 보온, 패리·회피 불가. 종료 후 탈진.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyMeleeWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "condition",
+        "params": {
+          "condition": "angry"
+        }
+      },
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "catlike",
+    "name": "",
+    "description": "낙하 피해 주사위를 WP 1당 D6 하나씩 감소. 곡예 판정 후 발동 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "acrobatics"
+      ],
+      "level": 12
+    },
+    "wpCost": "varies",
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "companion",
+    "name": "",
+    "description": "1스트레치를 들여 동물(몬스터 불가) 하나를 동료로. 동시에 1마리. 서식지 안에서만 동행, 정찰 무료. 추가 3 WP로 공격 명령(자유 액션).",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "hunting-fishing"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "action",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "contortionist",
+    "name": "",
+    "description": "결박 탈출·좁은 틈 통과를 판정 없이 성공.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "evade"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "autoSuccess",
+        "params": {
+          "roll": {
+            "all": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "defensive",
+    "name": "",
+    "description": "자기 턴을 소모하지 않고 패리 1회. 같은 공격에 1회만, 회피와 병용 불가. WP가 있는 한 라운드에 여러 번 사용 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyMeleeWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "reaction",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "extraParry"
+      }
+    ]
+  },
+  {
+    "id": "deflect-arrow",
+    "name": "",
+    "description": "방패 없이 근접 무기로 원거리 공격을 패리할 수 있다.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyMeleeWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "reaction",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "disguise",
+    "name": "",
+    "description": "1스트레치 작업으로 같은 종족인 다른 사람으로 변장. 아는 사람이 10m 내에서 보면 경계 판정으로 간파.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "bluffing"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "double-slash",
+    "name": "",
+    "description": "참격 무기로 2m 내의 적 둘을 한 번의 굴림으로 공격. 명중 시 둘 다 적중, 피해는 각각 굴림. 개별 패리·회피 가능. dual-wield 와 중첩 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "axes",
+        "swords"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "dragonslayer",
+    "name": "",
+    "description": "몬스터(일반 NPC 제외) 대상 공격에만. 명중 후·피해 전 발동, 피해 +D8.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "extraDamageDie",
+        "params": {
+          "dice": "D8"
+        }
+      }
+    ]
+  },
+  {
+    "id": "eagle-eye",
+    "name": "",
+    "description": "200m 내의 사람·물체를 바로 옆처럼 본다(1스트레치). 전투에서는 유효 사거리 초과 사격의 베인 제거. 대상마다 재발동.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "awareness"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "fast-footwork",
+    "name": "",
+    "description": "자기 턴을 소모하지 않고 회피 1회. 같은 공격에 1회만, 패리와 병용 불가. WP가 있는 한 라운드에 여러 번 사용 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "evade"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "reaction",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "extraDodge"
+      }
+    ]
+  },
+  {
+    "id": "fast-healer",
+    "name": "",
+    "description": "스트레치 휴식 시 HP 추가 D6 회복 (WP·상태이상에는 무효).",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 2,
+    "activation": "passive",
+    "stackable": false,
+    "trigger": "stretchRest",
+    "effects": [
+      {
+        "hook": "heal",
+        "params": {
+          "dice": "D6"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fearless",
+    "name": "",
+    "description": "WIL 판정 없이 공포를 자동 저항.",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "guardian",
+    "name": "",
+    "description": "나와 다른 아군이 같은 적의 2m 내에 있을 때, 그 아군을 노린 공격을 나에게로 돌린다. 턴 밖 사용 가능, 액션 아님.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "axes",
+        "hammers",
+        "swords"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "reaction",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "insight",
+    "name": "",
+    "description": "잠시 대화한 상대가 진실을 말하는지 경계 판정으로 간파. 무엇이 거짓인지는 알 수 없음.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "persuasion"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "intuition",
+    "name": "",
+    "description": "어려운 결정 앞에서 GM(게임)에게 질문 하나를 하고 유용한 답을 얻는다.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "myths-legends"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "iron-fist",
+    "name": "",
+    "description": "맨손 공격 전용. 명중 굴림 후 자유 발동, 피해 +D6.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "brawling"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "extraDamageDie",
+        "params": {
+          "dice": "D6"
+        }
+      }
+    ]
+  },
+  {
+    "id": "iron-grip",
+    "name": "",
+    "description": "붙잡기 시도 또는 붙잡기 유지 판정에만 보온.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "brawling"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "brawling"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "lightning-fast",
+    "name": "",
+    "description": "라운드 시작에 선제 카드 2장을 뽑아 하나를 선택. 라운드당 1회.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "evade"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "initiativeSwap",
+        "params": {
+          "mode": "drawTwo"
+        }
+      }
+    ]
+  },
+  {
+    "id": "lone-wolf",
+    "name": "",
+    "description": "야영 판정 없이 야외에서 시프트 휴식 가능. 본인에게만 적용.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "bushcraft"
+      ],
+      "level": 12
+    },
+    "wpCost": 0,
+    "activation": "passive",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "magic-talent",
+    "name": "",
+    "description": "새 마법 유파를 배울 자격을 얻는다(주문은 별도 습득). 유파마다 1회씩 중복 습득.",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 0,
+    "activation": "passive",
+    "stackable": true,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "massive-blow",
+    "name": "",
+    "description": "양손 근접 무기 전용. 피해 +D8, 대신 그 라운드에 이동 불가. 이동했다면 발동 불가. 명중 후 발동.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyStrMeleeWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "extraDamageDie",
+        "params": {
+          "dice": "D8"
+        }
+      }
+    ]
+  },
+  {
+    "id": "master-blacksmith",
+    "name": "",
+    "description": "대장장이 도구 필요. 1스트레치+3 WP: 날붙이를 벼려 상대 방어구 등급을 1단계 낮게 취급(전투 1회 지속). 1시프트: 금속 무기·갑옷 제작 — 화로·모루·철(무게 1) 필요, WP 비용 = 골드 가격(올림), 여러 시프트 분할 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "crafting"
+      ],
+      "level": 12
+    },
+    "wpCost": "varies",
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "master-carpenter",
+    "name": "",
+    "description": "목공 도구 필요. 액션: WP 1당 D12 피해를 문·벽 등 무생물에(방어 등급 무시). 1시프트: 목제 아이템 제작 — 목재 필요, WP 비용 = 골드 가격(올림).",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "crafting"
+      ],
+      "level": 12
+    },
+    "wpCost": "varies",
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "master-chef",
+    "name": "",
+    "description": "야외술 판정 없이 조리를 자동 성공.",
+    "kind": "heroic",
+    "requirement": null,
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "master-spellcaster",
+    "name": "",
+    "description": "자기 턴에 발동 — 서로 다른 두 주문을 한 액션에 시전. 첫 주문 굴림 후 발동 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyMagic"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "master-tanner",
+    "name": "",
+    "description": "무두질 도구 필요. 1시프트: 동물·몬스터 가죽으로 가죽 갑옷 제작 — 등급 = 원본 방어의 절반(올림, 최소 1), WP 비용 = 완성 등급.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "crafting"
+      ],
+      "level": 12
+    },
+    "wpCost": "varies",
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "monster-hunter",
+    "name": "",
+    "description": "갈림길에서 발동 — 가장 위험한 적이 있는 방향을 안다.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "beast-lore"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "musician",
+    "name": "",
+    "description": "액션. 10m 내 아군 전원의 모든 판정에 보온, 또는 적 전원에 베인(택1). 다음 라운드 자기 턴까지 지속. 악기로 비용·사거리 개선.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "performance"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "action",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "pathfinder",
+    "name": "",
+    "description": "길찾기 판정에만 보온.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "bushcraft"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "skills": [
+              "bushcraft"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "quartermaster",
+    "name": "",
+    "description": "야영 판정을 자동 성공.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "bushcraft"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "sea-legs",
+    "name": "",
+    "description": "물속(허리 깊이 이상) 행동 시 발동(액션 아님) — 1라운드 동안 익사 포함 물의 모든 악영향 무시.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "swimming"
+      ],
+      "level": 12
+    },
+    "wpCost": 1,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "shield-block",
+    "name": "",
+    "description": "방패 패리에 발동 — 보온. 원래 패리 불가인 몬스터 물리 공격(범위 제외)도 방패로 패리 가능(보온 포함). defensive 와 중첩 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyStrMeleeWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "boon",
+        "params": {
+          "roll": {
+            "all": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "throwing-arm",
+    "name": "",
+    "description": "한손 근접 무기를 STR 미터 내의 적에게 투척. 일반 명중 굴림, 패리·회피 가능. 무기는 적의 발밑에 떨어진다.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "anyMeleeWeapon"
+      ],
+      "level": 12
+    },
+    "wpCost": 2,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "treasure-hunter",
+    "name": "",
+    "description": "갈림길에서 발동 — 가장 큰 보물이 있는 방향을 안다.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "bartering"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "twin-shot",
+    "name": "",
+    "description": "활(석궁 제외) 공격 시 화살 2발 — 한 번의 굴림(베인), 피해는 각각. 같은 대상 또는 두 대상.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "bows"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "free",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
+  },
+  {
+    "id": "weasel",
+    "name": "",
+    "description": "공격받을 때 2m 내 다른 아군에게 공격을 떠넘긴다. 범위 공격 무효, 회피·패리 시도 전에 발동. 새 대상은 정상적으로 회피·패리 가능.",
+    "kind": "heroic",
+    "requirement": {
+      "skillIds": [
+        "evade"
+      ],
+      "level": 12
+    },
+    "wpCost": 3,
+    "activation": "reaction",
+    "stackable": false,
+    "trigger": null,
+    "effects": [
+      {
+        "hook": "manual"
+      }
+    ]
   }
 ]

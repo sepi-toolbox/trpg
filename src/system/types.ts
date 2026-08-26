@@ -422,6 +422,25 @@ export interface NpcTemplate {
   /** 미니언은 null (WP 미사용) */
   wp: number | null
   gearIds: string[]
+  /** 알고 있는 주문 (주술사형 NPC) */
+  spellIds?: string[]
+  /** 피해 절반 (해골의 관통 저항 등) */
+  resistances?: DamageType[]
+  /** 구조화 안 되는 특성 — 기계 규칙 요약 텍스트 */
+  traits?: string[]
+}
+
+/* ─────────────────────────── 동물 ─────────────────────────── */
+
+/** 일반 동물 — 자연 무기 하나로 싸우는 간이 스탯 블록 */
+export interface Animal {
+  id: string
+  name: string
+  movement: number
+  hp: number
+  attack: { skillLevel: number; damage: DiceNotation }
+  /** 기재된 스킬만. 미기재는 기본치 5 */
+  skills: Record<string, number>
 }
 
 /* ─────────────────────────── 굴림표 (콘텐츠 표) ─────────────────────────── */
@@ -491,5 +510,6 @@ export interface GameData {
   spells: Spell[]
   monsters: Monster[]
   npcs: NpcTemplate[]
+  animals: Animal[]
   tables: RollTable[]
 }

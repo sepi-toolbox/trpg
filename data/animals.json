@@ -1,0 +1,160 @@
+[
+  {
+    "id": "cat",
+    "name": "",
+    "movement": 12,
+    "hp": 4,
+    "attack": {
+      "skillLevel": 8,
+      "damage": "D3"
+    },
+    "skills": {
+      "awareness": 12,
+      "evade": 14,
+      "sneaking": 16
+    }
+  },
+  {
+    "id": "dog",
+    "name": "",
+    "movement": 14,
+    "hp": 8,
+    "attack": {
+      "skillLevel": 12,
+      "damage": "D8"
+    },
+    "skills": {
+      "awareness": 14,
+      "evade": 10,
+      "sneaking": 12
+    }
+  },
+  {
+    "id": "goat",
+    "name": "",
+    "movement": 10,
+    "hp": 6,
+    "attack": {
+      "skillLevel": 10,
+      "damage": "D6"
+    },
+    "skills": {
+      "awareness": 10,
+      "evade": 12
+    }
+  },
+  {
+    "id": "donkey",
+    "name": "",
+    "movement": 14,
+    "hp": 12,
+    "attack": {
+      "skillLevel": 10,
+      "damage": "D10"
+    },
+    "skills": {
+      "awareness": 10,
+      "evade": 6
+    }
+  },
+  {
+    "id": "horse",
+    "name": "",
+    "movement": 20,
+    "hp": 16,
+    "attack": {
+      "skillLevel": 10,
+      "damage": "2D4"
+    },
+    "skills": {
+      "awareness": 12,
+      "evade": 8
+    }
+  },
+  {
+    "id": "boar",
+    "name": "",
+    "movement": 12,
+    "hp": 14,
+    "attack": {
+      "skillLevel": 12,
+      "damage": "2D6"
+    },
+    "skills": {
+      "awareness": 10,
+      "evade": 8
+    }
+  },
+  {
+    "id": "deer",
+    "name": "",
+    "movement": 18,
+    "hp": 12,
+    "attack": {
+      "skillLevel": 10,
+      "damage": "D8"
+    },
+    "skills": {
+      "awareness": 12,
+      "evade": 12
+    }
+  },
+  {
+    "id": "moose",
+    "name": "",
+    "movement": 16,
+    "hp": 18,
+    "attack": {
+      "skillLevel": 10,
+      "damage": "2D6"
+    },
+    "skills": {
+      "awareness": 10,
+      "evade": 8
+    }
+  },
+  {
+    "id": "fox",
+    "name": "",
+    "movement": 10,
+    "hp": 6,
+    "attack": {
+      "skillLevel": 12,
+      "damage": "D6"
+    },
+    "skills": {
+      "awareness": 12,
+      "evade": 10,
+      "sneaking": 14
+    }
+  },
+  {
+    "id": "wolf",
+    "name": "",
+    "movement": 16,
+    "hp": 10,
+    "attack": {
+      "skillLevel": 14,
+      "damage": "2D6"
+    },
+    "skills": {
+      "awareness": 14,
+      "evade": 12,
+      "sneaking": 14
+    }
+  },
+  {
+    "id": "bear",
+    "name": "",
+    "movement": 12,
+    "hp": 20,
+    "attack": {
+      "skillLevel": 12,
+      "damage": "2D8"
+    },
+    "skills": {
+      "awareness": 10,
+      "evade": 8
+    }
+  }
+]

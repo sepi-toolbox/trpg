@@ -14,6 +14,11 @@
 
 id 는 코드가 참조하므로 **바꾸지 않는다** (바꿔야 하면 참조를 전부 같이 바꾸고 npm test).
 
+**이름 공란 규칙**: 나중에 추가된 데이터는 `name: ""` 로 비워져 있다 (내러티브는 성권 담당).
+빈 이름은 화면·로그에 자동으로 id 가 대신 표시된다 (몬스터 공격표 행은 "공격 N") —
+채우는 즉시 그 이름이 뜬다. 빈 이름 항목의 `description` 이 채워져 있으면 그것은
+**규칙 요약**이다 (manual 효과 등 엔진이 자동 실행 못 하는 부분) — 지우지 말고 표현만 다듬을 것.
+
 ## 공통 표기
 
 - **주사위**: `"D6"`, `"2D8"`, `"2D6+1"`, `"5"`(고정값). 대소문자 무관.
@@ -110,9 +115,14 @@ id 는 코드가 참조하므로 **바꾸지 않는다** (바꿔야 하면 참�
 - `name` `description` `traits`(구조화 안 된 특성 메모) ✏️ + 공격의 `name` `description` ✏️
 
 ### npcs.json — NPC 템플릿
-`kind` 🔧 minion(0 HP 즉사, WP 없음 — wp 는 null) | boss / `skills` `hp` `wp` 🔧
-`heroicAbilities` 🔧 `[{ "abilityId": "robust", "count": 6 }]` / `damageBonus` 🔧 / `gearIds` 🔧
-`name` ✏️
+`kind` 🔧 minion(0 HP 즉사, WP 없음 — wp 는 null. 예외: 주문 보유 미니언은 시전용 wp 허용) | boss
+`skills` `hp` `wp` 🔧 / `heroicAbilities` 🔧 `[{ "abilityId": "robust", "count": 6 }]`
+`damageBonus` 🔧 / `gearIds` 🔧 / `spellIds` 🔧 시전 가능 주문 / `resistances` 🔧 피해 유형 저항(절반)
+`name` ✏️ + `traits` ✏️ (구조화 안 된 특성 — 규칙 요약 메모)
+
+### animals.json — 동물 (사냥감·가축 등)
+`movement` `hp` 🔧 / `attack` 🔧 `{ "skillLevel": 12, "damage": "D8" }` — 몬스터와 달리 일반 스킬 판정으로 공격
+`skills` 🔧 기재된 것만 (나머지 기본치 5) / `name` ✏️
 
 ### tables/*.json — 굴림표
 공포표·사고표·중상표 등. `die` 🔧 주사위 면수, `rows` 는 min~max 로 전 눈을 덮어야 한다.
